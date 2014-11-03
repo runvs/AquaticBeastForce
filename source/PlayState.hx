@@ -27,13 +27,15 @@ class PlayState extends FlxState
 	{
 		trace("playstate create start");
 		
+		_player = new Player(10, 10);
+        trace("Player created");
+		
 		_level = new Level(this);
 		_level.LoadLevel(1);
 		add(_level);
 		trace("Level Loaded");
 		
-        _player = new Player(10, 10);
-        trace("Player created");
+
 		
 		super.create();
 	}

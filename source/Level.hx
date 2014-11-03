@@ -53,9 +53,10 @@ class Level extends FlxBasic
 	
 	private function placeEntities(entityName:String, entityData:Xml):Void
 	{
+		trace("placing entities");
 		var x:Int = Std.parseInt(entityData.get("x"));
 		var y:Int = Std.parseInt(entityData.get("y"));
-		if (entityName == "player")
+		if (entityName == "Player")
 		{
 			_state._player.position = new FlxVector(x,y);
 		}
