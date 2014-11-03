@@ -8,7 +8,7 @@ import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
-import flixel.addons.editors.ogmo.FlxOgmoLoader;
+
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -16,9 +16,9 @@ import flixel.addons.editors.ogmo.FlxOgmoLoader;
 class PlayState extends FlxState
 {
 	
-	private var _map:FlxOgmoLoader;
-	private var _mWalls:FlxTilemap;
-	private var _player:Player;
+
+	public var _player:Player;
+	private var _level:Level;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -27,17 +27,11 @@ class PlayState extends FlxState
 	{
 		trace("playstate create start");
 		
-		_map = new FlxOgmoLoader(AssetPaths.Level1__oel);
-		trace("Level loaded from file");
+		_level = new Level(this);
+		_level.LoadLevel(1);
+		add(_level);
+		trace("Level Loaded");
 		
-		_mWalls = _map.loadTilemap(AssetPaths.tileset__png, 16, 16, "Walls");
-		_mWalls.setTileProperties(1, FlxObject.NONE);
-		_mWalls.setTileProperties(2, FlxObject.ANY);
-		trace("Objects created ");
-		
-		add(_mWalls);
-		trace("Objects added");
-        
         _player = new Player(10, 10);
         trace("Player created");
 		
@@ -62,5 +56,6 @@ class PlayState extends FlxState
 	{
         _player.update();
 		super.update();
+		
 	}	
 }

@@ -7,6 +7,7 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 import haxe.ds.Vector;
+using flixel.util.FlxSpriteUtil;
 
 /**
  * A FlxState which can be used for the game's menu.
@@ -21,11 +22,14 @@ class MenuState extends FlxState
 	{
 		super.create();
 		_playButton = new FlxButton(0, 0, "Play", startGame);
+		_playButton.screenCenter();
+		
 		add(_playButton);
 	}
 	
 	public function startGame():Void
 	{
+		trace("switch to playstate");
 		FlxG.switchState(new PlayState());
 	}
 	
