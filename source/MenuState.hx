@@ -21,6 +21,7 @@ class MenuState extends FlxState
 	{
 		super.create();
 		_playButton = new FlxButton(0, 0, "Play", startGame);
+		add(_playButton);
 	}
 	
 	public function startGame():Void
