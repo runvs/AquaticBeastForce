@@ -1,24 +1,39 @@
 package;
 
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.text.FlxText;
+import flixel.tile.FlxTilemap;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
+import flixel.addons.editors.ogmo.FlxOgmoLoader;
 
 /**
  * A FlxState which can be used for the actual gameplay.
  */
 class PlayState extends FlxState
 {
+	
+	private var _map:FlxOgmoLoader;
+	private var _mWalls:FlxTilemap;
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
 	override public function create():Void
 	{
 		super.create();
+		_map = new FlxOgmoLoader(AssetPaths.Level1__oel);
+		_mWalls = _map.loadTilemap(AssetPaths.tileset__png, 16, 16, "walls");
+		_mWalls.setTileProperties(1, FlxObject.NONE);
+		_mWalls.setTileProperties(2, FlxObject.ANY);
+		add(_mWalls);
+		
 	}
+	
+	
 	
 	/**
 	 * Function that is called when this state is destroyed - you might want to 
