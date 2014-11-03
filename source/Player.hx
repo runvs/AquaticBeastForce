@@ -19,6 +19,6 @@ class Player
     
     public function update():Void
     {
-        FlxG.
+        
     }
 }
