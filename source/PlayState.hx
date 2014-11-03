@@ -15,7 +15,6 @@ import flixel.util.FlxMath;
  */
 class PlayState extends FlxState
 {
-	
 
 	public var _player:Player;
 	private var _level:Level;
