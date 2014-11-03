@@ -26,6 +26,9 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		trace("playstate create start");
+        
+        _player = new Player(1, 1);
+        trace("Player created");
 		
 		_player = new Player(10, 10);
         trace("Player created");
@@ -34,6 +37,8 @@ class PlayState extends FlxState
 		_level.LoadLevel(1);
 		add(_level);
 		trace("Level Loaded");
+        
+        add(_player);
 		
 
 		
@@ -58,6 +63,11 @@ class PlayState extends FlxState
 	{
         _player.update();
 		super.update();
-		
-	}	
+	}
+    
+    override public function draw():Void 
+    {
+        _player.draw();
+        super.draw();
+    }
 }
