@@ -1,6 +1,7 @@
 package ;
 import flixel.FlxBasic;
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.input.keyboard.FlxKey;
 import flixel.util.FlxVector;
@@ -10,7 +11,7 @@ import flixel.util.FlxColor;
  * ...
  * @author Thunraz
  */
-class Player extends FlxBasic
+class Player extends FlxObject
 {
     public var position:FlxVector;
     public var rotation:Float;
@@ -40,6 +41,9 @@ class Player extends FlxBasic
         _sprite.angle = rotation * 180/Math.PI;
         _sprite.update();
         
+		this.x = position.x;
+		this.y = position.y;
+		
         super.update();
     }
     

@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -24,6 +25,7 @@ class PlayState extends FlxState
 	 */
 	override public function create():Void
 	{
+		
 		trace("playstate create start");
         
         _player = new Player(1, 1);
@@ -39,6 +41,7 @@ class PlayState extends FlxState
         
         add(_player);
 		
+		FlxG.camera.follow(_player, FlxCamera.STYLE_TOPDOWN);
 
 		
 		super.create();
