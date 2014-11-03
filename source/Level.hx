@@ -57,9 +57,7 @@ class Level extends FlxBasic
 		var y:Int = Std.parseInt(entityData.get("y"));
 		if (entityName == "player")
 		{
-			_state._player.Position = new FlxVector(x,y);
-			//_state._player.x = x;
-			//_state._player.y = y;  
+			_state._player.position = new FlxVector(x,y);
 		}
 	}
 	
