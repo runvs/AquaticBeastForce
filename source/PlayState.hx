@@ -18,6 +18,7 @@ class PlayState extends FlxState
 	
 	private var _map:FlxOgmoLoader;
 	private var _mWalls:FlxTilemap;
+	private var _player:Player;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -25,14 +26,21 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		trace("playstate create start");
+		
 		_map = new FlxOgmoLoader(AssetPaths.Level1__oel);
 		trace("Level loaded from file");
+		
 		_mWalls = _map.loadTilemap(AssetPaths.tileset__png, 16, 16, "Walls");
 		_mWalls.setTileProperties(1, FlxObject.NONE);
 		_mWalls.setTileProperties(2, FlxObject.ANY);
 		trace("Objects created ");
+		
 		add(_mWalls);
 		trace("Objects added");
+        
+        _player = new Player(10, 10);
+        trace("Player created");
+		
 		super.create();
 	}
 	
@@ -52,6 +60,7 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
+        _player.update();
 		super.update();
 	}	
 }
