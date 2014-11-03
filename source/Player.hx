@@ -19,7 +19,10 @@ class Player extends FlxBasic
 		position = new FlxVector(x, y);
         
         _sprite = new FlxSprite(position.x, position.y);
-        _sprite.makeGraphic(16, 16, FlxColor.BLUE);
+        _sprite.loadGraphic(AssetPaths.player__png, true, 16, 16);
+        
+        _sprite.animation.add("base", [0, 1, 2, 3], 12, true);
+        _sprite.animation.play("base");
         
         super();
 	}
@@ -28,6 +31,7 @@ class Player extends FlxBasic
     {
         getInput();
         _sprite.setPosition(position.x, position.y);
+        _sprite.update();
         
         super.update();
     }
