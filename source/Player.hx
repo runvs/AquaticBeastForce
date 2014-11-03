@@ -15,9 +15,9 @@ class Player
 
 	public function new(x:Float, y:Float)
 	{
-		Position = new FlxVector(x, y);
+		position = new FlxVector(x, y);
         
-        _sprite = new FlxSprite(Position.x, Position.y);
+        _sprite = new FlxSprite(position.x, position.y);
         _sprite.makeGraphic(16, 16, FlxColor.BLUE);
 	}
     
@@ -25,7 +25,7 @@ class Player
     {
         getInput();
         
-        _sprite.setPosition(Position.x, Position.y);
+        _sprite.setPosition(position.x, position.y);
     }
     
     public function draw():Void
@@ -33,7 +33,7 @@ class Player
         _sprite.draw();
     }
     
-    private funtion getInput():Void
+    private function getInput():Void
     {
         
     }
