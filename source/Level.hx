@@ -78,6 +78,23 @@ class Level extends FlxBasic
 			
 			// instantiate Enemy
 		}
+		
+		if (entityName == "AttackTarget")
+		{
+			var targetType:String = entityData.get("Type");
+			if (targetType == "radar")
+			{
+				// instantiate
+			}
+			else if (targetType == "")
+			{
+				// instantiate
+			}
+			else
+			{
+				throw "cannot create target with type " + targetType;
+			}
+		}
 	}
 	
 	
