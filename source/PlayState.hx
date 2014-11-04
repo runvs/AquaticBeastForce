@@ -28,10 +28,7 @@ class PlayState extends FlxState
 		
 		trace("playstate create start");
         
-        _player = new Player(1, 1);
-        trace("Player created");
-		
-		_player = new Player(10, 10);
+        _player = new Player();
         trace("Player created");
 		
 		_level = new Level(this);

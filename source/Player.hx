@@ -14,21 +14,21 @@ import flixel.util.FlxColor;
 class Player extends FlxObject
 {   
     private var _sprite:FlxSprite;
-    private var _circle:Float;
-    private var _velocity:FlxVector;
-    
-	public function new(x:Float, y:Float)
-	{
-		this.x = x;
-        this.y = y;
+    private var _shadowSprite:FlxSprite;
         
-        _circle = Math.PI * 2;
-        
-        _sprite = new FlxSprite(this.x, this.y);
+	public function new()
+	{   
+        // Load sprite for the player
+        _sprite = new FlxSprite();
         _sprite.loadGraphic(AssetPaths.player__png, true, 16, 16);
-        
         _sprite.animation.add("base", [0, 1, 2, 3], 12, true);
         _sprite.animation.play("base");
+        
+        // Load sprite for the shadow
+        _shadowSprite = new FlxSprite();
+        _shadowSprite.loadGraphic(AssetPaths.playerShadow__png, true, 16, 16);
+        _shadowSprite.animation.add("base", [0, 1], 12, true);
+        _shadowSprite.animation.play("base");
         
         super();
 	}
@@ -36,9 +36,14 @@ class Player extends FlxObject
     override public function update():Void 
     {
         getInput();
-        _sprite.setPosition(this.x, this.y);
+        
+        _sprite.setPosition(x, y);
         _sprite.angle = angle;
         _sprite.update();
+        
+        _shadowSprite.setPosition(x + 3, y + 3);
+        _shadowSprite.angle = angle;
+        _shadowSprite.update();
         
         velocity.x *= 0.98;
         velocity.y *= 0.98;
@@ -48,7 +53,9 @@ class Player extends FlxObject
     
     override public function draw():Void 
     {
+        _shadowSprite.draw();
         _sprite.draw();
+        
         super.draw();
     }
     
