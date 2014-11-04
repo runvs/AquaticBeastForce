@@ -13,7 +13,6 @@ import flixel.util.FlxColor;
  */
 class Player extends FlxObject
 {
-    public var position:FlxVector;
     public var rotation:Float;
     
     private var _sprite:FlxSprite;
@@ -21,11 +20,12 @@ class Player extends FlxObject
     
 	public function new(x:Float, y:Float)
 	{
-		position = new FlxVector(x, y);
+		this.x = x;
+        this.y = y;
         
         _circle = Math.PI * 2;
         
-        _sprite = new FlxSprite(position.x, position.y);
+        _sprite = new FlxSprite(this.x, this.y);
         _sprite.loadGraphic(AssetPaths.player__png, true, 16, 16);
         
         _sprite.animation.add("base", [0, 1, 2, 3], 12, true);
@@ -37,12 +37,9 @@ class Player extends FlxObject
     override public function update():Void 
     {
         getInput();
-        _sprite.setPosition(position.x, position.y);
+        _sprite.setPosition(this.x, this.y);
         _sprite.angle = rotation * 180/Math.PI;
         _sprite.update();
-        
-		this.x = position.x;
-		this.y = position.y;
 		
         super.update();
     }
@@ -84,7 +81,7 @@ class Player extends FlxObject
         var dx:Float = Math.cos(rotation + Math.PI * 3/2) * distance;
         var dy:Float = Math.sin(rotation + Math.PI * 3/2) * distance;
         
-        position.x += dx;
-        position.y += dy;
+        this.x += dx;
+        this.y += dy;
     }
 }
