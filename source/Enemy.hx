@@ -33,24 +33,21 @@ class Enemy extends FlxObject
                     shadowSprite = AssetPaths.enemyTankShadow__png;
                     mainAnimation = [0, 1];
                     shadowAnimation = [0];
-                }
-                break;
+                };
             case EnemyType.Helicopter:
                 {
                     mainSprite = AssetPaths.enemyHelicopter__png;
                     shadowSprite = AssetPaths.enemyHelicopterShadow__png;
                     mainAnimation = [0];
                     shadowAnimation = [0];
-                }
-                break;
-            case EnemyType.Soldier:
+                };
+            case EnemyType.Soldiers:
                 {
                     mainSprite = AssetPaths.enemySoldier__png;
                     shadowSprite = AssetPaths.enemySoldierShadow__png;
                     mainAnimation = [0];
                     shadowAnimation = [0];
-                }
-                break;
+                };
         }
         
         // Load sprite for the enemy
