@@ -31,7 +31,7 @@ class Enemy extends FlxObject
                 {
                     mainSprite = AssetPaths.enemyTank__png;
                     shadowSprite = AssetPaths.enemyTankShadow__png;
-                    animation = [0, 1];
+                    mainAnimation = [0, 1];
                     shadowAnimation = [0];
                 }
                 break;
@@ -39,7 +39,7 @@ class Enemy extends FlxObject
                 {
                     mainSprite = AssetPaths.enemyHelicopter__png;
                     shadowSprite = AssetPaths.enemyHelicopterShadow__png;
-                    animation = [0];
+                    mainAnimation = [0];
                     shadowAnimation = [0];
                 }
                 break;
@@ -47,7 +47,7 @@ class Enemy extends FlxObject
                 {
                     mainSprite = AssetPaths.enemySoldier__png;
                     shadowSprite = AssetPaths.enemySoldierShadow__png;
-                    animation = [0];
+                    mainAnimation = [0];
                     shadowAnimation = [0];
                 }
                 break;
