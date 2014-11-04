@@ -12,11 +12,10 @@ import flixel.util.FlxColor;
  * @author Thunraz
  */
 class Player extends FlxObject
-{
-    public var rotation:Float;
-    
+{   
     private var _sprite:FlxSprite;
     private var _circle:Float;
+    private var _velocity:FlxVector;
     
 	public function new(x:Float, y:Float)
 	{
@@ -38,8 +37,11 @@ class Player extends FlxObject
     {
         getInput();
         _sprite.setPosition(this.x, this.y);
-        _sprite.angle = rotation * 180/Math.PI;
+        _sprite.angle = angle;
         _sprite.update();
+        
+        velocity.x *= 0.98;
+        velocity.y *= 0.98;
 		
         super.update();
     }
@@ -57,31 +59,39 @@ class Player extends FlxObject
         var left:Bool = FlxG.keys.anyPressed(["A", "LEFT"]);
         var right:Bool = FlxG.keys.anyPressed(["D", "RIGHT"]);
         
-        if (left)
+        if (!(left && right))
         {
-            rotation = (rotation - FlxG.elapsed * 5) % _circle;
-        }
-        else if (right)
-        {
-            rotation = (rotation + FlxG.elapsed * 5) % _circle;
+            if (left)
+            {
+                angle = (angle - 5) % 360;
+            }
+            else if (right)
+            {
+                angle = (angle + 5) % 360;
+            }
+            
+            trace(angle);
         }
         
-        if (up)
+        if (!(up && down))
         {
-            move(40 * FlxG.elapsed);
-        }
-        else if (down)
-        {
-            move(-40 * FlxG.elapsed);
+            if (up)
+            {
+                move(40 * FlxG.elapsed);
+            }
+            else if (down)
+            {
+                move(-40 * FlxG.elapsed);
+            }
         }
     }
     
     private function move(distance:Float):Void
     {
-        var dx:Float = Math.cos(rotation + Math.PI * 3/2) * distance;
-        var dy:Float = Math.sin(rotation + Math.PI * 3/2) * distance;
+        var dx:Float = Math.cos(angle / 180 * Math.PI) * distance;
+        var dy:Float = Math.sin(angle / 180 * Math.PI) * distance;
         
-        this.x += dx;
-        this.y += dy;
+        velocity.x += dx;
+        velocity.y += dy;
     }
 }
