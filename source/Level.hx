@@ -76,7 +76,24 @@ class Level extends FlxBasic
 		{
 			var enemyType:String = entityData.get("Type");
 			
-			// instantiate Enemy
+			var type:EnemyType;
+			
+			if (enemyType == "tank")
+			{
+				type = EnemyType.Tank;
+			}
+			else if (enemyType == "soldiers")
+			{
+				type = EnemyType.Soldiers;
+			}
+			else if (enemyType == "helicopter")
+			{
+				type = EnemyType.Helicopter;
+			}
+			var enemy : Enemy  = new Enemy(type);
+			enemy.x = x;
+			enemy.y = y;
+			_state.AddEnemy(enemy);
 		}
 		
 		if (entityName == "AttackTarget")

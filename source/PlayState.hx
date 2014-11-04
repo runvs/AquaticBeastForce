@@ -5,6 +5,7 @@ import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.group.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
 import flixel.ui.FlxButton;
@@ -19,6 +20,8 @@ class PlayState extends FlxState
 
 	public var _player:Player;
 	private var _level:Level;
+	
+	private var _enemies:FlxTypedGroup<Enemy>;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -85,4 +88,11 @@ class PlayState extends FlxState
         _player.draw();
         super.draw();
     }
+	
+	public function AddEnemy(enemy:Enemy)
+	{
+		_enemies.add(enemy);
+		trace ("spawning Enemy");
+	}
+	
 }
