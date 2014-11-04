@@ -31,5 +31,6 @@
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2</Walls>
   <Entities>
     <Player id="0" x="48" y="16" />
+    <LevelInfo id="1" x="0" y="0" MissionInfo="attack" />
   </Entities>
 </level>

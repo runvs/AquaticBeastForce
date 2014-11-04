@@ -16,6 +16,7 @@ class Level extends FlxBasic
 	public function new(state: PlayState) 
 	{
 		_state = state;
+		_missionInfo = "";
 		super();
 	}
 	
@@ -24,8 +25,8 @@ class Level extends FlxBasic
 	public var _levelNumber:Int;
 	
 	private var _map:FlxOgmoLoader;
-	public var _mWalls:FlxTilemap;
-	
+	public var _mapBackground:FlxTilemap;
+	private var _missionInfo:String;
 	
 	public function LoadLevel(levelNumber:Int)
 	{
@@ -39,15 +40,18 @@ class Level extends FlxBasic
 		// TODO Extend to more levels
 		
 		trace("Level loaded");
-		_mWalls = _map.loadTilemap(AssetPaths.tileset__png, 16, 16, "Walls");
+		_mapBackground = _map.loadTilemap(AssetPaths.tileset__png, 16, 16, "Background");
 		
-		_mWalls.setTileProperties(1, FlxObject.NONE);
-		_mWalls.setTileProperties(2, FlxObject.ANY);
 		trace("Background created ");
 		//add(_mWalls);
 		trace("Background added");
 		
 		_map.loadEntities(placeEntities, "Entities");
+		
+		if (_missionInfo == "")
+		{
+			throw "ERROR: could not load MissionInfo for Level Nr." + _levelNumber;
+		}
 
 	}
 	
@@ -60,17 +64,24 @@ class Level extends FlxBasic
 		{
 			_state._player.position = new FlxVector(x,y);
 		}
+		
+		if (entityName == "LevelInfo")
+		{
+			_missionInfo = entityData.get("MissionInfo");
+			trace("MissionType: " + _missionInfo);
+		}
+		
 	}
 	
 	
 	public override function draw():Void
 	{
-		_mWalls.draw();
+		_mapBackground.draw();
 	}
 	
 	public override function update():Void
 	{
-		_mWalls.update();
+		_mapBackground.update();
 	}
 	
 	

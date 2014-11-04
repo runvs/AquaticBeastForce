@@ -35,7 +35,15 @@ class PlayState extends FlxState
         trace("Player created");
 		
 		_level = new Level(this);
-		_level.LoadLevel(1);
+		try 
+		{
+			_level.LoadLevel(1);
+		}
+		catch ( msg : String ) 
+		{
+			trace("Error occurred while loading the level: " + msg);
+			Sys.exit( -1);
+		}
 		add(_level);
 		trace("Level Loaded");
         
