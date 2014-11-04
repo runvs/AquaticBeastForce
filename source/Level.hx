@@ -72,7 +72,12 @@ class Level extends FlxBasic
 			_missionInfo = entityData.get("MissionInfo");
 			trace("MissionType: " + _missionInfo);
 		}
-		
+		if (entityName == "Enemy")
+		{
+			var enemyType:String = entityData.get("Type");
+			
+			// instantiate Enemy
+		}
 	}
 	
 	
