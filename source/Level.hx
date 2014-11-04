@@ -90,6 +90,11 @@ class Level extends FlxBasic
 			{
 				type = EnemyType.Helicopter;
 			}
+			else
+			{
+				type = EnemyType.Tank;
+				throw "Enemy Type not known";
+			}
 			var enemy : Enemy  = new Enemy(type);
 			enemy.x = x;
 			enemy.y = y;

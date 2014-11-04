@@ -66,4 +66,16 @@ class Enemy extends FlxObject
         
         super();
     }
+	
+	override public function update():Void 
+    {
+		_sprite.update();
+		super.update();
+	}
+	
+	 override public function draw():Void 
+    {
+		_sprite.draw();
+		super.draw();
+	}
 }
