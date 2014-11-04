@@ -26,6 +26,7 @@ class Level extends FlxBasic
 	
 	private var _map:FlxOgmoLoader;
 	public var _mapBackground:FlxTilemap;
+	public var _mapObjects1:FlxTilemap;
 	private var _missionInfo:String;
 	
 	public function LoadLevel(levelNumber:Int)
@@ -39,12 +40,13 @@ class Level extends FlxBasic
 		}
 		// TODO Extend to more levels
 		
-		trace("Level loaded");
-		_mapBackground = _map.loadTilemap(AssetPaths.tileset__png, 16, 16, "Background");
+		trace("Levelfile parsed");
 		
+		
+		_mapBackground = _map.loadTilemap(AssetPaths.tileset__png, 16, 16, "Background");
+		_mapObjects1 = _map.loadTilemap(AssetPaths.objects__png, 16, 16, "Objects1");
 		trace("Background created ");
-		//add(_mWalls);
-		trace("Background added");
+		
 		
 		_map.loadEntities(placeEntities, "Entities");
 		
@@ -52,7 +54,6 @@ class Level extends FlxBasic
 		{
 			throw "ERROR: could not load MissionInfo for Level Nr." + _levelNumber;
 		}
-
 	}
 	
 	private function placeEntities(entityName:String, entityData:Xml):Void
@@ -77,11 +78,13 @@ class Level extends FlxBasic
 	public override function draw():Void
 	{
 		_mapBackground.draw();
+		_mapObjects1.draw();
 	}
 	
 	public override function update():Void
 	{
 		_mapBackground.update();
+		_mapObjects1.update();
 	}
 	
 	
