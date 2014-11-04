@@ -14,6 +14,7 @@ class Enemy extends FlxObject
     
     private var _sprite:FlxSprite;
     private var _shadowSprite:FlxSprite;
+	private var _shadowDistance:Float;
 
     public function new(type:EnemyType )
     {
@@ -33,6 +34,7 @@ class Enemy extends FlxObject
                     shadowSprite = AssetPaths.enemyTankShadow__png;
                     mainAnimation = [0, 1];
                     shadowAnimation = [0];
+					_shadowDistance = 1;
                 };
             case EnemyType.Helicopter:
                 {
@@ -40,6 +42,7 @@ class Enemy extends FlxObject
                     shadowSprite = AssetPaths.enemyHelicopterShadow__png;
                     mainAnimation = [0];
                     shadowAnimation = [0];
+					_shadowDistance = 3;
                 };
             case EnemyType.Soldiers:
                 {
@@ -47,6 +50,7 @@ class Enemy extends FlxObject
                     shadowSprite = AssetPaths.enemySoldierShadow__png;
                     mainAnimation = [0];
                     shadowAnimation = [0];
+					_shadowDistance = 1;
                 };
         }
         
@@ -69,12 +73,20 @@ class Enemy extends FlxObject
 	
 	override public function update():Void 
     {
+		_sprite.setPosition(x, y);
+		_shadowSprite.setPosition(x + _shadowDistance, y + _shadowDistance);
+		
+		_sprite.angle = angle;
+		_shadowSprite.angle = angle;
+		
 		_sprite.update();
+		_shadowSprite.update();
 		super.update();
 	}
 	
 	 override public function draw():Void 
     {
+		_shadowSprite.draw();
 		_sprite.draw();
 		super.draw();
 	}

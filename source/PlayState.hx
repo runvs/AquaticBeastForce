@@ -29,6 +29,7 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		_enemies = new FlxTypedGroup<Enemy>();
+		//add(_enemies);
 		trace("playstate create start");
         
         _player = new Player();
@@ -85,6 +86,8 @@ class PlayState extends FlxState
 		super.update();
 		
 	}
+	
+
     
     override public function draw():Void 
     {
