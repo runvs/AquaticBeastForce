@@ -63,25 +63,23 @@ class Player extends FlxObject
         {
             if (left)
             {
-                angle = (angle - 5) % 360;
+                angle = (angle - GameProperties.PlayerRotationSpeed) % 360;
             }
             else if (right)
             {
-                angle = (angle + 5) % 360;
+                angle = (angle + GameProperties.PlayerRotationSpeed) % 360;
             }
-            
-            trace(angle);
         }
         
         if (!(up && down))
         {
             if (up)
             {
-                move(40 * FlxG.elapsed);
+                move(GameProperties.PlayerMovementSpeed * FlxG.elapsed);
             }
             else if (down)
             {
-                move(-40 * FlxG.elapsed);
+                move(-GameProperties.PlayerMovementSpeed * FlxG.elapsed);
             }
         }
     }
