@@ -1,18 +1,15 @@
 package ;
-import flixel.FlxBasic;
-import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
-import flixel.input.keyboard.FlxKey;
-import flixel.util.FlxVector;
-import flixel.util.FlxColor;
+import flash.display.BlendMode;
+import flixel.FlxG;
 
 /**
  * ...
  * @author Thunraz
  */
 class Player extends FlxObject
-{   
+{
     private var _sprite:FlxSprite;
     private var _shadowSprite:FlxSprite;
         
@@ -29,6 +26,8 @@ class Player extends FlxObject
         _shadowSprite.loadGraphic(AssetPaths.playerShadow__png, true, 16, 16);
         _shadowSprite.animation.add("base", [0, 1], 12, true);
         _shadowSprite.animation.play("base");
+        _shadowSprite.alpha = 0.75;
+        _shadowSprite.blend = BlendMode.MULTIPLY;
         
         super();
 	}
