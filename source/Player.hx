@@ -132,7 +132,7 @@ class Player extends FlxObject
 		
 		
 		
-		var s:Shot = new Shot(x + dx, y + dy, angle + dangle, ShotType.Mg);
+		var s:Shot = new Shot(x + dx, y + dy, angle + dangle, ShotType.Rocket, _state);
 		_state.AddShot(s);
 
 		trace ("Shot created");

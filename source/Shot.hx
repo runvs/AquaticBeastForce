@@ -1,5 +1,7 @@
 package ;
 
+import flixel.FlxBasic;
+import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.util.FlxPoint;
@@ -13,9 +15,18 @@ class Shot extends FlxObject
 	private var _sprite:FlxSprite;
 	private var _type:ShotType;
 	
-	public function new(X:Float=0, Y:Float=0, Angle:Float=0, type:ShotType) 
+	private var _state:PlayState;
+	
+	private var _lifetime:Float;
+	
+	
+	public function new(X:Float=0, Y:Float=0, Angle:Float=0, type:ShotType, state:PlayState) 
 	{
 		super(X, Y);
+		
+		_state = state;
+		
+		
 		angle = Angle;
 		_type = type;
 		_sprite = new FlxSprite();
@@ -33,6 +44,7 @@ class Shot extends FlxObject
 			_sprite.alpha = 0.5;
 			_sprite.blend = BlendMode.ALPHA;
 			_sprite.angle = angle;
+			_lifetime = GameProperties.ShotMGLifeTime;
 			
 		}
 		else if (_type == ShotType.MgSmall)
@@ -43,9 +55,18 @@ class Shot extends FlxObject
 			_sprite.blend = BlendMode.ALPHA;
 			_sprite.setGraphicSize(4, 1);
 			_sprite.updateHitbox();
+			_lifetime = GameProperties.ShotMGSmallLifeTime;
 		}
 		else if (_type == ShotType.Rocket)
 		{
+			trace ("create Roeckt shot");
+			velocity.x = dx * GameProperties.ShotMGMovementSpeed;
+			velocity.y = dy * GameProperties.ShotMGMovementSpeed;
+			_sprite.loadGraphic(AssetPaths.shot_mg__png, false, 8, 1);
+			_sprite.alpha = 1.0;
+			_sprite.angle = angle;
+			
+			_lifetime = GameProperties.ShotRocketLifeTime;
 		}
 		else if (_type == ShotType.Laser)
 		{
@@ -64,6 +85,10 @@ class Shot extends FlxObject
 	public override function update():Void
 	{
 		super.update();
+		
+		_lifetime -= FlxG.elapsed;
+		
+		
 		if (_type == ShotType.Mg || _type == ShotType.MgSmall)
 		{
 			updateMG();
@@ -76,6 +101,12 @@ class Shot extends FlxObject
 		{
 			updateLaser();
 		}
+		
+		if (_lifetime <= 0)
+		{
+			kill();
+		}
+		
 	}
 	
 	private function updateMG():Void
@@ -88,6 +119,13 @@ class Shot extends FlxObject
 	{
 		_sprite.angle = angle;
 		_sprite.setPosition(x, y);
+		
+		if (_lifetime <= 0)
+		{
+			var e:Explosion = new Explosion(x, y);
+			_state.AddExplosion(e);
+		}
+		
 	}
 	private function updateLaser():Void
 	{

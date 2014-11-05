@@ -11,7 +11,9 @@ class GameProperties
 	public static var PlayerWeaponMgFireTime:Float = 0.175;
 	public static var PlayerWeaponMgSpreadInDegree = 5;
 	
-	public static var ShotMGMovementSpeed = 120;
-	
-	
+	public static var ShotMGMovementSpeed:Float = 120;
+
+	public static var ShotMGLifeTime:Float = 20;
+	public static var ShotMGSmallLifeTime:Float = 20;
+	public static var ShotRocketLifeTime:Float = 1;
 }

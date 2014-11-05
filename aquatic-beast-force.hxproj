@@ -15,21 +15,26 @@
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
+    <class path="C:\HaxeToolkit\haxe\lib\flixel-addons\1,1,0" />
+    <class path="C:\HaxeToolkit\haxe\lib\openfl\2,1,3" />
+    <class path="C:\HaxeToolkit\haxe\lib\flixel\3,3,5" />
+    <class path="C:\HaxeToolkit\haxe\lib\lime\2,0,0-alpha,5" />
     <class path="source" />
+    <class path="C:\HaxeToolkit\haxe\lib\lime\2,0,0-alpha,5\legacy" />
+    <class path="export\windows\cpp\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="" />
+    <option directives="flixel-addons=1.1.0&#xA;openfl=2.1.3&#xA;flixel=3.3.5&#xA;lime=2.0.0-alpha.5&#xA;tools=2.0.0-alpha.5&#xA;lime-legacy&#xA;FLX_NO_DEBUG&#xA;no-compilation&#xA;NAPE_RELEASE_BUILD&#xA;native&#xA;lime-native&#xA;openfl-native&#xA;FLX_RENDER_TILE&#xA;windows&#xA;desktop" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
-    <option mainClass="Test" />
+    <option mainClass="ApplicationMain" />
     <option enabledebug="False" />
-    <option additional="" />
+    <option additional="--remap flash:openfl&#xA;#--macro keep(&quot;Main&quot;)" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
-    <library name="nme" />
-    <library name="flixel" />
+    <!-- example: <library name="..." /> -->
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
@@ -41,7 +46,7 @@
   </library>
   <!-- Paths to exclude from the Project Explorer tree -->
   <hiddenPaths>
-    <!-- example: <hidden path="..." /> -->
+    <hidden path="obj" />
   </hiddenPaths>
   <!-- Executed before build -->
   <preBuildCommand />
