@@ -95,7 +95,7 @@ class Level extends FlxBasic
 				type = EnemyType.Tank;
 				throw "Enemy Type not known";
 			}
-			var enemy : Enemy  = new Enemy(type);
+			var enemy : Enemy  = new Enemy(type, _state);
 			enemy.x = x;
 			enemy.y = y;
 			_state.AddEnemy(enemy);

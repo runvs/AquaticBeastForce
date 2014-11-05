@@ -119,13 +119,7 @@ class Shot extends FlxObject
 	{
 		_sprite.angle = angle;
 		_sprite.setPosition(x, y);
-		
-		if (_lifetime <= 0)
-		{
-			var e:Explosion = new Explosion(x, y);
-			_state.AddExplosion(e);
-		}
-		
+
 	}
 	private function updateLaser():Void
 	{
@@ -137,4 +131,16 @@ class Shot extends FlxObject
 		super.draw();
 		_sprite.draw();
 	}
+	
+	public override function kill():Void
+	{
+		if (_type == ShotType.Rocket)
+		{
+			var e:Explosion = new Explosion(x, y);
+			_state.AddExplosion(e);
+		}
+		alive = false;
+		exists = false;
+	}
+	
 }

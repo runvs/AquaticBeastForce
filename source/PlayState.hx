@@ -90,8 +90,19 @@ class PlayState extends FlxState
 		_enemies.update();
 		_shotlist.update();
 		_explosionList.update();
-		super.update();
 		
+		FlxG.collide(_enemies, _shotlist, shotEnemyCollision);
+		
+		
+		super.update();
+	}
+	
+	
+	public function shotEnemyCollision (e:Enemy, s:Shot):Void
+	{
+		trace ("hit");
+		s.kill;
+		//e.takeDamage();
 	}
 	
 
@@ -113,7 +124,7 @@ class PlayState extends FlxState
 	}
 	public function AddShot(shot:Shot):Void
 	{
-		trace ("spawning Shot");
+		//trace ("spawning Shot");
 		_shotlist.add(shot);
 	}
 	public function AddExplosion(e:Explosion):Void

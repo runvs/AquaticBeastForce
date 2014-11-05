@@ -3,6 +3,8 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flash.display.BlendMode;
 import flixel.FlxG;
+import flixel.util.FlxPoint;
+import flixel.util.FlxVector;
 
 /**
  * ...
@@ -15,11 +17,14 @@ class Enemy extends FlxObject
     private var _sprite:FlxSprite;
     private var _shadowSprite:FlxSprite;
 	private var _shadowDistance:Float;
+	private var _state:PlayState;
 
-    public function new(type:EnemyType )
+    public function new(type:EnemyType, state:PlayState )
     {
         this.type = type;
-        
+        _state = state;
+		
+		
         var mainSprite:String;
         var shadowSprite:String;
         var mainAnimation = [];
@@ -81,8 +86,67 @@ class Enemy extends FlxObject
 		
 		_sprite.update();
 		_shadowSprite.update();
+		
+		
+		if (type == EnemyType.Tank)
+		{
+			updateTank();
+		}
+		
+		velocity.x *= 0.96;
+		velocity.y *= 0.96;
+		
+		
 		super.update();
 	}
+	
+	private function updateTank():Void
+	{
+		// drive towards player
+		var playerPos:FlxVector= new FlxVector(_state._player.x, _state._player.y);
+		var tankPos:FlxVector  = new FlxVector(x,y);
+		
+		var direction:FlxVector = new FlxVector(playerPos.x - tankPos.x,playerPos.y - tankPos.y);
+		var l = direction.length;
+		
+//		angle = direction.degrees;
+		
+		var targetAngle:Float = direction.degrees;
+		var currentAngle:Float = angle;
+		
+		var angleDifference:Float= targetAngle - currentAngle;
+		
+		if (angleDifference > 0 && angleDifference >= GameProperties.EnemyTankTurnSpeed)
+		{
+			angleDifference = GameProperties.EnemyTankTurnSpeed;
+		}
+		else if (angleDifference <= 0 && angleDifference <= GameProperties.EnemyTankTurnSpeed)
+		{
+			angleDifference = -GameProperties.EnemyTankTurnSpeed;
+		}
+		
+		currentAngle+= angleDifference;
+		
+		var rad:Float = currentAngle / 180 * Math.PI;
+        var dx:Float = Math.cos(rad);
+        var dy:Float = Math.sin(rad);
+		
+		direction = new FlxVector(dx, dy);
+		angle = direction.degrees;
+		
+		if(l >= 40)
+		{
+			direction = direction.normalize();
+			
+			var tmp:Float = GameProperties.EnemyTankMovementSpeed * FlxG.elapsed;
+			
+			velocity.x += direction.x * tmp;
+			velocity.y += direction.y * tmp;
+		}
+		
+	}
+	
+	
 	
 	 override public function draw():Void 
     {
