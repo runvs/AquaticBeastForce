@@ -12,7 +12,7 @@ import flash.display.BlendMode;
  */
 class Shot extends FlxObject
 {
-	private var _sprite:FlxSprite;
+	public var _sprite:FlxSprite;
 	private var _type:ShotType;
 	
 	private var _state:PlayState;
@@ -37,7 +37,7 @@ class Shot extends FlxObject
 		
 		if (_type == ShotType.Mg)
 		{
-			trace ("create MG shot");
+			//trace ("create MG shot");
 			velocity.x = dx * GameProperties.ShotMGMovementSpeed;
 			velocity.y = dy * GameProperties.ShotMGMovementSpeed;
 			_sprite.loadGraphic(AssetPaths.shot_mg__png, false, 8, 1);
@@ -49,7 +49,7 @@ class Shot extends FlxObject
 		}
 		else if (_type == ShotType.MgSmall)
 		{
-			trace ("create MGSmall shot");
+			//trace ("create MGSmall shot");
 			_sprite.loadGraphic(AssetPaths.shot_mg__png, false, 8, 1);
 			_sprite.alpha = 0.25;
 			_sprite.blend = BlendMode.ALPHA;
@@ -59,7 +59,7 @@ class Shot extends FlxObject
 		}
 		else if (_type == ShotType.Rocket)
 		{
-			trace ("create Roeckt shot");
+			//trace ("create Roeckt shot");
 			velocity.x = dx * GameProperties.ShotMGMovementSpeed;
 			velocity.y = dy * GameProperties.ShotMGMovementSpeed;
 			_sprite.loadGraphic(AssetPaths.shot_mg__png, false, 8, 1);
@@ -77,7 +77,7 @@ class Shot extends FlxObject
 			throw "ERROR: cannot determine shot type";
 		}
 		
-		trace ("Shot constuctor finished");
+		//trace ("Shot constuctor finished");
 		
 	}
 	
@@ -128,19 +128,22 @@ class Shot extends FlxObject
 	
 	public override function draw():Void
 	{
-		super.draw();
-		_sprite.draw();
+		if (alive && exists)
+		{
+			super.draw();
+			_sprite.draw();
+		}
 	}
 	
-	public override function kill():Void
-	{
-		if (_type == ShotType.Rocket)
-		{
-			var e:Explosion = new Explosion(x, y);
-			_state.AddExplosion(e);
-		}
-		alive = false;
-		exists = false;
-	}
+	//public override function kill():Void
+	//{
+		//if (_type == ShotType.Rocket)
+		//{
+			//var e:Explosion = new Explosion(x, y);
+			//_state.AddExplosion(e);
+		//}
+		//alive = false;
+		//exists = false;
+	//}
 	
 }

@@ -14,7 +14,7 @@ class Enemy extends FlxObject
 {
     public var type:EnemyType;
     
-    private var _sprite:FlxSprite;
+    public var _sprite:FlxSprite;
     private var _shadowSprite:FlxSprite;
 	private var _shadowDistance:Float;
 	private var _state:PlayState;

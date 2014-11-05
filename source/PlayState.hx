@@ -10,6 +10,7 @@ import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
+import lime.math.Vector2;
 
 
 /**
@@ -90,18 +91,53 @@ class PlayState extends FlxState
 		_enemies.update();
 		_shotlist.update();
 		_explosionList.update();
-		
-		FlxG.collide(_enemies, _shotlist, shotEnemyCollision);
-		
+
+		//FlxG.overlap(_enemies, _shotlist, shotEnemyCollision);
+		var newEList:FlxTypedGroup<Enemy> = new FlxTypedGroup<Enemy>();
+		for (i in 0..._enemies.length)
+		{
+			var e:Enemy = _enemies.members[i];
+			if (e.alive && e.exists)
+			{
+					newEList.add(e);
+			}
+			else 
+			{
+				continue;
+			}
+			
+			for (j in 0..._shotlist.length)
+			{
+				
+				var s:Shot = _shotlist.members[j];
+				if (s.alive && s.exists)
+				{
+
+					//trace ("checkcollision");
+					var pos1:Vector2 = new Vector2(e.x+8, e.y+8);
+					var pos2:Vector2 = new Vector2(s.x, s.y);
+					var distance:Vector2 = new Vector2(pos1.x - pos2.x, pos1.y - pos2.y);
+
+					if (distance.length <= 5)
+					{
+						
+						shotEnemyCollision(e, s);
+					}
+				}
+			}
+			
+		}
+		_enemies = newEList;
 		
 		super.update();
 	}
+
 	
 	
 	public function shotEnemyCollision (e:Enemy, s:Shot):Void
 	{
-		trace ("hit");
-		s.kill;
+		//trace ("hit");
+		s.kill();
 		//e.takeDamage();
 	}
 	
