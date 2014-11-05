@@ -3,6 +3,8 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flash.display.BlendMode;
 import flixel.FlxG;
+import flixel.util.FlxRandom;
+import lime.math.Vector2;
 
 /**
  * ...
@@ -12,9 +14,12 @@ class Player extends FlxObject
 {
     private var _sprite:FlxSprite;
     private var _shadowSprite:FlxSprite;
-        
-	public function new()
+    private var _state:PlayState;    
+	private var _mgfireTime:Float;
+	
+	public function new(state:PlayState)
 	{   
+		_state = state;
         // Load sprite for the player
         _sprite = new FlxSprite();
         _sprite.loadGraphic(AssetPaths.player__png, true, 16, 16);
@@ -28,6 +33,8 @@ class Player extends FlxObject
         _shadowSprite.animation.play("base");
         _shadowSprite.alpha = 0.75;
         _shadowSprite.blend = BlendMode.MULTIPLY;
+		
+		_mgfireTime = 0;
         
         super();
 	}
@@ -47,6 +54,10 @@ class Player extends FlxObject
         velocity.x *= 0.98;
         velocity.y *= 0.98;
 		
+		_mgfireTime += FlxG.elapsed;
+		
+		
+		
         super.update();
     }
     
@@ -64,6 +75,7 @@ class Player extends FlxObject
         var down:Bool = FlxG.keys.anyPressed(["S", "DOWN"]);
         var left:Bool = FlxG.keys.anyPressed(["A", "LEFT"]);
         var right:Bool = FlxG.keys.anyPressed(["D", "RIGHT"]);
+		var shot:Bool = FlxG.keys.anyPressed(["Space","X"]);
         
         if (!(left && right))
         {
@@ -88,14 +100,44 @@ class Player extends FlxObject
                 move(-GameProperties.PlayerMovementSpeed * FlxG.elapsed);
             }
         }
+		
+		if (shot)
+		{
+			if (_mgfireTime >= GameProperties.PlayerWeaponMgFireTime)
+			{
+				shoot();
+			}
+		
+		}
     }
     
     private function move(distance:Float):Void
     {
-        var dx:Float = Math.cos(angle / 180 * Math.PI) * distance;
-        var dy:Float = Math.sin(angle / 180 * Math.PI) * distance;
+		var rad:Float = angle / 180 * Math.PI;
+        var dx:Float = Math.cos(rad) * distance;
+        var dy:Float = Math.sin(rad) * distance;
         
         velocity.x += dx;
         velocity.y += dy;
     }
+	
+	private function shoot():Void
+	{
+		trace ("Player Shooting");
+		var dangle = FlxRandom.floatRanged( -GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
+		var rad:Float = (angle) / 180 * Math.PI;
+		var dx:Float = Math.cos(rad) * 7 + 7;
+        var dy:Float = Math.sin(rad) * 7 + 7;
+		trace ("Shot created");
+		
+		
+		
+		var s:Shot = new Shot(x + dx, y + dy, angle + dangle, ShotType.Mg);
+		_state.AddShot(s);
+
+		trace ("Shot created");
+		_mgfireTime = 0;
+		
+	}
+	
 }

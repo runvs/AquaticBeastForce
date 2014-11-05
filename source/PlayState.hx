@@ -22,6 +22,7 @@ class PlayState extends FlxState
 	private var _level:Level;
 	
 	private var _enemies:FlxTypedGroup<Enemy>;
+	private var _shotlist:FlxTypedGroup<Shot>;
 	
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -29,10 +30,11 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		_enemies = new FlxTypedGroup<Enemy>();
+		_shotlist = new FlxTypedGroup<Shot>();
 		//add(_enemies);
 		trace("playstate create start");
         
-        _player = new Player();
+        _player = new Player(this);
         trace("Player created");
 		
 		_level = new Level(this);
@@ -83,6 +85,7 @@ class PlayState extends FlxState
 		_level.update();
         _player.update();
 		_enemies.update();
+		_shotlist.update();
 		super.update();
 		
 	}
@@ -94,13 +97,20 @@ class PlayState extends FlxState
 		_level.draw();
         _player.draw();
 		_enemies.draw();
+		_shotlist.draw();
         super.draw();
     }
 	
-	public function AddEnemy(enemy:Enemy)
+	public function AddEnemy(enemy:Enemy):Void
 	{
 		_enemies.add(enemy);
 		trace ("spawning Enemy");
 	}
+	public function AddShot(shot:Shot):Void
+	{
+		trace ("spawning Shot");
+		_shotlist.add(shot);
+	}
+	
 	
 }
