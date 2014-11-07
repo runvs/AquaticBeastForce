@@ -4,7 +4,9 @@ import flixel.FlxSprite;
 import flash.display.BlendMode;
 import flixel.FlxG;
 import flixel.util.FlxPoint;
+import flixel.util.FlxSpriteUtil;
 import flixel.util.FlxVector;
+using flixel.util.FlxSpriteUtil;
 
 /**
  * ...
@@ -28,7 +30,7 @@ class Enemy extends FlxObject
         this.type = type;
         _state = state;
 		
-		_health = _healtMax = 1000;
+		_health = _healtMax = GameProperties.EnemyTankDefaultHealth;
 		
 		
         var mainSprite:String;
@@ -155,23 +157,27 @@ class Enemy extends FlxObject
 			velocity.x += direction.x * tmp;
 			velocity.y += direction.y * tmp;
 		}
-		
 	}
 	
 	
 	public function TakeDamage(damage:Float):Void
 	{
-		_health -=  damage;
-		
-		CheckDead();
+		if (alive && exists)
+		{
+			_health -=  damage;
+			CheckDead();
+		}
 	}
 	
 	
 	private function CheckDead()
 	{
-		if (_health <= 0)
+		if (alive && exists)
 		{
-			kill();
+			if (_health <= 0)
+			{
+				kill();
+			}
 		}
 	}
 	
@@ -184,10 +190,11 @@ class Enemy extends FlxObject
 	
 	public override function kill():Void
 	{
-		
+		super.kill();
+		// we need to call kill first, otherwise the enemy could get damaged by its own explosion and cause an endless loop
 		_state.AddExplosion(new Explosion(x , y ));
 		
-		super.kill();
+		
 		
 	}
 	

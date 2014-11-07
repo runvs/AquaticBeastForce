@@ -10,6 +10,7 @@ import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
+import flixel.util.FlxTimer;
 import lime.math.Vector2;
 
 
@@ -84,6 +85,26 @@ class PlayState extends FlxState
 		super.destroy();
 	}
 
+	
+	private function CleanUp():Void
+	{
+		{
+			var newExploList:FlxTypedGroup<Explosion> = new FlxTypedGroup<Explosion>();
+			_explosionList.forEach(function(e:Explosion) { if (e.alive) newExploList.add(e); } );
+			_explosionList = newExploList;
+		}
+		{
+			var newEnemyList:FlxTypedGroup<Enemy> = new FlxTypedGroup<Enemy>();
+			_enemies.forEach(function(e:Enemy) { if (e.alive) newEnemyList.add(e); } );
+			_enemies = newEnemyList;
+		}
+		{
+			var newShotList:FlxTypedGroup<Shot> = new FlxTypedGroup<Shot>();
+			_shotlist.forEach(function(s:Shot) { if (s.alive) newShotList.add(s); } );
+			_shotlist = newShotList;
+		}
+	}
+	
 	/**
 	 * Function that is called once every frame.
 	 */
@@ -95,10 +116,10 @@ class PlayState extends FlxState
 		_enemies.update();
 		_shotlist.update();
 		_explosionList.update();
-
+		
+		CleanUp();
 		
 		// TODO Rework and Refactor once finished
-		var newEList:FlxTypedGroup<Enemy> = new FlxTypedGroup<Enemy>();
 		for (j in 0..._shotlist.length)
 		{
 			var s:Shot = _shotlist.members[j];
@@ -107,11 +128,7 @@ class PlayState extends FlxState
 				for (i in 0..._enemies.length)
 				{
 					var e:Enemy = _enemies.members[i];
-					if (e.alive && e.exists)
-					{
-							newEList.add(e);
-					}
-					else 
+					if (!(e.alive && e.exists))
 					{
 						continue;
 					}
@@ -127,11 +144,7 @@ class PlayState extends FlxState
 				for (i in 0 ... _destroyableList.length)
 				{
 					var d:DestroyableObject = _destroyableList.members[i];
-					if (d.alive && d.exists)
-					{
-						
-					}
-					else
+					if (!(d.alive && d.exists))
 					{
 						continue;
 					}
@@ -142,13 +155,9 @@ class PlayState extends FlxState
 							shotDestroyableCollision(d, s);
 						}
 					}
-					
-					
 				}
 			}
-			
 		}
-		_enemies = newEList;
 		
 
 		
@@ -196,6 +205,20 @@ class PlayState extends FlxState
 	public function AddExplosion(e:Explosion):Void
 	{
 		_explosionList.add(e);
+		
+		_enemies.forEach(function(en:Enemy) 
+		{ 
+			if (en.alive && en.exists)
+			{
+				var dist = Math.sqrt((en.x -e.x) * (en.x -e.x) + (en.y -e.y) * (en.y -e.y));
+				if (dist <= 16)
+				{
+					trace ("enemy taking Damage from explosion");
+					var t: FlxTimer = new FlxTimer(0.23, function(t:FlxTimer) { en.TakeDamage(GameProperties.ExplosionDamage); } );	// so they do not explode simulatiously
+				}
+			}
+		} );
+		
 	}
 	public function AddDestroyable(d:DestroyableObject):Void
 	{

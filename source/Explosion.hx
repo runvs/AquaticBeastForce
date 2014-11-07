@@ -22,6 +22,7 @@ class Explosion extends FlxSprite
 	{
 		if (animation.finished)
 		{
+			alive = false;
 			kill();
 		}
 		super.update();

@@ -4,6 +4,7 @@ import flixel.FlxBasic;
 import flixel.addons.editors.ogmo.FlxOgmoLoader;
 import flixel.FlxObject;
 import flixel.tile.FlxTilemap;
+import flixel.util.FlxPoint;
 import flixel.util.FlxVector;
 
 /**
@@ -63,8 +64,9 @@ class Level extends FlxBasic
 		var y:Int = Std.parseInt(entityData.get("y"));
 		if (entityName == "Player")
 		{
-			_state._player.x = x;
-            _state._player.y = y;
+			_state._player.SetRespawnPosition(new FlxPoint(x, y), true);
+			//_state._player.x = x;
+            //_state._player.y = y;
 		}
 		
 		if (entityName == "LevelInfo")

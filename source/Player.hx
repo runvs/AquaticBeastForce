@@ -3,6 +3,8 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flash.display.BlendMode;
 import flixel.FlxG;
+import flixel.util.FlxColor;
+import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
 import lime.math.Vector2;
 
@@ -16,6 +18,15 @@ class Player extends FlxObject
     private var _shadowSprite:FlxSprite;
     private var _state:PlayState;    
 	private var _mgfireTime:Float;
+	
+	private var _health:Float;
+	private var _healthMax:Float;
+	
+	private var _remainingLives:Int;
+	
+	private var _reSpawnPosition:FlxPoint;
+	
+	
 	
 	public function new(state:PlayState)
 	{   
@@ -36,11 +47,16 @@ class Player extends FlxObject
         _shadowSprite.alpha = 0.75;
         _shadowSprite.blend = BlendMode.MULTIPLY;
 		
+		_health = _healthMax = GameProperties.PlayerHealthDefault;
+		_remainingLives = GameProperties.PlayerLivesDefault;
+		
+		
 		_mgfireTime = 0;
         
         super();
 	}
-    
+	
+
     override public function update():Void 
     {
         getInput();
@@ -131,15 +147,69 @@ class Player extends FlxObject
 		var dx:Float = Math.cos(rad) * 7 + 7;
         var dy:Float = Math.sin(rad) * 7 + 7;
 		//trace ("Shot created");
-		
-		
-		
+
 		var s:Shot = new Shot(x + dx, y + dy, angle + dangle, ShotType.Mg, _state);
 		_state.AddShot(s);
 
 		//trace ("Shot created");
 		_mgfireTime = 0;
-		
 	}
+	
+	public function Repair():Void
+	{
+		_health = _healthMax;
+	}
+	
+	
+	public function TakeDamage(damage:Float):Void
+	{
+		_health -=  damage;
+		CheckDead();
+	}
+	
+	
+	private function CheckDead()
+	{
+		if (_health <= 0)
+		{
+			Die();
+		}
+	}
+	
+	private function Die():Void
+	{
+		alive = false;
+		// start Die animation
+		
+		FlxG.camera.fade(FlxColor.BLACK, 1, false, EndThisLife);
+	}
+	
+	public function EndThisLife():Void
+	{
+		_remainingLives = _remainingLives - 1;
+		if (_remainingLives >= 0)
+		{
+			Respawn();
+		}
+	}
+	
+	
+	private function Respawn():Void
+	{
+		alive = true;
+		FlxG.camera.fade(FlxColor.BLACK, 1, true);
+		x = _reSpawnPosition.x;
+		y = _reSpawnPosition.y;
+	}
+	
+	public function SetRespawnPosition(pos:FlxPoint, moveToPosition:Bool = false):Void
+	{
+		_reSpawnPosition = pos;
+		if (moveToPosition)
+		{
+			Respawn();
+		}
+	}
+	
 	
 }

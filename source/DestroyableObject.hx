@@ -12,9 +12,7 @@ import haxe.ds.StringMap;
  * @author 
  */
 class DestroyableObject extends FlxObject
-{
-
-	
+{	
 	static private function GetHitpoints(type:String):Float
 	{
 		if (type == "barrel")
@@ -52,7 +50,7 @@ class DestroyableObject extends FlxObject
 		_state = state;
 		
 		var imagepath:String = "assets/images/" + type + ".png";
-		trace ("destoyable constructor: " + imagepath);
+		//trace ("destoyable constructor: " + imagepath);
 		_sprite = new FlxSprite();
 		_sprite.loadGraphic(imagepath, true, 16, 16);
 		_sprite.setGraphicSize(GetScale(_type), GetScale(_type));
