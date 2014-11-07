@@ -211,7 +211,7 @@ class PlayState extends FlxState
 			if (en.alive && en.exists)
 			{
 				var dist = Math.sqrt((en.x -e.x) * (en.x -e.x) + (en.y -e.y) * (en.y -e.y));
-				if (dist <= 16)
+				if (dist <= 25)
 				{
 					trace ("enemy taking Damage from explosion");
 					var t: FlxTimer = new FlxTimer(0.23, function(t:FlxTimer) { en.TakeDamage(GameProperties.ExplosionDamage); } );	// so they do not explode simulatiously

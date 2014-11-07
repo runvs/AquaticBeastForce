@@ -39,6 +39,48 @@
     <Destroy id="7" x="48" y="224" Type="barrel" />
     <Enemy id="8" x="80" y="240" Type="tank" />
     <Player id="9" x="80" y="160" />
+    <Enemy id="0" x="128" y="160" Type="tank" />
+    <Enemy id="10" x="144" y="160" Type="tank" />
+    <Enemy id="11" x="160" y="160" Type="tank" />
+    <Enemy id="12" x="176" y="160" Type="tank" />
+    <Enemy id="13" x="192" y="160" Type="tank" />
+    <Enemy id="14" x="208" y="160" Type="tank" />
+    <Enemy id="15" x="224" y="160" Type="tank" />
+    <Enemy id="16" x="240" y="160" Type="tank" />
+    <Enemy id="17" x="256" y="160" Type="tank" />
+    <Enemy id="18" x="272" y="160" Type="tank" />
+    <Enemy id="19" x="288" y="160" Type="tank" />
+    <Enemy id="20" x="304" y="160" Type="tank" />
+    <Enemy id="21" x="144" y="144" Type="tank" />
+    <Enemy id="22" x="144" y="176" Type="tank" />
+    <Enemy id="23" x="176" y="112" Type="tank" />
+    <Enemy id="24" x="160" y="176" Type="tank" />
+    <Enemy id="25" x="160" y="128" Type="tank" />
+    <Enemy id="26" x="160" y="144" Type="tank" />
+    <Enemy id="27" x="160" y="192" Type="tank" />
+    <Enemy id="28" x="176" y="128" Type="tank" />
+    <Enemy id="29" x="176" y="144" Type="tank" />
+    <Enemy id="30" x="176" y="176" Type="tank" />
+    <Enemy id="31" x="176" y="192" Type="tank" />
+    <Enemy id="32" x="176" y="208" Type="tank" />
+    <Enemy id="33" x="192" y="208" Type="tank" />
+    <Enemy id="34" x="192" y="192" Type="tank" />
+    <Enemy id="35" x="192" y="224" Type="tank" />
+    <Enemy id="36" x="192" y="176" Type="tank" />
+    <Enemy id="37" x="192" y="144" Type="tank" />
+    <Enemy id="38" x="192" y="128" Type="tank" />
+    <Enemy id="39" x="192" y="96" Type="tank" />
+    <Enemy id="40" x="192" y="112" Type="tank" />
+    <Enemy id="41" x="208" y="80" Type="tank" />
+    <Enemy id="42" x="208" y="96" Type="tank" />
+    <Enemy id="43" x="208" y="112" Type="tank" />
+    <Enemy id="44" x="208" y="144" Type="tank" />
+    <Enemy id="45" x="208" y="128" Type="tank" />
+    <Enemy id="46" x="208" y="176" Type="tank" />
+    <Enemy id="47" x="208" y="192" Type="tank" />
+    <Enemy id="48" x="208" y="208" Type="tank" />
+    <Enemy id="49" x="208" y="224" Type="tank" />
+    <Enemy id="50" x="208" y="240" Type="tank" />
   </Entities>
   <Objects1 tileset="ObjectSet" exportMode="CSV">-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
