@@ -18,11 +18,17 @@ class Enemy extends FlxObject
     private var _shadowSprite:FlxSprite;
 	private var _shadowDistance:Float;
 	private var _state:PlayState;
+	
+	private var _health:Float;
+	private var _healtMax:Float;
+	
 
     public function new(type:EnemyType, state:PlayState )
     {
         this.type = type;
         _state = state;
+		
+		_health = _healtMax = 1000;
 		
 		
         var mainSprite:String;
@@ -30,6 +36,7 @@ class Enemy extends FlxObject
         var mainAnimation = [];
         var shadowAnimation = [];
         var animationSpeed = 12;
+		
         
         switch(this.type)
         {
@@ -73,6 +80,11 @@ class Enemy extends FlxObject
         _shadowSprite.alpha = 0.75;
         _shadowSprite.blend = BlendMode.MULTIPLY;
         
+		
+		width = _sprite.width;
+		height = _sprite.height;
+		
+		
         super();
     }
 	
@@ -147,6 +159,21 @@ class Enemy extends FlxObject
 	}
 	
 	
+	public function TakeDamage(damage:Float):Void
+	{
+		_health -=  damage;
+		
+		CheckDead();
+	}
+	
+	
+	private function CheckDead()
+	{
+		if (_health <= 0)
+		{
+			kill();
+		}
+	}
 	
 	 override public function draw():Void 
     {
@@ -154,4 +181,15 @@ class Enemy extends FlxObject
 		_sprite.draw();
 		super.draw();
 	}
+	
+	public override function kill():Void
+	{
+		
+		_state.AddExplosion(new Explosion(x , y ));
+		
+		super.kill();
+		
+	}
+	
+	
 }

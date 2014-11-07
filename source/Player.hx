@@ -19,14 +19,16 @@ class Player extends FlxObject
 	
 	public function new(state:PlayState)
 	{   
+		FlxG.stage.quality = flash.display.StageQuality.BEST;
 		_state = state;
         // Load sprite for the player
         _sprite = new FlxSprite();
+		trace(AssetPaths.player__png);
         _sprite.loadGraphic(AssetPaths.player__png, true, 16, 16);
         _sprite.animation.add("base", [0, 1, 2, 3], 12, true);
         _sprite.animation.play("base");
         
-        // Load sprite for the shadow
+		// Load sprite for the shadow
         _shadowSprite = new FlxSprite();
         _shadowSprite.loadGraphic(AssetPaths.playerShadow__png, true, 16, 16);
         _shadowSprite.animation.add("base", [0, 1], 12, true);
@@ -132,7 +134,7 @@ class Player extends FlxObject
 		
 		
 		
-		var s:Shot = new Shot(x + dx, y + dy, angle + dangle, ShotType.Rocket, _state);
+		var s:Shot = new Shot(x + dx, y + dy, angle + dangle, ShotType.Mg, _state);
 		_state.AddShot(s);
 
 		//trace ("Shot created");

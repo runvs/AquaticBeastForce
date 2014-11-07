@@ -25,15 +25,18 @@ class PlayState extends FlxState
 	private var _enemies:FlxTypedGroup<Enemy>;
 	private var _shotlist:FlxTypedGroup<Shot>;
 	private var _explosionList:FlxTypedGroup<Explosion>;
-	
+	private var _destroyableList:FlxTypedGroup<DestroyableObject>;
+
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
 	override public function create():Void
 	{
+		//FlxG.camera.antialiasing = true;
 		_enemies = new FlxTypedGroup<Enemy>();
 		_shotlist = new FlxTypedGroup<Shot>();
 		_explosionList = new FlxTypedGroup<Explosion>();
+		_destroyableList = new FlxTypedGroup<DestroyableObject>();
 		
 		//add(_enemies);
 		trace("playstate create start");
@@ -87,47 +90,67 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		_level.update();
+		_destroyableList.update();
         _player.update();
 		_enemies.update();
 		_shotlist.update();
 		_explosionList.update();
 
-		//FlxG.overlap(_enemies, _shotlist, shotEnemyCollision);
+		
+		// TODO Rework and Refactor once finished
 		var newEList:FlxTypedGroup<Enemy> = new FlxTypedGroup<Enemy>();
-		for (i in 0..._enemies.length)
+		for (j in 0..._shotlist.length)
 		{
-			var e:Enemy = _enemies.members[i];
-			if (e.alive && e.exists)
+			var s:Shot = _shotlist.members[j];
+			if (s.alive && s.exists)
 			{
-					newEList.add(e);
-			}
-			else 
-			{
-				continue;
-			}
-			
-			for (j in 0..._shotlist.length)
-			{
-				
-				var s:Shot = _shotlist.members[j];
-				if (s.alive && s.exists)
+				for (i in 0..._enemies.length)
 				{
+					var e:Enemy = _enemies.members[i];
+					if (e.alive && e.exists)
+					{
+							newEList.add(e);
+					}
+					else 
+					{
+						continue;
+					}
 
-					//trace ("checkcollision");
-					var pos1:Vector2 = new Vector2(e.x+8, e.y+8);
-					var pos2:Vector2 = new Vector2(s.x, s.y);
-					var distance:Vector2 = new Vector2(pos1.x - pos2.x, pos1.y - pos2.y);
-
-					if (distance.length <= 5)
+					if (FlxG.overlap(e._sprite, s._sprite))
+					{
+						if (FlxG.pixelPerfectOverlap(e._sprite, s._sprite,1))
+						{
+							shotEnemyCollision(e, s);
+						}
+					}
+				}
+				for (i in 0 ... _destroyableList.length)
+				{
+					var d:DestroyableObject = _destroyableList.members[i];
+					if (d.alive && d.exists)
 					{
 						
-						shotEnemyCollision(e, s);
 					}
+					else
+					{
+						continue;
+					}
+					if (FlxG.overlap(d._sprite, s._sprite))
+					{
+						if (FlxG.pixelPerfectOverlap(d._sprite, s._sprite,1))
+						{
+							shotDestroyableCollision(d, s);
+						}
+					}
+					
+					
 				}
 			}
 			
 		}
 		_enemies = newEList;
+		
+
 		
 		super.update();
 	}
@@ -137,19 +160,26 @@ class PlayState extends FlxState
 	public function shotEnemyCollision (e:Enemy, s:Shot):Void
 	{
 		//trace ("hit");
-		s.kill();
-		//e.takeDamage();
+		 s.deleteObject();
+		e.TakeDamage(1.5);
 	}
 	
-
+	public function shotDestroyableCollision (d:DestroyableObject, s:Shot):Void
+	{
+		//trace ("hit");
+		s.deleteObject();
+		d.TakeDamage(1.5);
+	}
     
     override public function draw():Void 
     {
 		_level.draw();
-        _player.draw();
+        _destroyableList.draw();
+		_player.draw();
 		_enemies.draw();
 		_shotlist.draw();
 		_explosionList.draw();
+		
         super.draw();
     }
 	
@@ -166,6 +196,10 @@ class PlayState extends FlxState
 	public function AddExplosion(e:Explosion):Void
 	{
 		_explosionList.add(e);
+	}
+	public function AddDestroyable(d:DestroyableObject):Void
+	{
+		_destroyableList.add(d);
 	}
 	
 	

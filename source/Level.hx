@@ -117,6 +117,13 @@ class Level extends FlxBasic
 				throw "cannot create target with type " + targetType;
 			}
 		}
+		if (entityName == "Destroy")
+		{
+			trace ("creating destoyable object");
+			var type:String = entityData.get("Type");
+			var d : DestroyableObject = new  DestroyableObject(x, y, type, _state);
+			_state.AddDestroyable(d);
+		}
 	}
 	
 	

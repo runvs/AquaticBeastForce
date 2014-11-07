@@ -4,8 +4,12 @@ import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxPoint;
 import flash.display.BlendMode;
+
+using flixel.util.FlxSpriteUtil;
+
 /**
  * ...
  * @author ...
@@ -42,7 +46,6 @@ class Shot extends FlxObject
 			velocity.y = dy * GameProperties.ShotMGMovementSpeed;
 			_sprite.loadGraphic(AssetPaths.shot_mg__png, false, 8, 1);
 			_sprite.alpha = 0.5;
-			_sprite.blend = BlendMode.ALPHA;
 			_sprite.angle = angle;
 			_lifetime = GameProperties.ShotMGLifeTime;
 			
@@ -76,6 +79,9 @@ class Shot extends FlxObject
 		{
 			throw "ERROR: cannot determine shot type";
 		}
+		
+		width = _sprite.width;
+		height = _sprite.height;
 		
 		//trace ("Shot constuctor finished");
 		
@@ -135,15 +141,25 @@ class Shot extends FlxObject
 		}
 	}
 	
-	//public override function kill():Void
-	//{
-		//if (_type == ShotType.Rocket)
-		//{
-			//var e:Explosion = new Explosion(x, y);
-			//_state.AddExplosion(e);
-		//}
-		//alive = false;
-		//exists = false;
-	//}
+	public override function kill():Void
+	{
+		if (_type == ShotType.Rocket)
+		{
+			var e:Explosion = new Explosion(x, y);
+			_state.AddExplosion(e);
+		}
+		_sprite.fadeOut(0.5, false, finalKill);
+	}
+	
+	public function deleteObject():Void
+	{
+		alive = false;
+		exists = false;
+	}
+	
+	public function finalKill(t:FlxTween ):Void
+	{
+		deleteObject();
+	}
 	
 }
