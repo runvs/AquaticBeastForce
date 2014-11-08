@@ -67,17 +67,17 @@ class DestroyableObject extends FlxObject
 		
 	}
 	
-	public function TakeDamage(damage:Float):Void
+	public function takeDamage(damage:Float):Void
 	{
 		if (alive && exists)
 		{
 			_health -=  damage;
 			//trace ("remaining health " + _health);
-			CheckDead();
+			checkDead();
 		}
 	}
 	
-	private function CheckDead()
+	private function checkDead()
 	{
 		if (_health <= 0)
 		{
@@ -91,7 +91,7 @@ class DestroyableObject extends FlxObject
 		{
 			alive = false;
 			
-			_state.AddExplosion(new Explosion(x-4 , y-4 ));	// probably just a small explosion?
+			_state.addExplosion(new Explosion(x-4 , y-4 ));	// probably just a small explosion?
 			var t: FlxTimer = new FlxTimer(0.2, switchImage);	// this timer is needed so the image is flipped after the explosion has started. Fancy juicy shit :D
 		}
 		

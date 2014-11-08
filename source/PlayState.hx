@@ -50,7 +50,7 @@ class PlayState extends FlxState
 		var exitByException:Bool = false;
 		try 
 		{
-			_level.LoadLevel(1);
+			_level.loadLevel(1);
 		}
 		catch ( msg : String ) 
 		{
@@ -86,21 +86,21 @@ class PlayState extends FlxState
 	}
 
 	
-	private function CleanUp():Void
+	private function cleanUp():Void
 	{
 		{
 			var newExploList:FlxTypedGroup<Explosion> = new FlxTypedGroup<Explosion>();
-			_explosionList.forEach(function(e:Explosion) { if (e.alive) newExploList.add(e); } );
+			_explosionList.forEach(function(e:Explosion) { if (e.alive) newExploList.add(e); else e.destroy(); } );
 			_explosionList = newExploList;
 		}
 		{
 			var newEnemyList:FlxTypedGroup<Enemy> = new FlxTypedGroup<Enemy>();
-			_enemies.forEach(function(e:Enemy) { if (e.alive) newEnemyList.add(e); } );
+			_enemies.forEach(function(e:Enemy) { if (e.alive) newEnemyList.add(e); else e.destroy(); } );
 			_enemies = newEnemyList;
 		}
 		{
 			var newShotList:FlxTypedGroup<Shot> = new FlxTypedGroup<Shot>();
-			_shotlist.forEach(function(s:Shot) { if (s.alive) newShotList.add(s); } );
+			_shotlist.forEach(function(s:Shot) { if (s.alive) newShotList.add(s); else s.destroy(); } );
 			_shotlist = newShotList;
 		}
 	}
@@ -117,7 +117,7 @@ class PlayState extends FlxState
 		_shotlist.update();
 		_explosionList.update();
 		
-		CleanUp();
+		cleanUp();
 		
 		// TODO Rework and Refactor once finished
 		for (j in 0..._shotlist.length)
@@ -170,14 +170,14 @@ class PlayState extends FlxState
 	{
 		//trace ("hit");
 		 s.deleteObject();
-		e.TakeDamage(1.5);
+		e.takeDamage(1.5);
 	}
 	
 	public function shotDestroyableCollision (d:DestroyableObject, s:Shot):Void
 	{
 		//trace ("hit");
 		s.deleteObject();
-		d.TakeDamage(1.5);
+		d.takeDamage(1.5);
 	}
     
     override public function draw():Void 
@@ -192,17 +192,17 @@ class PlayState extends FlxState
         super.draw();
     }
 	
-	public function AddEnemy(enemy:Enemy):Void
+	public function addEnemy(enemy:Enemy):Void
 	{
 		_enemies.add(enemy);
 		trace ("spawning Enemy");
 	}
-	public function AddShot(shot:Shot):Void
+	public function addShot(shot:Shot):Void
 	{
 		//trace ("spawning Shot");
 		_shotlist.add(shot);
 	}
-	public function AddExplosion(e:Explosion):Void
+	public function addExplosion(e:Explosion):Void
 	{
 		_explosionList.add(e);
 		
@@ -214,13 +214,26 @@ class PlayState extends FlxState
 				if (dist <= 25)
 				{
 					trace ("enemy taking Damage from explosion");
-					var t: FlxTimer = new FlxTimer(0.23, function(t:FlxTimer) { en.TakeDamage(GameProperties.ExplosionDamage); } );	// so they do not explode simulatiously
+					var t: FlxTimer = new FlxTimer(0.23, function(t:FlxTimer) { en.takeDamage(GameProperties.ExplosionDamage); } );	// so they do not explode simulatiously
+				}
+			}
+		} );
+		
+		_destroyableList.forEach(function(d:DestroyableObject) 
+		{ 
+			if (d.alive && d.exists)
+			{
+				var dist = Math.sqrt((d.x -e.x) * (d.x -e.x) + (d.y -e.y) * (d.y -e.y));
+				if (dist <= 25)
+				{
+					trace ("enemy taking Damage from explosion");
+					var t: FlxTimer = new FlxTimer(0.23, function(t:FlxTimer) { d.takeDamage(GameProperties.ExplosionDamage); } );	// so they do not explode simulatiously
 				}
 			}
 		} );
 		
 	}
-	public function AddDestroyable(d:DestroyableObject):Void
+	public function addDestroyable(d:DestroyableObject):Void
 	{
 		_destroyableList.add(d);
 	}

@@ -160,17 +160,17 @@ class Enemy extends FlxObject
 	}
 	
 	
-	public function TakeDamage(damage:Float):Void
+	public function takeDamage(damage:Float):Void
 	{
 		if (alive && exists)
 		{
 			_health -=  damage;
-			CheckDead();
+			checkDead();
 		}
 	}
 	
 	
-	private function CheckDead()
+	private function checkDead()
 	{
 		if (alive && exists)
 		{
@@ -192,7 +192,7 @@ class Enemy extends FlxObject
 	{
 		super.kill();
 		// we need to call kill first, otherwise the enemy could get damaged by its own explosion and cause an endless loop
-		_state.AddExplosion(new Explosion(x , y ));
+		_state.addExplosion(new Explosion(x , y ));
 		
 		
 		

@@ -146,7 +146,7 @@ class Shot extends FlxObject
 		if (_type == ShotType.Rocket)
 		{
 			var e:Explosion = new Explosion(x, y);
-			_state.AddExplosion(e);
+			_state.addExplosion(e);
 		}
 		_sprite.fadeOut(0.5, false, finalKill);
 	}

@@ -86,6 +86,12 @@ class Player extends FlxObject
         
         super.draw();
     }
+	
+	public function drawHud():Void
+	{
+		
+	}
+	
     
     private function getInput():Void
     {
@@ -149,52 +155,52 @@ class Player extends FlxObject
 		//trace ("Shot created");
 
 		var s:Shot = new Shot(x + dx, y + dy, angle + dangle, ShotType.Mg, _state);
-		_state.AddShot(s);
+		_state.addShot(s);
 
 		//trace ("Shot created");
 		_mgfireTime = 0;
 	}
 	
-	public function Repair():Void
+	public function repair():Void
 	{
 		_health = _healthMax;
 	}
 	
 	
-	public function TakeDamage(damage:Float):Void
+	public function takeDamage(damage:Float):Void
 	{
 		_health -=  damage;
-		CheckDead();
+		checkDead();
 	}
 	
 	
-	private function CheckDead()
+	private function checkDead()
 	{
 		if (_health <= 0)
 		{
-			Die();
+			die();
 		}
 	}
 	
-	private function Die():Void
+	private function die():Void
 	{
 		alive = false;
 		// start Die animation
 		
-		FlxG.camera.fade(FlxColor.BLACK, 1, false, EndThisLife);
+		FlxG.camera.fade(FlxColor.BLACK, 1, false, endThisLife);
 	}
 	
-	public function EndThisLife():Void
+	public function endThisLife():Void
 	{
 		_remainingLives = _remainingLives - 1;
 		if (_remainingLives >= 0)
 		{
-			Respawn();
+			respawn();
 		}
 	}
 	
 	
-	private function Respawn():Void
+	private function respawn():Void
 	{
 		alive = true;
 		FlxG.camera.fade(FlxColor.BLACK, 1, true);
@@ -202,12 +208,12 @@ class Player extends FlxObject
 		y = _reSpawnPosition.y;
 	}
 	
-	public function SetRespawnPosition(pos:FlxPoint, moveToPosition:Bool = false):Void
+	public function setRespawnPoint(pos:FlxPoint, moveToPosition:Bool = false):Void
 	{
 		_reSpawnPosition = pos;
 		if (moveToPosition)
 		{
-			Respawn();
+			respawn();
 		}
 	}
 	

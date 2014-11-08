@@ -30,7 +30,7 @@ class Level extends FlxBasic
 	public var _mapObjects1:FlxTilemap;
 	private var _missionInfo:String;
 	
-	public function LoadLevel(levelNumber:Int)
+	public function loadLevel(levelNumber:Int)
 	{
 		_levelNumber = levelNumber;
 		
@@ -100,7 +100,7 @@ class Level extends FlxBasic
 			var enemy : Enemy  = new Enemy(type, _state);
 			enemy.x = x;
 			enemy.y = y;
-			_state.AddEnemy(enemy);
+			_state.addEnemy(enemy);
 		}
 		
 		if (entityName == "AttackTarget")
@@ -124,7 +124,7 @@ class Level extends FlxBasic
 			trace ("creating destoyable object");
 			var type:String = entityData.get("Type");
 			var d : DestroyableObject = new  DestroyableObject(x, y, type, _state);
-			_state.AddDestroyable(d);
+			_state.addDestroyable(d);
 		}
 	}
 	
