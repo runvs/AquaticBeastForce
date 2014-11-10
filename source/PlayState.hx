@@ -123,21 +123,24 @@ class PlayState extends FlxState
 		for (j in 0..._shotlist.length)
 		{
 			var s:Shot = _shotlist.members[j];
-			if (s.alive && s.exists)
+			if (s.alive && s.exists )
 			{
-				for (i in 0..._enemies.length)
+				if (s._shooter)
 				{
-					var e:Enemy = _enemies.members[i];
-					if (!(e.alive && e.exists))
+					for (i in 0..._enemies.length)
 					{
-						continue;
-					}
-
-					if (FlxG.overlap(e._sprite, s._sprite))
-					{
-						if (FlxG.pixelPerfectOverlap(e._sprite, s._sprite,1))
+						var e:Enemy = _enemies.members[i];
+						if (!(e.alive && e.exists))
 						{
-							shotEnemyCollision(e, s);
+							continue;
+						}
+
+						if (FlxG.overlap(e._sprite, s._sprite))
+						{
+							if (FlxG.pixelPerfectOverlap(e._sprite, s._sprite,1))
+							{
+								shotEnemyCollision(e, s);
+							}
 						}
 					}
 				}
