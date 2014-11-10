@@ -9,10 +9,11 @@ import flixel.FlxSprite;
 class Explosion extends FlxSprite
 {
 
+	public var _isSmallExplosion:Bool;
 	public function new(X:Float=0, Y:Float=0, smallExplosion:Bool = false)
 	{
 		super(X, Y);
-		
+		_isSmallExplosion = smallExplosion;
         // Load the right graphics for the explosion
         if (smallExplosion)
         {

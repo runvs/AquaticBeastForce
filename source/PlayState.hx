@@ -219,33 +219,34 @@ class PlayState extends FlxState
 	public function addExplosion(e:Explosion):Void
 	{
 		_explosionList.add(e);
-		
-		_enemies.forEach(function(en:Enemy) 
-		{ 
-			if (en.alive && en.exists)
-			{
-				var dist = Math.sqrt((en.x -e.x) * (en.x -e.x) + (en.y -e.y) * (en.y -e.y));
-				if (dist <= 25)
+		if (!e._isSmallExplosion)
+		{
+			_enemies.forEach(function(en:Enemy) 
+			{ 
+				if (en.alive && en.exists)
 				{
-					trace ("enemy taking Damage from explosion");
-					var t: FlxTimer = new FlxTimer(0.23, function(t:FlxTimer) { en.takeDamage(GameProperties.ExplosionDamage); } );	// so they do not explode simulatiously
+					var dist = Math.sqrt((en.x -e.x) * (en.x -e.x) + (en.y -e.y) * (en.y -e.y));
+					if (dist <= 25)
+					{
+						trace ("enemy taking Damage from explosion");
+						var t: FlxTimer = new FlxTimer(0.23, function(t:FlxTimer) { en.takeDamage(GameProperties.ExplosionDamage); } );	// so they do not explode simulatiously
+					}
 				}
-			}
-		} );
-		
-		_destroyableList.forEach(function(d:DestroyableObject) 
-		{ 
-			if (d.alive && d.exists)
-			{
-				var dist = Math.sqrt((d.x -e.x) * (d.x -e.x) + (d.y -e.y) * (d.y -e.y));
-				if (dist <= 25)
+			} );
+			
+			_destroyableList.forEach(function(d:DestroyableObject) 
+			{ 
+				if (d.alive && d.exists)
 				{
-					trace ("enemy taking Damage from explosion");
-					var t: FlxTimer = new FlxTimer(0.23, function(t:FlxTimer) { d.takeDamage(GameProperties.ExplosionDamage); } );	// so they do not explode simulatiously
+					var dist = Math.sqrt((d.x -e.x) * (d.x -e.x) + (d.y -e.y) * (d.y -e.y));
+					if (dist <= 25)
+					{
+						trace ("enemy taking Damage from explosion");
+						var t: FlxTimer = new FlxTimer(0.23, function(t:FlxTimer) { d.takeDamage(GameProperties.ExplosionDamage); } );	// so they do not explode simulatiously
+					}
 				}
-			}
-		} );
-		
+			} );
+		}
 	}
 	public function addDestroyable(d:DestroyableObject):Void
 	{
