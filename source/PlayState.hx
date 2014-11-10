@@ -182,19 +182,14 @@ class PlayState extends FlxState
 	
 	public function shotEnemyCollision (e:Enemy, s:Shot):Void
 	{
-		var vector:FlxVector = new FlxVector(-4, -6);
-        //vector = vector.normalize();
-		//vector = new FlxVector(vector.x * s._sprite.width * 0.5, vector.y * s._sprite.width * 0.5);
-		//vector = new FlxVector(-4, -4);
-        //trace(vector);
-        addExplosion(new Explosion(s._sprite.x + vector.x , s._sprite.y + vector.y, true));
+        addExplosion(new Explosion(s._sprite.x - 4, s._sprite.y - 6, true));
         s.deleteObject();
 		e.takeDamage(1.5);
 	}
 	
 	public function shotDestroyableCollision (d:DestroyableObject, s:Shot):Void
 	{
-		//trace ("hit");
+		addExplosion(new Explosion(s._sprite.x - 4, s._sprite.y - 4, true));
 		s.deleteObject();
 		d.takeDamage(1.5);
 	}
