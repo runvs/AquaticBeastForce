@@ -24,7 +24,7 @@ class Player extends FlxObject
 	
 	private var _remainingLives:Int;
 	
-	private var _reSpawnPosition:FlxPoint;
+	private var _respawnPosition:FlxPoint;
 	
 	
 	
@@ -204,13 +204,13 @@ class Player extends FlxObject
 	{
 		alive = true;
 		FlxG.camera.fade(FlxColor.BLACK, 1, true);
-		x = _reSpawnPosition.x;
-		y = _reSpawnPosition.y;
+		x = _respawnPosition.x;
+		y = _respawnPosition.y;
 	}
 	
-	public function setRespawnPoint(pos:FlxPoint, moveToPosition:Bool = false):Void
+	public function setRespawnPosition(pos:FlxPoint, moveToPosition:Bool = false):Void
 	{
-		_reSpawnPosition = pos;
+		_respawnPosition = pos;
 		if (moveToPosition)
 		{
 			respawn();
