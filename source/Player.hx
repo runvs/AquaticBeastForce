@@ -150,7 +150,7 @@ class Player extends FlxObject
 		//trace ("Player Shooting");
 		var dangle = FlxRandom.floatRanged( -GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
 		var rad:Float = (angle) / 180 * Math.PI;
-		var dx:Float = Math.cos(rad) * 7 + 7;
+		var dx:Float = Math.cos(rad) * 7 + 5;
         var dy:Float = Math.sin(rad) * 7 + 7;
 		//trace ("Shot created");
 
