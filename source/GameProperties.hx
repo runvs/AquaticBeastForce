@@ -12,12 +12,12 @@ class GameProperties
 	public static var PlayerWeaponMgFireTime:Float = 0.175;
 	public static var PlayerWeaponMgSpreadInDegree = 5;
 	
-	public static var PlayerHealthDefault:Float = 15;
+	public static var PlayerHealthDefault:Float = 1500000000;
 	public static var PlayerLivesDefault:Int = 2;
 
 	public static var EnemyTankMovementSpeed:Float = 25;
 	public static var EnemyTankTurnSpeed:Float = 0.75;
-	public static var EnemyTankDefaultHealth:Float = 10;
+	public static var EnemyTankDefaultHealth:Float = 100000;
 	
 	public static var ShotMGMovementSpeed:Float = 120;
 
