@@ -11,7 +11,7 @@ import flixel.tile.FlxTilemap;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 import flixel.util.FlxTimer;
-import lime.math.Vector2;
+import flixel.util.FlxVector;
 
 
 /**
@@ -168,8 +168,11 @@ class PlayState extends FlxState
 	
 	public function shotEnemyCollision (e:Enemy, s:Shot):Void
 	{
-		//trace ("hit");
-		 s.deleteObject();
+		var vector:FlxVector = new FlxVector(s.velocity.x, s.velocity.y);
+        vector = vector.normalize();
+        
+        addExplosion(new Explosion(s.x + vector.x * s._sprite.width, s._sprite.y + vector.y * s._sprite.width, true));
+        s.deleteObject();
 		e.takeDamage(1.5);
 	}
 	
