@@ -64,7 +64,7 @@ class Level extends FlxBasic
 		var y:Int = Std.parseInt(entityData.get("y"));
 		if (entityName == "Player")
 		{
-			_state._player.setRespawnPoint(new FlxPoint(x, y), true);
+			_state._player.setRespawnPosition(new FlxPoint(x, y), true);
 			//_state._player.x = x;
             //_state._player.y = y;
 		}
