@@ -4,6 +4,7 @@ import flixel.FlxSprite;
 import flash.display.BlendMode;
 import flixel.FlxG;
 import flixel.util.FlxPoint;
+import flixel.util.FlxRandom;
 import flixel.util.FlxSpriteUtil;
 import flixel.util.FlxVector;
 using flixel.util.FlxSpriteUtil;
@@ -23,6 +24,9 @@ class Enemy extends FlxObject
 	
 	private var _health:Float;
 	private var _healtMax:Float;
+	
+	private var _shootTimer:Float;
+	private var _shootTimerMax:Float;
 	
 
     public function new(type:EnemyType, state:PlayState )
@@ -49,6 +53,8 @@ class Enemy extends FlxObject
                     mainAnimation = [0, 1];
                     shadowAnimation = [0];
 					_shadowDistance = 1;
+					
+					_shootTimer = _shootTimerMax = 1;
                 };
             case EnemyType.Helicopter:
                 {
@@ -57,6 +63,7 @@ class Enemy extends FlxObject
                     mainAnimation = [0];
                     shadowAnimation = [0];
 					_shadowDistance = 3;
+					_shootTimer = _shootTimerMax = 1;
                 };
             case EnemyType.Soldiers:
                 {
@@ -65,6 +72,7 @@ class Enemy extends FlxObject
                     mainAnimation = [0];
                     shadowAnimation = [0];
 					_shadowDistance = 1;
+					_shootTimer = _shootTimerMax = 1;
                 };
         }
         
@@ -128,7 +136,8 @@ class Enemy extends FlxObject
 		var targetAngle:Float = direction.degrees;
 		var currentAngle:Float = angle;
 		
-		var angleDifference:Float= targetAngle - currentAngle;
+		var angleDifference:Float = targetAngle - currentAngle;
+		//trace(angleDifference);
 		
 		if (angleDifference > 0 && angleDifference >= GameProperties.EnemyTankTurnSpeed)
 		{
@@ -138,6 +147,8 @@ class Enemy extends FlxObject
 		{
 			angleDifference = -GameProperties.EnemyTankTurnSpeed;
 		}
+		
+		
 		
 		currentAngle+= angleDifference;
 		
@@ -156,6 +167,36 @@ class Enemy extends FlxObject
 			
 			velocity.x += direction.x * tmp;
 			velocity.y += direction.y * tmp;
+		}
+		
+				
+		
+		var angletoTurn = targetAngle - currentAngle;
+		if ( Math.abs(angletoTurn) <= 1 && l <= 120)
+		{
+			shoot();
+		}
+		
+		_shootTimer += FlxG.elapsed;
+		
+	}
+	
+	public function shoot():Void
+	{
+		if (_shootTimer >= _shootTimerMax)
+		{
+			//trace ("Player Shooting");
+			var dangle = FlxRandom.floatRanged( -GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
+			var rad:Float = (angle) / 180 * Math.PI;
+			var dx:Float = Math.cos(rad) * 7 + 5;
+			var dy:Float = Math.sin(rad) * 7 + 7;
+			//trace ("Shot created");
+
+			var s:Shot = new Shot(x + dx, y + dy, angle + dangle, ShotType.Mg, _state, false);
+			_state.addShot(s);
+
+			//trace ("Shot created");
+			_shootTimer = 0;
 		}
 	}
 	

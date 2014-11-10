@@ -14,7 +14,7 @@ import lime.math.Vector2;
  */
 class Player extends FlxObject
 {
-    private var _sprite:FlxSprite;
+    public var _sprite:FlxSprite;
     private var _shadowSprite:FlxSprite;
     private var _state:PlayState;    
 	private var _mgfireTime:Float;
@@ -169,8 +169,11 @@ class Player extends FlxObject
 	
 	public function takeDamage(damage:Float):Void
 	{
+		FlxG.camera.shake(0.005,0.25);
+		FlxG.camera.flash(FlxColor.RED, 0.25);
 		_health -=  damage;
 		checkDead();
+		
 	}
 	
 	

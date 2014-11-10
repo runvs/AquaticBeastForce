@@ -23,10 +23,14 @@ class Shot extends FlxObject
 	
 	private var _lifetime:Float;
 	
+	public var _shooter:Bool;	// true if player, false if enemy
 	
-	public function new(X:Float=0, Y:Float=0, Angle:Float=0, type:ShotType, state:PlayState) 
+	
+	public function new(X:Float=0, Y:Float=0, Angle:Float=0, type:ShotType, state:PlayState, playerShot:Bool = true ) 
 	{
 		super(X, Y);
+		
+		_shooter = playerShot;
 		
 		_state = state;
 		
