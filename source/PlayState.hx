@@ -144,6 +144,17 @@ class PlayState extends FlxState
 						}
 					}
 				}
+				else
+				{
+					if (FlxG.overlap(_player._sprite, s._sprite))
+						{
+							if (FlxG.pixelPerfectOverlap(_player._sprite, s._sprite,1))
+							{
+								_player.takeDamage(1.5);
+								s.deleteObject();
+							}
+						}
+				}
 				for (i in 0 ... _destroyableList.length)
 				{
 					var d:DestroyableObject = _destroyableList.members[i];
