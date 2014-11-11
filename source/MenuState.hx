@@ -18,11 +18,22 @@ class MenuState extends FlxState
 	 * Function that is called up when to state is created to set it up. 
 	 */
 	private var _playButton :FlxButton;
+    private var _intro:FlxSprite;
+    
 	override public function create():Void
 	{
 		super.create();
-		_playButton = new FlxButton(0, 0, "Play", startGame);
-		_playButton.screenCenter();
+        
+        _intro = new FlxSprite();
+        _intro.loadGraphic(AssetPaths.logo__png, true, 166, 144);
+        _intro.animation.add('intro', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 10, false);
+        _intro.animation.play('intro');
+        add(_intro);
+        
+		_playButton = new FlxButton(35, 114, "", startGame);
+        _playButton.loadGraphic(AssetPaths.playButton__png, false, 48, 21);
+        _playButton.visible = false;
+		//_playButton.screenCenter();
 		
 		add(_playButton);
 	}
@@ -47,6 +58,12 @@ class MenuState extends FlxState
 	 */
 	override public function update():Void
 	{
+        _intro.update();
+        if (_intro.animation.finished)
+        {
+            _playButton.visible = true;
+        }
+        
 		super.update();
 	}	
 }
