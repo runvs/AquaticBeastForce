@@ -17,7 +17,8 @@ class Player extends FlxObject
     public var _sprite:FlxSprite;
     private var _shadowSprite:FlxSprite;
     private var _state:PlayState;    
-	private var _mgfireTime:Float;
+	
+	
 	
 	private var _health:Float;
 	private var _healthMax:Float;
@@ -26,10 +27,19 @@ class Player extends FlxObject
 	
 	private var _respawnPosition:FlxPoint;
 	
+	private var _weaponSystems:WeaponSystems;
 	
+	public var _mgfireTime:Float;
+	public var _specialWeaponFireTime:Float;
 	
 	public function new(state:PlayState)
 	{   
+		
+		_weaponSystems = new WeaponSystems();
+		
+		// for testing
+		_weaponSystems._hasAirGroundRockets = true;
+		
 		FlxG.stage.quality = flash.display.StageQuality.BEST;
 		_state = state;
         // Load sprite for the player
@@ -52,6 +62,7 @@ class Player extends FlxObject
 		
 		
 		_mgfireTime = 0;
+		_specialWeaponFireTime = 0;
         
         super();
 	}
@@ -73,7 +84,7 @@ class Player extends FlxObject
         velocity.y *= 0.98;
 		
 		_mgfireTime += FlxG.elapsed;
-		
+		_specialWeaponFireTime += FlxG.elapsed;
 		
 		
         super.update();
@@ -127,9 +138,13 @@ class Player extends FlxObject
 		
 		if (shot)
 		{
-			if (_mgfireTime >= GameProperties.PlayerWeaponMgFireTime)
+			if (_mgfireTime >= _weaponSystems._mgFireTimeMax)
 			{
 				shoot();
+			}
+			if (_specialWeaponFireTime > _weaponSystems._specialWeaponFireTimeMax)
+			{
+				shootSpecial();
 			}
 		
 		}
@@ -144,6 +159,36 @@ class Player extends FlxObject
         velocity.x += dx;
         velocity.y += dy;
     }
+	
+	private function shootSpecial():Void
+	{
+		_specialWeaponFireTime = 0;
+		if (_weaponSystems._hasAirGroundRockets)
+		{
+			//trace ("Player Shooting");
+			//var dangle = FlxRandom.floatRanged( -GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
+			var rad:Float = (angle) / 180 * Math.PI;
+			var dx:Float = Math.cos(rad) * 7 + 5;
+			var dy:Float = Math.sin(rad) * 7 + 7;
+			//trace ("Shot created");
+
+			var s:Shot = new Shot(x + dx, y + dy, angle , ShotType.Rocket, _state);
+			_state.addShot(s);
+		}
+		else if (_weaponSystems._hasAirAirRockets)
+		{
+			
+		}
+		else if (_weaponSystems._hasAutoTurret)
+		{
+			
+		}
+		else if (_weaponSystems._hasLaser)
+		{
+			
+		}
+	}
+	
 	
 	private function shoot():Void
 	{

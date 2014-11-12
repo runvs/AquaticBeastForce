@@ -9,7 +9,7 @@ class GameProperties
     public static var PlayerMovementSpeed:Float = 40;
     public static var PlayerRotationSpeed:Float = 2;
 	
-	public static var PlayerWeaponMgFireTime:Float = 0.175;
+
 	public static var PlayerWeaponMgSpreadInDegree = 5;
 	
 	public static var PlayerHealthDefault:Float = 15;
@@ -24,8 +24,8 @@ class GameProperties
 	public static var ShotMGLifeTime:Float = 0.25;
 	public static var ShotMGSmallLifeTime:Float = 20;
 	
-	public static var ShotRocketLifeTime:Float = 0.5;
-	public static var ShotRocketMoveSpeedInitial:Float = 1.0;
+	public static var ShotRocketLifeTime:Float = 1;
+	public static var ShotRocketMoveSpeedInitial:Float = 70.0;
 	
 	public static var ExplosionDamage:Float = 7;
 }

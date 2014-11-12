@@ -72,7 +72,8 @@ class Shot extends FlxObject
 			//trace ("create Roeckt shot");
 			velocity.x = dx * GameProperties.ShotRocketMoveSpeedInitial;
 			velocity.y = dy * GameProperties.ShotRocketMoveSpeedInitial;
-			_sprite.loadGraphic(AssetPaths.rocket__png, false, 16, 16);
+			_sprite.loadGraphic(AssetPaths.rocket__png, false, 16, 9);
+			_sprite.setGraphicSize(8, 4);
 			_sprite.alpha = 1.0;
 			_sprite.angle = angle;
 			
@@ -157,14 +158,14 @@ class Shot extends FlxObject
 	private function updateRocket():Void
 	{
 
-		var VelocitySpeedUp:Float = 2;
+		var VelocitySpeedUp:Float = 80;
 		var velo:Float = _timer * VelocitySpeedUp + GameProperties.ShotRocketMoveSpeedInitial;
-		var maxVelocity:Float = 10;
+		var maxVelocity:Float = 150;
 		velo = (velo < maxVelocity) ? velo : maxVelocity;
 		var rad:Float = angle / 180 * Math.PI;
         var dx:Float = Math.cos(rad);
         var dy:Float = Math.sin(rad);
-		
+		//trace(velo);
 		velocity.x = dx * velo;
 		velocity.y = dy * velo;
 		_sprite.angle = angle;
@@ -190,8 +191,12 @@ class Shot extends FlxObject
 		{
 			var e:Explosion = new Explosion(x, y);
 			_state.addExplosion(e);
+			deleteObject();
 		}
-		_sprite.fadeOut(0.5, false, finalKill);
+		else
+		{
+			_sprite.fadeOut(0.5, false, finalKill);
+		}
 	}
 	
 	public function deleteObject():Void
