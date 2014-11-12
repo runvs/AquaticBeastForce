@@ -31,9 +31,12 @@ class MenuState extends FlxState
         add(_intro);
         
 		_playButton = new FlxButton(35, 114, "", startGame);
-        _playButton.loadGraphic(AssetPaths.playButton__png, false, 48, 21);
+        _playButton.loadGraphic(AssetPaths.playButton__png, true, 48, 21);
+        _playButton.animation.add('idle', [0]);
+        _playButton.animation.add('hover', [1]);
+        _playButton.onOver.callback = onOverButton;
+        _playButton.onOut.callback = onOutButton;
         _playButton.visible = false;
-		//_playButton.screenCenter();
 		
 		add(_playButton);
 	}
@@ -43,6 +46,16 @@ class MenuState extends FlxState
 		trace("switch to playstate");
 		FlxG.switchState(new PlayState());
 	}
+    
+    public function onOutButton():Void
+    {
+        _playButton.animation.play('idle');
+    }
+    
+    public function onOverButton():Void
+    {
+        _playButton.animation.play('hover');
+    }
 	
 	/**
 	 * Function that is called when this state is destroyed - you might want to 
