@@ -30,11 +30,10 @@
 2,2,1,1,2,2,1,1,2,2,1,1,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
 2,2,1,1,2,2,1,1,2,2,1,1,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2</Background>
   <Entities>
-    <LevelInfo id="2" x="0" y="0" MissionInfo="attack" />
-    <Enemy id="1" x="112" y="176" Type="tank" />
-    <AttackTarget id="5" x="176" y="288" Type="radar" />
-    <Destroy id="6" x="80" y="192" Type="barrel" />
-    <Destroy id="7" x="48" y="224" Type="barrel" />
+    <LevelInfo id="2" x="0" y="0" MissionInfo="attack" targets="radar1,radar2,radar3" />
+    <Enemy id="1" x="112" y="176" Type="tank" name="" />
+    <Destroy id="6" x="80" y="192" Type="barrel" name="" />
+    <Destroy id="7" x="48" y="224" Type="barrel" name="" />
     <Player id="9" x="80" y="160" />
   </Entities>
   <Objects1 tileset="ObjectSet" exportMode="CSV">-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1

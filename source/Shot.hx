@@ -25,6 +25,8 @@ class Shot extends FlxObject
 	
 	public var _shooter:Bool;	// true if player, false if enemy
 	
+	private var _timer:Float;
+	
 	
 	public function new(X:Float=0, Y:Float=0, Angle:Float=0, type:ShotType, state:PlayState, playerShot:Bool = true ) 
 	{
@@ -34,6 +36,7 @@ class Shot extends FlxObject
 		
 		_state = state;
 		
+		_timer = 0;
 		
 		angle = Angle;
 		_type = type;
@@ -67,6 +70,28 @@ class Shot extends FlxObject
 		else if (_type == ShotType.Rocket)
 		{
 			//trace ("create Roeckt shot");
+			velocity.x = dx * GameProperties.ShotRocketMoveSpeedInitial;
+			velocity.y = dy * GameProperties.ShotRocketMoveSpeedInitial;
+			_sprite.loadGraphic(AssetPaths.rocket__png, false, 16, 16);
+			_sprite.alpha = 1.0;
+			_sprite.angle = angle;
+			
+			_lifetime = GameProperties.ShotRocketLifeTime;
+		}
+		else if (_type == ShotType.RocketAirAir)
+		{
+			//trace ("create Roeckt shot");
+			velocity.x = dx * GameProperties.ShotMGMovementSpeed;
+			velocity.y = dy * GameProperties.ShotMGMovementSpeed;
+			_sprite.loadGraphic(AssetPaths.shot_mg__png, false, 8, 1);
+			_sprite.alpha = 1.0;
+			_sprite.angle = angle;
+			
+			_lifetime = GameProperties.ShotRocketLifeTime;
+		}
+		else if (_type == ShotType.Ballistic)
+		{
+			//trace ("create Roeckt shot");
 			velocity.x = dx * GameProperties.ShotMGMovementSpeed;
 			velocity.y = dy * GameProperties.ShotMGMovementSpeed;
 			_sprite.loadGraphic(AssetPaths.shot_mg__png, false, 8, 1);
@@ -76,6 +101,10 @@ class Shot extends FlxObject
 			_lifetime = GameProperties.ShotRocketLifeTime;
 		}
 		else if (_type == ShotType.Laser)
+		{
+			
+		}
+		else if (_type == ShotType.BFG)
 		{
 			
 		}
@@ -97,7 +126,7 @@ class Shot extends FlxObject
 		super.update();
 		
 		_lifetime -= FlxG.elapsed;
-		
+		_timer += FlxG.elapsed;
 		
 		if (_type == ShotType.Mg || _type == ShotType.MgSmall)
 		{
@@ -127,9 +156,19 @@ class Shot extends FlxObject
 	}
 	private function updateRocket():Void
 	{
+
+		var VelocitySpeedUp:Float = 2;
+		var velo:Float = _timer * VelocitySpeedUp + GameProperties.ShotRocketMoveSpeedInitial;
+		var maxVelocity:Float = 10;
+		velo = (velo < maxVelocity) ? velo : maxVelocity;
+		var rad:Float = angle / 180 * Math.PI;
+        var dx:Float = Math.cos(rad);
+        var dy:Float = Math.sin(rad);
+		
+		velocity.x = dx * velo;
+		velocity.y = dy * velo;
 		_sprite.angle = angle;
 		_sprite.setPosition(x, y);
-
 	}
 	private function updateLaser():Void
 	{

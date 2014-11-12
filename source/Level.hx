@@ -78,52 +78,20 @@ class Level extends FlxBasic
 		{
 			var enemyType:String = entityData.get("Type");
 			
-			var type:EnemyType;
+			var type:EnemyType = Enemy.TypeFromString(enemyType);
 			
-			if (enemyType == "tank")
-			{
-				type = EnemyType.Tank;
-			}
-			else if (enemyType == "soldiers")
-			{
-				type = EnemyType.Soldiers;
-			}
-			else if (enemyType == "helicopter")
-			{
-				type = EnemyType.Helicopter;
-			}
-			else
-			{
-				type = EnemyType.Tank;
-				throw "Enemy Type not known";
-			}
 			var enemy : Enemy  = new Enemy(type, _state);
 			enemy.x = x;
 			enemy.y = y;
+			enemy._name = entityData.get("Name");
 			_state.addEnemy(enemy);
-		}
-		
-		if (entityName == "AttackTarget")
-		{
-			var targetType:String = entityData.get("Type");
-			if (targetType == "radar")
-			{
-				// instantiate
-			}
-			else if (targetType == "")
-			{
-				// instantiate
-			}
-			else
-			{
-				throw "cannot create target with type " + targetType;
-			}
 		}
 		if (entityName == "Destroy")
 		{
 			trace ("creating destoyable object");
 			var type:String = entityData.get("Type");
 			var d : DestroyableObject = new  DestroyableObject(x, y, type, _state);
+			d._name = entityData.get("Name");
 			_state.addDestroyable(d);
 		}
 	}

@@ -23,7 +23,9 @@ class GameProperties
 
 	public static var ShotMGLifeTime:Float = 0.25;
 	public static var ShotMGSmallLifeTime:Float = 20;
+	
 	public static var ShotRocketLifeTime:Float = 0.5;
+	public static var ShotRocketMoveSpeedInitial:Float = 1.0;
 	
 	public static var ExplosionDamage:Float = 7;
 }

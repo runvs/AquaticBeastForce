@@ -43,6 +43,7 @@ class DestroyableObject extends FlxObject
 	private var _health:Float;
 	
 	private var _state:PlayState;
+	public var _name:String;
 	
 	public function new(X:Float=0, Y:Float=0, type:String, state:PlayState) 
 	{

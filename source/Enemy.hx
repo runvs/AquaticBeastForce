@@ -28,6 +28,31 @@ class Enemy extends FlxObject
 	private var _shootTimer:Float;
 	private var _shootTimerMax:Float;
 	
+	public var _name:String;
+	
+	static public function TypeFromString(enemyType:String):EnemyType
+	{
+		var type:EnemyType = EnemyType.Tank;
+		if (enemyType == "tank")
+		{
+			type = EnemyType.Tank;
+		}
+		else if (enemyType == "soldiers")
+		{
+			type = EnemyType.Soldiers;
+		}
+		else if (enemyType == "helicopter")
+		{
+			type = EnemyType.Helicopter;
+		}
+		else
+		{
+			type = EnemyType.Tank;
+			throw "Enemy Type not known";
+		}
+		return type;
+	}
+	
 
     public function new(type:EnemyType, state:PlayState )
     {
