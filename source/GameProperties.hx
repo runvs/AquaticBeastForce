@@ -22,7 +22,7 @@ class GameProperties
 	public static var ShotMGMovementSpeed:Float = 120;
 
 	public static var ShotMGLifeTime:Float = 0.25;
-	public static var ShotMGSmallLifeTime:Float = 20;
+	public static var ShotMGSmallLifeTime:Float = 0.25;
 	
 	public static var ShotRocketLifeTime:Float = 1;
 	public static var ShotRocketMoveSpeedInitial:Float = 70.0;

@@ -19,7 +19,7 @@ class WeaponSystems
 	
 	public var _mgFireTimeMax:Float = 0.175;
 	
-	public var _specialWeaponFireTimeMax:Float = 0.75;
+	public var _specialWeaponFireTimeMax:Float = 1.15;
 	
 
 	
