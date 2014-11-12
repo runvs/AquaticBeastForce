@@ -28,7 +28,8 @@ class Level extends FlxBasic
 	private var _map:FlxOgmoLoader;
 	public var _mapBackground:FlxTilemap;
 	public var _mapObjects1:FlxTilemap;
-	private var _missionInfo:String;
+	public var _missionInfo:String;
+	public var _targets:Array<String>;
 	
 	public function loadLevel(levelNumber:Int)
 	{
@@ -73,6 +74,8 @@ class Level extends FlxBasic
 		{
 			_missionInfo = entityData.get("MissionInfo");
 			trace("MissionType: " + _missionInfo);
+			_targets = entityData.get("targets").split(",");
+			trace(_targets);
 		}
 		if (entityName == "Enemy")
 		{

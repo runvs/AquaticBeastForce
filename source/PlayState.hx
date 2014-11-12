@@ -103,6 +103,11 @@ class PlayState extends FlxState
 			_shotlist.forEach(function(s:Shot) { if (s.alive) newShotList.add(s); else s.destroy(); } );
 			_shotlist = newShotList;
 		}
+		{
+			var newDestrList:FlxTypedGroup<DestroyableObject> = new FlxTypedGroup<DestroyableObject>();
+			_destroyableList.forEach(function(d:DestroyableObject) { if (d.alive) newDestrList.add(d); else d.destroy(); } );
+			_destroyableList = newDestrList;
+		}
 	}
 	
 	/**
@@ -118,6 +123,8 @@ class PlayState extends FlxState
 		_explosionList.update();
 		
 		cleanUp();
+		
+		CheckEndCondition();
 		
 		// TODO Rework and Refactor once finished
 		for (j in 0..._shotlist.length)
@@ -173,12 +180,71 @@ class PlayState extends FlxState
 			}
 		}
 		
+		CheckEndCondition();
 
 		
 		super.update();
 	}
 
 	
+	private function CheckEndCondition():Void
+	{
+		
+		if (_player._dead)
+		{
+			FlxG.switchState(new MenuState());
+			// or anything like a score
+		}
+		
+		if (_level._missionInfo == "attack")
+		{
+			if (CheckAllTargetsDead())
+			{
+				// player wins
+				FlxG.switchState(new MenuState());
+			}
+		}
+		else if (_level._missionInfo == "defend")
+		{
+			
+		}
+		else if (_level._missionInfo == "escort")
+		{
+			
+		}
+		else if (_level._missionInfo == "rescue")
+		{
+			
+		}
+	}
+	
+	private function CheckAllTargetsDead():Bool
+	{
+		for (i in 0 ... _level._targets.length)
+		{
+			var n:String = _level._targets[i];
+			
+			for (j in 0 ... _enemies.length)
+			{
+				var e:Enemy = _enemies.members[j];
+				 if ( e._name == n) 
+				 { 
+					trace (n);  
+					 return false;
+				 }
+			}
+			for (j in 0 ... _destroyableList.length)
+			{
+				var e:DestroyableObject = _destroyableList.members[j];
+				 if ( e._name == n) 
+				 { 
+					trace (n);  
+					 return false;
+				 }
+			}
+		}
+		return true;
+	}
 	
 	public function shotEnemyCollision (e:Enemy, s:Shot):Void
 	{

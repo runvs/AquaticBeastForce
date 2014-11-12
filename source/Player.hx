@@ -31,10 +31,12 @@ class Player extends FlxObject
 	
 	public var _mgfireTime:Float;
 	public var _specialWeaponFireTime:Float;
+	public var _dead:Bool;
 	
 	public function new(state:PlayState)
 	{   
-		
+
+		_dead = false;
 		_weaponSystems = new WeaponSystems();
 		
 		// for testing
@@ -244,6 +246,10 @@ class Player extends FlxObject
 		if (_remainingLives >= 0)
 		{
 			respawn();
+		}
+		else 
+		{
+			_dead = true;
 		}
 	}
 	
