@@ -69,14 +69,23 @@ class Shot extends FlxObject
 		}
 		else if (_type == ShotType.MgSmall)
 		{
+			//velocity.x = dx * GameProperties.ShotMGMovementSpeed;
+			//velocity.y = dy * GameProperties.ShotMGMovementSpeed;
+			//_sprite.loadGraphic(AssetPaths.shot_mg__png, false, 8, 1);
+			//_sprite.alpha = 0.25;
+			//_sprite.setGraphicSize(4, 1);
+			//_sprite.updateHitbox();
+			//_sprite.angle = angle;
+			//_lifetime = GameProperties.ShotMGSmallLifeTime;
+			
 			velocity.x = dx * GameProperties.ShotMGMovementSpeed;
 			velocity.y = dy * GameProperties.ShotMGMovementSpeed;
 			_sprite.loadGraphic(AssetPaths.shot_mg__png, false, 8, 1);
-			_sprite.alpha = 0.25;
-			_sprite.setGraphicSize(4, 1);
-			_sprite.updateHitbox();
+			_sprite.alpha = 1.0;
 			_sprite.angle = angle;
-			_lifetime = GameProperties.ShotMGSmallLifeTime;
+			_lifetime = GameProperties.ShotMGLifeTime;
+			
+			
 		}
 		else if (_type == ShotType.RocketAirGround)
 		{
@@ -175,13 +184,12 @@ class Shot extends FlxObject
 	
 	private function updateMG():Void
 	{
-		
+		//trace (x);
 		//_sprite.angle = angle; // angle does not change here
 		_sprite.setPosition(x, y);
 	}
 	private function updateRocket():Void
 	{
-
 		var VelocitySpeedUp:Float = 80;
 		var velo:Float = _timer * VelocitySpeedUp + GameProperties.ShotRocketMoveSpeedInitial;
 		var maxVelocity:Float = 150;
