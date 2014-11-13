@@ -255,14 +255,14 @@ class PlayState extends FlxState
 	{
         addExplosion(new Explosion(s._sprite.x - 4, s._sprite.y - 6, true));
         s.deleteObject();
-		e.takeDamage(1.5);
+		e.takeDamage(s.getDamage());
 	}
 	
 	public function shotDestroyableCollision (d:DestroyableObject, s:Shot):Void
 	{
 		addExplosion(new Explosion(s._sprite.x - 4, s._sprite.y - 4, true));
 		s.deleteObject();
-		d.takeDamage(1.5);
+		d.takeDamage(s.getDamage());
 	}
     
     override public function draw():Void 

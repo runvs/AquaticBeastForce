@@ -172,6 +172,7 @@ class Player extends FlxObject
 			var dy:Float = Math.sin(rad) * 7 + 7;
 
 			var s:Shot = new Shot(x + dx, y + dy, angle , ShotType.RocketAirGround, _state);
+			s.setDamage(_weaponSystems._rocketAirGroundDamageBase, _weaponSystems._rocketAirGroundDamageFactor);
 			_state.addShot(s);
 		}
 		else if (_weaponSystems._hasAirAirRockets)
@@ -182,6 +183,7 @@ class Player extends FlxObject
 			var dy:Float = Math.sin(rad) * 7 + 7;
 
 			var s:Shot = new Shot(x + dx, y + dy, angle , ShotType.RocketAirAir, _state);
+			s.setDamage(_weaponSystems._rocketAirAirDamageBase, _weaponSystems._rocketAirAirDamageFactor);
 			_state.addShot(s);
 		}
 		else if (_weaponSystems._hasAutoTurret)
@@ -199,6 +201,7 @@ class Player extends FlxObject
 			var dy:Float = Math.sin(rad) * 7 + 7;
 
 			var s:Shot = new Shot(x + dx, y + dy, angle , ShotType.BFG, _state);
+			s.setDamage(_weaponSystems._bfgDamageBase, _weaponSystems._bfgDamageFactor);
 			_state.addShot(s);
 		}
 	}
@@ -214,6 +217,7 @@ class Player extends FlxObject
 		//trace ("Shot created");
 
 		var s:Shot = new Shot(x + dx, y + dy, angle + dangle, ShotType.Mg, _state);
+		s.setDamage(_weaponSystems._mgDamgeBase, _weaponSystems._mgDamageFactor);
 		_state.addShot(s);
 
 		//trace ("Shot created");

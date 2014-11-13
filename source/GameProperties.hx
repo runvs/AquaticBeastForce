@@ -20,7 +20,7 @@ class GameProperties
 	public static var EnemyTankDefaultHealth:Float = 10;
 	
 	public static var ShotMGMovementSpeed:Float = 120;
-	
+	public static var ShotBFGMovementSpeed:Float = 140;
 	
 
 	public static var ShotMGLifeTime:Float = 0.25;
