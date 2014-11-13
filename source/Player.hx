@@ -39,7 +39,7 @@ class Player extends FlxObject
 		_weaponSystems = new WeaponSystems();
 		
 		// for testing
-		_weaponSystems._hasBFG = true;
+		_weaponSystems._hasAutoTurret = true;
 		
 		FlxG.stage.quality = flash.display.StageQuality.BEST;
 		_state = state;
@@ -149,6 +149,13 @@ class Player extends FlxObject
 			}
 		
 		}
+		if (_weaponSystems._hasAutoTurret)
+		{
+			if (_specialWeaponFireTime > _weaponSystems._specialWeaponFireTimeMax)
+			{
+				shootSpecial();
+			}
+		}
     }
     
     private function move(distance:Float):Void
@@ -188,6 +195,21 @@ class Player extends FlxObject
 		}
 		else if (_weaponSystems._hasAutoTurret)
 		{
+			var e:Enemy = _state.getNearestEnemy();
+			if (e == null)
+			{
+				return;
+			}
+			
+			//var dangle = FlxRandom.floatRanged( -GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
+			var dex:Float = e.x - x + 5;
+			var dey:Float = e.y - y + 7;
+
+			var tarAngle:Float = Math.atan2(dey, dex);
+			
+			var s:Shot = new Shot(x + dex, y + dey, tarAngle, ShotType.MgSmall, _state);
+			s.setDamage(_weaponSystems._autoDamageBase, _weaponSystems._autoDamageFactor);
+			_state.addShot(s);
 			
 		}
 		else if (_weaponSystems._hasLaser)

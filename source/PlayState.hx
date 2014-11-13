@@ -264,6 +264,31 @@ class PlayState extends FlxState
 		s.deleteObject();
 		d.takeDamage(s.getDamage());
 	}
+	
+	public function getNearestEnemy():Enemy 
+	{
+		var ret:Enemy = null;
+		var distancelargest:Float = 999999;
+		for (i in 0 ... _enemies.length)
+		{
+			var e:Enemy = _enemies.members[i];
+			var dx:Float = e.x - _player.x;
+			var dy:Float = e.y - _player.y;
+			
+			var d:Float = Math.sqrt(dx * dx + dy * dy);
+			
+			if (d < GameProperties.AutoCannonRange)
+			{
+				if (d < distancelargest)
+				{
+					distancelargest = d;
+					ret = e;
+				}
+			}
+			
+		}
+		return ret;
+	}
     
     override public function draw():Void 
     {

@@ -32,4 +32,6 @@ class GameProperties
 	public static var ShotRocketMoveSpeedInitial:Float = 70.0;
 	
 	public static var ExplosionDamage:Float = 7;
+	
+	public static var AutoCannonRange:Float = 50;
 }

@@ -31,6 +31,9 @@ class WeaponSystems
 	public var _bfgDamageBase:Float = 7.0;
 	public var _bfgDamageFactor:Float = 1.0;
 	
+	public var _autoDamageBase:Float = 0.75;
+	public var _autoDamageFactor:Float = 1.0;
+	
 	public var _specialWeaponFireTimeMax:Float = 1.15;
 	
 	
