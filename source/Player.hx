@@ -35,12 +35,11 @@ class Player extends FlxObject
 	
 	public function new(state:PlayState)
 	{   
-
 		_dead = false;
 		_weaponSystems = new WeaponSystems();
 		
 		// for testing
-		_weaponSystems._hasAirGroundRockets = true;
+		_weaponSystems._hasBFG = true;
 		
 		FlxG.stage.quality = flash.display.StageQuality.BEST;
 		_state = state;
@@ -167,19 +166,23 @@ class Player extends FlxObject
 		_specialWeaponFireTime = 0;
 		if (_weaponSystems._hasAirGroundRockets)
 		{
-			//trace ("Player Shooting");
 			//var dangle = FlxRandom.floatRanged( -GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
 			var rad:Float = (angle) / 180 * Math.PI;
 			var dx:Float = Math.cos(rad) * 7 + 5;
 			var dy:Float = Math.sin(rad) * 7 + 7;
-			//trace ("Shot created");
 
-			var s:Shot = new Shot(x + dx, y + dy, angle , ShotType.Rocket, _state);
+			var s:Shot = new Shot(x + dx, y + dy, angle , ShotType.RocketAirGround, _state);
 			_state.addShot(s);
 		}
 		else if (_weaponSystems._hasAirAirRockets)
 		{
-			
+			//var dangle = FlxRandom.floatRanged( -GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
+			var rad:Float = (angle) / 180 * Math.PI;
+			var dx:Float = Math.cos(rad) * 7 + 5;
+			var dy:Float = Math.sin(rad) * 7 + 7;
+
+			var s:Shot = new Shot(x + dx, y + dy, angle , ShotType.RocketAirAir, _state);
+			_state.addShot(s);
 		}
 		else if (_weaponSystems._hasAutoTurret)
 		{
@@ -188,6 +191,15 @@ class Player extends FlxObject
 		else if (_weaponSystems._hasLaser)
 		{
 			
+		}
+		else if (_weaponSystems._hasBFG)
+		{
+			var rad:Float = (angle) / 180 * Math.PI;
+			var dx:Float = Math.cos(rad) * 7 + 5;
+			var dy:Float = Math.sin(rad) * 7 + 7;
+
+			var s:Shot = new Shot(x + dx, y + dy, angle , ShotType.BFG, _state);
+			_state.addShot(s);
 		}
 	}
 	

@@ -74,8 +74,6 @@ class PlayState extends FlxState
 		super.create();
 	}
 	
-	
-	
 	/**
 	 * Function that is called when this state is destroyed - you might want to 
 	 * consider setting all objects this state uses to null to help garbage collection.
@@ -141,7 +139,14 @@ class PlayState extends FlxState
 						{
 							continue;
 						}
-
+						if (e._groundAirSwitch && s._type == ShotType.RocketAirAir)
+						{
+							continue;
+						}
+						if (!e._groundAirSwitch && s._type == ShotType.RocketAirGround)
+						{
+							continue;
+						}
 						if (FlxG.overlap(e._sprite, s._sprite))
 						{
 							if (FlxG.pixelPerfectOverlap(e._sprite, s._sprite,1))
