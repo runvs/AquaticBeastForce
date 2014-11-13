@@ -227,20 +227,18 @@ class PlayState extends FlxState
 			for (j in 0 ... _enemies.length)
 			{
 				var e:Enemy = _enemies.members[j];
-				 if ( e._name == n) 
-				 { 
-					trace (n);  
-					 return false;
-				 }
+                if ( e._name == n) 
+                {
+                    return false;
+                }
 			}
 			for (j in 0 ... _destroyableList.length)
 			{
 				var e:DestroyableObject = _destroyableList.members[j];
-				 if ( e._name == n) 
-				 { 
-					trace (n);  
-					 return false;
-				 }
+				if ( e._name == n) 
+				{
+					return false;
+				}
 			}
 		}
 		return true;
