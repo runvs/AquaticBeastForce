@@ -234,7 +234,7 @@ class PlayState extends FlxState
 				var e:Enemy = _enemies.members[j];
 				 if ( e._name == n) 
 				 { 
-					trace (n);  
+					//trace (n);  
 					 return false;
 				 }
 			}
@@ -243,7 +243,7 @@ class PlayState extends FlxState
 				var e:DestroyableObject = _destroyableList.members[j];
 				 if ( e._name == n) 
 				 { 
-					trace (n);  
+					//trace (n);  
 					 return false;
 				 }
 			}

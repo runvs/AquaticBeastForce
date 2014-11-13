@@ -205,8 +205,8 @@ class Player extends FlxObject
 			var dex:Float = e.x - x + 5;
 			var dey:Float = e.y - y + 7;
 
-			var tarAngle:Float = Math.atan2(dey, dex);
-			
+			var tarAngle:Float = Math.atan2(dey, dex) * 180/Math.PI;
+			trace (dex + " " + dey + " " + tarAngle);
 			var s:Shot = new Shot(x + dex, y + dey, tarAngle, ShotType.MgSmall, _state);
 			s.setDamage(_weaponSystems._autoDamageBase, _weaponSystems._autoDamageFactor);
 			_state.addShot(s);
