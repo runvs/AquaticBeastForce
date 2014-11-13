@@ -1,7 +1,6 @@
 package ;
 import flixel.FlxObject;
 import flixel.FlxSprite;
-import flash.display.BlendMode;
 import flixel.FlxG;
 import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
@@ -16,258 +15,90 @@ using flixel.util.FlxSpriteUtil;
 class Enemy extends FlxObject
 {
     public var type:EnemyType;
-    
-    public var _sprite:FlxSprite;
-    private var _shadowSprite:FlxSprite;
-	private var _shadowDistance:Float;
-	private var _state:PlayState;
-	
-	private var _health:Float;
-	private var _healtMax:Float;
-	
-	private var _shootTimer:Float;
-	private var _shootTimerMax:Float;
-	
-	public var _name:String;
-	
-	public var _groundAirSwitch:Bool;	// true for ground, false for air
-	
-	static public function TypeFromString(enemyType:String):EnemyType
-	{
-		var type:EnemyType = EnemyType.Tank;
-		if (enemyType == "tank")
-		{
-			type = EnemyType.Tank;
-		}
-		else if (enemyType == "soldiers")
-		{
-			type = EnemyType.Soldiers;
-		}
-		else if (enemyType == "helicopter")
-		{
-			type = EnemyType.Helicopter;
-		}
-		else
-		{
-			type = EnemyType.Tank;
-			throw "Enemy Type not known";
-		}
-		return type;
-	}
-	
+    public var name:String;
+    public var isGround:Bool;
+    public var sprite:FlxSprite;
 
-    public function new(type:EnemyType, state:PlayState )
+
+    private var _shadowSprite:FlxSprite;
+    private var _shadowDistance:Float;
+    private var _state:PlayState;
+
+    private var _health:Float;
+    private var _healthMax:Float;
+
+    private var _shootTimer:Float;
+    private var _shootTimerMax:Float;
+
+    public function new()
     {
-        this.type = type;
-        _state = state;
-		
-		_health = _healtMax = GameProperties.EnemyTankDefaultHealth;
-		
-		
-        var mainSprite:String;
-        var shadowSprite:String;
-        var mainAnimation = [];
-        var shadowAnimation = [];
-        var animationSpeed = 12;
-		
-        
-        switch(this.type)
-        {
-            case EnemyType.Tank:
-                {
-                    mainSprite = AssetPaths.enemyTank__png;
-                    shadowSprite = AssetPaths.enemyTankShadow__png;
-                    mainAnimation = [0, 1];
-                    shadowAnimation = [0];
-					_shadowDistance = 1;
-					
-					_shootTimer = _shootTimerMax = 1;
-					_groundAirSwitch = true;
-                };
-            case EnemyType.Helicopter:
-                {
-                    mainSprite = AssetPaths.enemyHelicopter__png;
-                    shadowSprite = AssetPaths.enemyHelicopterShadow__png;
-                    mainAnimation = [0];
-                    shadowAnimation = [0];
-					_shadowDistance = 3;
-					_shootTimer = _shootTimerMax = 1;
-					_groundAirSwitch = false;
-                };
-            case EnemyType.Soldiers:
-                {
-                    mainSprite = AssetPaths.enemySoldier__png;
-                    shadowSprite = AssetPaths.enemySoldierShadow__png;
-                    mainAnimation = [0];
-                    shadowAnimation = [0];
-					_shadowDistance = 1;
-					_shootTimer = _shootTimerMax = 1;
-					_groundAirSwitch = true;
-                };
-        }
-        
-        // Load sprite for the enemy
-        _sprite = new FlxSprite();
-        _sprite.loadGraphic(mainSprite, true, 16, 16);
-        _sprite.animation.add("base", mainAnimation, animationSpeed, true);
-        _sprite.animation.play("base");
-        
-        // Load sprite for the shadow
-        _shadowSprite = new FlxSprite();
-        _shadowSprite.loadGraphic(shadowSprite, true, 16, 16);
-        _shadowSprite.animation.add("base", shadowAnimation, animationSpeed, true);
-        _shadowSprite.animation.play("base");
-        _shadowSprite.alpha = 0.75;
-        _shadowSprite.blend = BlendMode.MULTIPLY;
-        
-		
-		width = _sprite.width;
-		height = _sprite.height;
-		
-		
         super();
     }
-	
-	override public function update():Void 
-    {
-		_sprite.setPosition(x, y);
-		_shadowSprite.setPosition(x + _shadowDistance, y + _shadowDistance);
-		
-		_sprite.angle = angle;
-		_shadowSprite.angle = angle;
-		
-		_sprite.update();
-		_shadowSprite.update();
-		
-		
-		if (type == EnemyType.Tank)
-		{
-			updateTank();
-		}
-		
-		velocity.x *= 0.96;
-		velocity.y *= 0.96;
-		
-		
-		super.update();
-	}
-	
-	private function updateTank():Void
-	{
-		// drive towards player
-		var playerPos:FlxVector= new FlxVector(_state._player.x, _state._player.y);
-		var tankPos:FlxVector  = new FlxVector(x,y);
-		
-		var direction:FlxVector = new FlxVector(playerPos.x - tankPos.x,playerPos.y - tankPos.y);
-		var l = direction.length;
-		
-//		angle = direction.degrees;
-		
-		var targetAngle:Float = direction.degrees;
-		var currentAngle:Float = angle;
-		
-		var angleDifference:Float = targetAngle - currentAngle;
-		//trace(angleDifference);
-		
-		if (angleDifference > 0 && angleDifference >= GameProperties.EnemyTankTurnSpeed)
-		{
-			angleDifference = GameProperties.EnemyTankTurnSpeed;
-		}
-		else if (angleDifference <= 0 && angleDifference <= GameProperties.EnemyTankTurnSpeed)
-		{
-			angleDifference = -GameProperties.EnemyTankTurnSpeed;
-		}
-		
-		
-		
-		currentAngle+= angleDifference;
-		
-		var rad:Float = currentAngle / 180 * Math.PI;
-        var dx:Float = Math.cos(rad);
-        var dy:Float = Math.sin(rad);
-		
-		direction = new FlxVector(dx, dy);
-		angle = direction.degrees;
-		
-		if(l >= 40)
-		{
-			direction = direction.normalize();
-			
-			var tmp:Float = GameProperties.EnemyTankMovementSpeed * FlxG.elapsed;
-			
-			velocity.x += direction.x * tmp;
-			velocity.y += direction.y * tmp;
-		}
-		
-				
-		
-		var angletoTurn = targetAngle - currentAngle;
-		if ( Math.abs(angletoTurn) <= 1 && l <= 120)
-		{
-			shoot();
-		}
-		
-		_shootTimer += FlxG.elapsed;
-		
-	}
-	
-	public function shoot():Void
-	{
-		if (_shootTimer >= _shootTimerMax)
-		{
-			//trace ("Player Shooting");
-			var dangle = FlxRandom.floatRanged( -GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
-			var rad:Float = (angle) / 180 * Math.PI;
-			var dx:Float = Math.cos(rad) * 7 + 5;
-			var dy:Float = Math.sin(rad) * 7 + 7;
-			//trace ("Shot created");
 
-			var s:Shot = new Shot(x + dx, y + dy, angle + dangle, ShotType.Mg, _state, false);
-			_state.addShot(s);
-
-			//trace ("Shot created");
-			_shootTimer = 0;
-		}
-	}
-	
-	
-	public function takeDamage(damage:Float):Void
-	{
-		if (alive && exists)
-		{
-			_health -=  damage;
-			checkDead();
-		}
-	}
-	
-	
-	private function checkDead()
-	{
-		if (alive && exists)
-		{
-			if (_health <= 0)
-			{
-				kill();
-			}
-		}
-	}
-	
-	 override public function draw():Void 
+    override public function update():Void 
     {
-		_shadowSprite.draw();
-		_sprite.draw();
-		super.draw();
-	}
-	
-	public override function kill():Void
-	{
-		super.kill();
-		// we need to call kill first, otherwise the enemy could get damaged by its own explosion and cause an endless loop
-		_state.addExplosion(new Explosion(x , y ));
-		
-		
-		
-	}
-	
-	
+        sprite.setPosition(x, y);
+        _shadowSprite.setPosition(x + _shadowDistance, y + _shadowDistance);
+        
+        sprite.angle = angle;
+        _shadowSprite.angle = angle;
+        
+        sprite.update();
+        _shadowSprite.update();
+        
+        velocity.x *= 0.96;
+        velocity.y *= 0.96;
+        
+        super.update();
+    }
+
+    public function shoot():Void
+    {
+        if (_shootTimer >= _shootTimerMax)
+        {
+            var dAngle = FlxRandom.floatRanged(-GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
+            var rad:Float = (angle) / 180 * Math.PI;
+            var dx:Float = Math.cos(rad) * 7 + 5;
+            var dy:Float = Math.sin(rad) * 7 + 7;
+            
+            var s:Shot = new Shot(x + dx, y + dy, angle + dAngle, ShotType.Mg, _state, false);
+            _state.addShot(s);
+            
+            _shootTimer = 0;
+        }
+    }
+
+    public function takeDamage(damage:Float):Void
+    {
+        if (alive && exists)
+        {
+            _health -=  damage;
+            checkDead();
+        }
+    }
+
+    private function checkDead()
+    {
+        if (alive && exists)
+        {
+            if (_health <= 0)
+            {
+                kill();
+            }
+        }
+    }
+
+     override public function draw():Void 
+    {
+        _shadowSprite.draw();
+        sprite.draw();
+        super.draw();
+    }
+
+    public override function kill():Void
+    {
+        super.kill();
+        // we need to call kill first, otherwise the enemy could get damaged by its own explosion and cause an endless loop
+        _state.addExplosion(new Explosion(x , y ));
+    }
 }

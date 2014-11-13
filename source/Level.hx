@@ -80,21 +80,20 @@ class Level extends FlxBasic
 		if (entityName == "Enemy")
 		{
 			var enemyType:String = entityData.get("Type");
-			
-			var type:EnemyType = Enemy.TypeFromString(enemyType);
-			
-			var enemy : Enemy  = new Enemy(type, _state);
+            
+			var enemy : Enemy = EnemyFactory.getEnemyByString(enemyType, _state);
 			enemy.x = x;
 			enemy.y = y;
-			enemy._name = entityData.get("Name");
-			_state.addEnemy(enemy);
+			enemy.name = entityData.get("Name");
+			
+            _state.addEnemy(enemy);
 		}
 		if (entityName == "Destroy")
 		{
 			trace ("creating destoyable object");
 			var type:String = entityData.get("Type");
 			var d : DestroyableObject = new  DestroyableObject(x, y, type, _state);
-			d._name = entityData.get("Name");
+			d.name = entityData.get("Name");
 			_state.addDestroyable(d);
 		}
 	}

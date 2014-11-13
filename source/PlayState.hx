@@ -139,17 +139,17 @@ class PlayState extends FlxState
 						{
 							continue;
 						}
-						if (e._groundAirSwitch && s._type == ShotType.RocketAirAir)
+						if (e.isGround && s._type == ShotType.RocketAirAir)
 						{
 							continue;
 						}
-						if (!e._groundAirSwitch && s._type == ShotType.RocketAirGround)
+						if (!e.isGround && s._type == ShotType.RocketAirGround)
 						{
 							continue;
 						}
-						if (FlxG.overlap(e._sprite, s._sprite))
+						if (FlxG.overlap(e.sprite, s._sprite))
 						{
-							if (FlxG.pixelPerfectOverlap(e._sprite, s._sprite,1))
+							if (FlxG.pixelPerfectOverlap(e.sprite, s._sprite,1))
 							{
 								shotEnemyCollision(e, s);
 							}
@@ -174,9 +174,9 @@ class PlayState extends FlxState
 					{
 						continue;
 					}
-					if (FlxG.overlap(d._sprite, s._sprite))
+					if (FlxG.overlap(d.sprite, s._sprite))
 					{
-						if (FlxG.pixelPerfectOverlap(d._sprite, s._sprite,1))
+						if (FlxG.pixelPerfectOverlap(d.sprite, s._sprite,1))
 						{
 							shotDestroyableCollision(d, s);
 						}
@@ -232,7 +232,7 @@ class PlayState extends FlxState
 			for (j in 0 ... _enemies.length)
 			{
 				var e:Enemy = _enemies.members[j];
-                if ( e._name == n) 
+                if ( e.name == n) 
                 {
                     return false;
                 }
@@ -240,7 +240,7 @@ class PlayState extends FlxState
 			for (j in 0 ... _destroyableList.length)
 			{
 				var e:DestroyableObject = _destroyableList.members[j];
-				if ( e._name == n) 
+				if ( e.name == n) 
 				{
 					return false;
 				}
