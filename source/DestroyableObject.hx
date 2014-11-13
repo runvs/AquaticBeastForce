@@ -60,7 +60,6 @@ class DestroyableObject extends FlxObject
 		_sprite.animation.add("destroyed", [1],30,true);
 		_sprite.animation.play("normal");
 		
-		
 		_health = GetHitpoints(_type);
 		
 		

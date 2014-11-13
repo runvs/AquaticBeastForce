@@ -17,7 +17,7 @@ using flixel.util.FlxSpriteUtil;
 class Shot extends FlxObject
 {
 	public var _sprite:FlxSprite;
-	private var _type:ShotType;
+	public var _type:ShotType;
 	
 	private var _state:PlayState;
 	
@@ -27,15 +27,26 @@ class Shot extends FlxObject
 	
 	private var _timer:Float;
 	
+	private var _damageBase:Float;
+	private var _damageFactor:Float;
+	
+	public function setDamage(base:Float, factor:Float = 1.0):Void
+	{
+		_damageBase = base;
+		_damageFactor = factor;
+	}
+
+	public function getDamage():Float
+	{
+		return _damageBase * _damageFactor;
+	}
 	
 	public function new(X:Float=0, Y:Float=0, Angle:Float=0, type:ShotType, state:PlayState, playerShot:Bool = true ) 
 	{
 		super(X, Y);
 		
 		_shooter = playerShot;
-		
 		_state = state;
-		
 		_timer = 0;
 		
 		angle = Angle;
@@ -48,7 +59,6 @@ class Shot extends FlxObject
 		
 		if (_type == ShotType.Mg)
 		{
-			//trace ("create MG shot");
 			velocity.x = dx * GameProperties.ShotMGMovementSpeed;
 			velocity.y = dy * GameProperties.ShotMGMovementSpeed;
 			_sprite.loadGraphic(AssetPaths.shot_mg__png, false, 8, 1);
@@ -59,20 +69,20 @@ class Shot extends FlxObject
 		}
 		else if (_type == ShotType.MgSmall)
 		{
-			//trace ("create MGSmall shot");
+			velocity.x = dx * GameProperties.ShotMGMovementSpeed;
+			velocity.y = dy * GameProperties.ShotMGMovementSpeed;
 			_sprite.loadGraphic(AssetPaths.shot_mg__png, false, 8, 1);
 			_sprite.alpha = 0.25;
-			_sprite.blend = BlendMode.ALPHA;
 			_sprite.setGraphicSize(4, 1);
 			_sprite.updateHitbox();
+			_sprite.angle = angle;
 			_lifetime = GameProperties.ShotMGSmallLifeTime;
 		}
-		else if (_type == ShotType.Rocket)
+		else if (_type == ShotType.RocketAirGround)
 		{
-			//trace ("create Roeckt shot");
 			velocity.x = dx * GameProperties.ShotRocketMoveSpeedInitial;
 			velocity.y = dy * GameProperties.ShotRocketMoveSpeedInitial;
-			_sprite.loadGraphic(AssetPaths.rocket__png, false, 16, 9);
+			_sprite.loadGraphic(AssetPaths.shot_rocket_ground__png, false, 16, 9);
 			_sprite.setGraphicSize(8, 4);
 			_sprite.alpha = 1.0;
 			_sprite.angle = angle;
@@ -81,10 +91,9 @@ class Shot extends FlxObject
 		}
 		else if (_type == ShotType.RocketAirAir)
 		{
-			//trace ("create Roeckt shot");
-			velocity.x = dx * GameProperties.ShotMGMovementSpeed;
-			velocity.y = dy * GameProperties.ShotMGMovementSpeed;
-			_sprite.loadGraphic(AssetPaths.shot_mg__png, false, 8, 1);
+			velocity.x = dx * GameProperties.ShotRocketMoveSpeedInitial;
+			velocity.y = dy * GameProperties.ShotRocketMoveSpeedInitial;
+			_sprite.loadGraphic(AssetPaths.shot_rocket__png, false, 8, 1);
 			_sprite.alpha = 1.0;
 			_sprite.angle = angle;
 			
@@ -92,7 +101,6 @@ class Shot extends FlxObject
 		}
 		else if (_type == ShotType.Ballistic)
 		{
-			//trace ("create Roeckt shot");
 			velocity.x = dx * GameProperties.ShotMGMovementSpeed;
 			velocity.y = dy * GameProperties.ShotMGMovementSpeed;
 			_sprite.loadGraphic(AssetPaths.shot_mg__png, false, 8, 1);
@@ -107,7 +115,16 @@ class Shot extends FlxObject
 		}
 		else if (_type == ShotType.BFG)
 		{
-			
+			velocity.x = dx * GameProperties.ShotBFGMovementSpeed;
+			velocity.y = dy * GameProperties.ShotBFGMovementSpeed;
+			_sprite.loadGraphic(AssetPaths.shot_bfg__png, true, 8, 8);
+			_sprite.setGraphicSize(4, 4);
+			_sprite.animation.add("normal", [0, 1, 2], 30, true);
+			_sprite.animation.play("normal");
+			_sprite.alpha = 1.0;
+			_sprite.angle = angle;
+			_sprite.angularVelocity = 10;
+			_lifetime = GameProperties.ShotBFGLifeTime;
 		}
 		else
 		{
@@ -116,15 +133,13 @@ class Shot extends FlxObject
 		
 		width = _sprite.width;
 		height = _sprite.height;
-		
-		//trace ("Shot constuctor finished");
-		
 	}
 	
 	
 	public override function update():Void
 	{
 		super.update();
+		_sprite.update();
 		
 		_lifetime -= FlxG.elapsed;
 		_timer += FlxG.elapsed;
@@ -133,7 +148,7 @@ class Shot extends FlxObject
 		{
 			updateMG();
 		}
-		else if (_type == ShotType.Rocket)
+		else if (_type == ShotType.RocketAirAir || _type == ShotType.RocketAirGround)
 		{
 			updateRocket();
 		}
@@ -141,11 +156,20 @@ class Shot extends FlxObject
 		{
 			updateLaser();
 		}
-		
+		else if (_type == ShotType.BFG)
+		{
+			updateBFG();
+		}
 		if (_lifetime <= 0)
 		{
 			kill();
 		}
+		
+	}
+	
+	private function updateBFG():Void
+	{
+		_sprite.setPosition(x, y);
 		
 	}
 	
@@ -187,7 +211,7 @@ class Shot extends FlxObject
 	
 	public override function kill():Void
 	{
-		if (_type == ShotType.Rocket)
+		if (_type == ShotType.RocketAirAir || _type == ShotType.RocketAirGround)
 		{
 			var e:Explosion = new Explosion(x, y);
 			_state.addExplosion(e);

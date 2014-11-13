@@ -20,12 +20,18 @@ class GameProperties
 	public static var EnemyTankDefaultHealth:Float = 10;
 	
 	public static var ShotMGMovementSpeed:Float = 120;
+	public static var ShotBFGMovementSpeed:Float = 140;
+	
 
 	public static var ShotMGLifeTime:Float = 0.25;
 	public static var ShotMGSmallLifeTime:Float = 0.25;
+	
+	public static var ShotBFGLifeTime:Float = 0.5;
 	
 	public static var ShotRocketLifeTime:Float = 1;
 	public static var ShotRocketMoveSpeedInitial:Float = 70.0;
 	
 	public static var ExplosionDamage:Float = 7;
+	
+	public static var AutoCannonRange:Float = 50;
 }

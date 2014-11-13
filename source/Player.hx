@@ -35,12 +35,11 @@ class Player extends FlxObject
 	
 	public function new(state:PlayState)
 	{   
-
 		_dead = false;
 		_weaponSystems = new WeaponSystems();
 		
 		// for testing
-		_weaponSystems._hasAirGroundRockets = true;
+		_weaponSystems._hasAutoTurret = true;
 		
 		FlxG.stage.quality = flash.display.StageQuality.BEST;
 		_state = state;
@@ -150,6 +149,13 @@ class Player extends FlxObject
 			}
 		
 		}
+		if (_weaponSystems._hasAutoTurret)
+		{
+			if (_specialWeaponFireTime > _weaponSystems._specialWeaponFireTimeMax)
+			{
+				shootSpecial();
+			}
+		}
     }
     
     private function move(distance:Float):Void
@@ -167,27 +173,58 @@ class Player extends FlxObject
 		_specialWeaponFireTime = 0;
 		if (_weaponSystems._hasAirGroundRockets)
 		{
-			//trace ("Player Shooting");
 			//var dangle = FlxRandom.floatRanged( -GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
 			var rad:Float = (angle) / 180 * Math.PI;
 			var dx:Float = Math.cos(rad) * 7 + 5;
 			var dy:Float = Math.sin(rad) * 7 + 7;
-			//trace ("Shot created");
 
-			var s:Shot = new Shot(x + dx, y + dy, angle , ShotType.Rocket, _state);
+			var s:Shot = new Shot(x + dx, y + dy, angle , ShotType.RocketAirGround, _state);
+			s.setDamage(_weaponSystems._rocketAirGroundDamageBase, _weaponSystems._rocketAirGroundDamageFactor);
 			_state.addShot(s);
 		}
 		else if (_weaponSystems._hasAirAirRockets)
 		{
-			
+			//var dangle = FlxRandom.floatRanged( -GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
+			var rad:Float = (angle) / 180 * Math.PI;
+			var dx:Float = Math.cos(rad) * 7 + 5;
+			var dy:Float = Math.sin(rad) * 7 + 7;
+
+			var s:Shot = new Shot(x + dx, y + dy, angle , ShotType.RocketAirAir, _state);
+			s.setDamage(_weaponSystems._rocketAirAirDamageBase, _weaponSystems._rocketAirAirDamageFactor);
+			_state.addShot(s);
 		}
 		else if (_weaponSystems._hasAutoTurret)
 		{
+			var e:Enemy = _state.getNearestEnemy();
+			if (e == null)
+			{
+				return;
+			}
+			
+			//var dangle = FlxRandom.floatRanged( -GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
+			var dex:Float = e.x - x + 5;
+			var dey:Float = e.y - y + 7;
+
+			var tarAngle:Float = Math.atan2(dey, dex);
+			
+			var s:Shot = new Shot(x + dex, y + dey, tarAngle, ShotType.MgSmall, _state);
+			s.setDamage(_weaponSystems._autoDamageBase, _weaponSystems._autoDamageFactor);
+			_state.addShot(s);
 			
 		}
 		else if (_weaponSystems._hasLaser)
 		{
 			
+		}
+		else if (_weaponSystems._hasBFG)
+		{
+			var rad:Float = (angle) / 180 * Math.PI;
+			var dx:Float = Math.cos(rad) * 7 + 5;
+			var dy:Float = Math.sin(rad) * 7 + 7;
+
+			var s:Shot = new Shot(x + dx, y + dy, angle , ShotType.BFG, _state);
+			s.setDamage(_weaponSystems._bfgDamageBase, _weaponSystems._bfgDamageFactor);
+			_state.addShot(s);
 		}
 	}
 	
@@ -202,6 +239,7 @@ class Player extends FlxObject
 		//trace ("Shot created");
 
 		var s:Shot = new Shot(x + dx, y + dy, angle + dangle, ShotType.Mg, _state);
+		s.setDamage(_weaponSystems._mgDamgeBase, _weaponSystems._mgDamageFactor);
 		_state.addShot(s);
 
 		//trace ("Shot created");

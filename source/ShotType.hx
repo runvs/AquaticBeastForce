@@ -8,7 +8,7 @@ enum ShotType
 {
 	Mg;
 	MgSmall;
-	Rocket;
+	RocketAirGround;
 	RocketAirAir;
 	Laser;
 	Ballistic;

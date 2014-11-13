@@ -30,6 +30,8 @@ class Enemy extends FlxObject
 	
 	public var _name:String;
 	
+	public var _groundAirSwitch:Bool;	// true for ground, false for air
+	
 	static public function TypeFromString(enemyType:String):EnemyType
 	{
 		var type:EnemyType = EnemyType.Tank;
@@ -80,6 +82,7 @@ class Enemy extends FlxObject
 					_shadowDistance = 1;
 					
 					_shootTimer = _shootTimerMax = 1;
+					_groundAirSwitch = true;
                 };
             case EnemyType.Helicopter:
                 {
@@ -89,6 +92,7 @@ class Enemy extends FlxObject
                     shadowAnimation = [0];
 					_shadowDistance = 3;
 					_shootTimer = _shootTimerMax = 1;
+					_groundAirSwitch = false;
                 };
             case EnemyType.Soldiers:
                 {
@@ -98,6 +102,7 @@ class Enemy extends FlxObject
                     shadowAnimation = [0];
 					_shadowDistance = 1;
 					_shootTimer = _shootTimerMax = 1;
+					_groundAirSwitch = true;
                 };
         }
         

@@ -74,8 +74,6 @@ class PlayState extends FlxState
 		super.create();
 	}
 	
-	
-	
 	/**
 	 * Function that is called when this state is destroyed - you might want to 
 	 * consider setting all objects this state uses to null to help garbage collection.
@@ -141,7 +139,14 @@ class PlayState extends FlxState
 						{
 							continue;
 						}
-
+						if (e._groundAirSwitch && s._type == ShotType.RocketAirAir)
+						{
+							continue;
+						}
+						if (!e._groundAirSwitch && s._type == ShotType.RocketAirGround)
+						{
+							continue;
+						}
 						if (FlxG.overlap(e._sprite, s._sprite))
 						{
 							if (FlxG.pixelPerfectOverlap(e._sprite, s._sprite,1))
@@ -248,14 +253,39 @@ class PlayState extends FlxState
 	{
         addExplosion(new Explosion(s._sprite.x - 4, s._sprite.y - 6, true));
         s.deleteObject();
-		e.takeDamage(1.5);
+		e.takeDamage(s.getDamage());
 	}
 	
 	public function shotDestroyableCollision (d:DestroyableObject, s:Shot):Void
 	{
 		addExplosion(new Explosion(s._sprite.x - 4, s._sprite.y - 4, true));
 		s.deleteObject();
-		d.takeDamage(1.5);
+		d.takeDamage(s.getDamage());
+	}
+	
+	public function getNearestEnemy():Enemy 
+	{
+		var ret:Enemy = null;
+		var distancelargest:Float = 999999;
+		for (i in 0 ... _enemies.length)
+		{
+			var e:Enemy = _enemies.members[i];
+			var dx:Float = e.x - _player.x;
+			var dy:Float = e.y - _player.y;
+			
+			var d:Float = Math.sqrt(dx * dx + dy * dy);
+			
+			if (d < GameProperties.AutoCannonRange)
+			{
+				if (d < distancelargest)
+				{
+					distancelargest = d;
+					ret = e;
+				}
+			}
+			
+		}
+		return ret;
 	}
     
     override public function draw():Void 
