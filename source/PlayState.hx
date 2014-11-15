@@ -101,11 +101,11 @@ class PlayState extends FlxState
 			_shotlist.forEach(function(s:Shot) { if (s.alive) newShotList.add(s); else s.destroy(); } );
 			_shotlist = newShotList;
 		}
-		{
-			var newDestrList:FlxTypedGroup<DestroyableObject> = new FlxTypedGroup<DestroyableObject>();
-			_destroyableList.forEach(function(d:DestroyableObject) { if (d.alive) newDestrList.add(d); else d.destroy(); } );
-			_destroyableList = newDestrList;
-		}
+		//{
+			//var newDestrList:FlxTypedGroup<DestroyableObject> = new FlxTypedGroup<DestroyableObject>();
+			//_destroyableList.forEach(function(d:DestroyableObject) { if (d.alive) newDestrList.add(d); else d.destroy(); } );
+			//_destroyableList = newDestrList;
+		//}
 	}
 	
 	/**

@@ -146,7 +146,7 @@ class Shot extends FlxObject
 		
 		if (_type == ShotType.Mg || _type == ShotType.MgSmall)
 		{
-			trace ("update mgshot");
+			//trace ("update mgshot");
 			updateMG();
 		}
 		else if (_type == ShotType.RocketAirAir || _type == ShotType.RocketAirGround)
@@ -164,7 +164,7 @@ class Shot extends FlxObject
 		
 		if (_lifetime <= 0)
 		{
-			trace ("kill");
+			//trace ("kill");
 			kill();
 		}
 		

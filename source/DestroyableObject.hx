@@ -26,6 +26,10 @@ class DestroyableObject extends FlxObject
         {
             return 5;
         }
+		else if (type == "fueltank")
+        {
+            return 25;
+        }
         else
         {
             return 1;
@@ -37,6 +41,26 @@ class DestroyableObject extends FlxObject
         if (type == "barrel")
         {
             return 8;
+        }
+		else if (type == "fueltank")
+        {
+            return 24;
+        }
+        else
+        {
+            return 16;
+        }
+    }
+	
+	static private function GetSize(type:String):Int
+    {
+        if (type == "barrel")
+        {
+            return 16;
+        }
+		else if (type == "fueltank")
+        {
+            return 24;
         }
         else
         {
@@ -52,7 +76,7 @@ class DestroyableObject extends FlxObject
         var imagepath:String = "assets/images/" + type + ".png";
         //trace ("destoyable constructor: " + imagepath);
         sprite = new FlxSprite();
-        sprite.loadGraphic(imagepath, true, 16, 16);
+        sprite.loadGraphic(imagepath, true, GetSize(_type), GetSize(_type));
         sprite.setGraphicSize(GetScale(_type), GetScale(_type));
         sprite.updateHitbox();
         sprite.animation.add("normal", [0], 30, true);
@@ -90,7 +114,7 @@ class DestroyableObject extends FlxObject
         {
             alive = false;
             
-            _state.addExplosion(new Explosion(x-4 , y-4 ));	// probably just a small explosion?
+            _state.addExplosion(new Explosion(x + (GetScale(_type)-16)/2, y + (GetScale(_type) - 16)/2));	// probably just a small explosion?
             var t: FlxTimer = new FlxTimer(0.2, switchImage);	// this timer is needed so the image is flipped after the explosion has started. Fancy juicy shit :D
         }
         
@@ -98,7 +122,8 @@ class DestroyableObject extends FlxObject
 
     public function switchImage(t:FlxTimer):Void
     {
-        sprite.animation.play("destroyed", true);
+		trace ("switch image");
+        sprite.animation.play("destroyed");
     }
 
     override public function draw():Void 

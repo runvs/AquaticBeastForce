@@ -165,6 +165,7 @@
         <ValueDefinition xsi:type="EnumValueDefinition" Name="Type">
           <Elements>
             <string>barrel</string>
+            <string>fueltank</string>
           </Elements>
         </ValueDefinition>
         <ValueDefinition xsi:type="StringValueDefinition" Name="Name" Default="" MaxChars="-1" MultiLine="false" />

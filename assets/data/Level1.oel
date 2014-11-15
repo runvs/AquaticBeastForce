@@ -36,6 +36,8 @@
     <Destroy id="7" x="48" y="224" Type="barrel" Name="barrel2" />
     <Player id="9" x="80" y="160" />
     <Enemy id="0" x="80" y="112" Type="helicopter" Name="" />
+    <Destroy id="3" x="160" y="240" Type="fueltank" Name="" />
+    <Destroy id="4" x="224" y="240" Type="fueltank" Name="" />
   </Entities>
   <Objects1 tileset="ObjectSet" exportMode="CSV">-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
