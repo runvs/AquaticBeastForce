@@ -202,14 +202,23 @@ class Player extends FlxObject
 			}
 			
 			//var dangle = FlxRandom.floatRanged( -GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
-			var dex:Float = e.x - x + 5;
-			var dey:Float = e.y - y + 7;
+			var dex:Float = e.x - x + 4;
+			var dey:Float = e.y - y + 4;
+			
+			var rad:Float = (angle) / 180 * Math.PI;
+			var dx:Float = Math.cos(rad) * 7 + 5;
+			var dy:Float = Math.sin(rad) * 7 + 7;
 
 			var tarAngle:Float = Math.atan2(dey, dex) * 180/Math.PI;
 			trace (dex + " " + dey + " " + tarAngle);
-			var s:Shot = new Shot(x + dex, y + dey, tarAngle, ShotType.MgSmall, _state);
+			var s:Shot = new Shot(x + dx, y + dy, tarAngle, ShotType.MgSmall, _state);
 			s.setDamage(_weaponSystems._autoDamageBase, _weaponSystems._autoDamageFactor);
 			_state.addShot(s);
+			
+			
+			
+			
+			
 			
 		}
 		else if (_weaponSystems._hasLaser)

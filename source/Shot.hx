@@ -69,23 +69,14 @@ class Shot extends FlxObject
 		}
 		else if (_type == ShotType.MgSmall)
 		{
-			//velocity.x = dx * GameProperties.ShotMGMovementSpeed;
-			//velocity.y = dy * GameProperties.ShotMGMovementSpeed;
-			//_sprite.loadGraphic(AssetPaths.shot_mg__png, false, 8, 1);
-			//_sprite.alpha = 0.25;
-			//_sprite.setGraphicSize(4, 1);
-			//_sprite.updateHitbox();
-			//_sprite.angle = angle;
-			//_lifetime = GameProperties.ShotMGSmallLifeTime;
-			
 			velocity.x = dx * GameProperties.ShotMGMovementSpeed;
 			velocity.y = dy * GameProperties.ShotMGMovementSpeed;
 			_sprite.loadGraphic(AssetPaths.shot_mg__png, false, 8, 1);
-			_sprite.alpha = 1.0;
+			_sprite.alpha = 0.5;
+			_sprite.setGraphicSize(4, 1);
+			_sprite.updateHitbox();
 			_sprite.angle = angle;
-			_lifetime = GameProperties.ShotMGLifeTime;
-			
-			
+			_lifetime = GameProperties.ShotMGSmallLifeTime;
 		}
 		else if (_type == ShotType.RocketAirGround)
 		{
@@ -155,6 +146,7 @@ class Shot extends FlxObject
 		
 		if (_type == ShotType.Mg || _type == ShotType.MgSmall)
 		{
+			trace ("update mgshot");
 			updateMG();
 		}
 		else if (_type == ShotType.RocketAirAir || _type == ShotType.RocketAirGround)
@@ -169,8 +161,10 @@ class Shot extends FlxObject
 		{
 			updateBFG();
 		}
+		
 		if (_lifetime <= 0)
 		{
+			trace ("kill");
 			kill();
 		}
 		
