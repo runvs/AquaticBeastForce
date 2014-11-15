@@ -29,9 +29,11 @@ class Enemy extends FlxObject
 
     private var _shootTimer:Float;
     private var _shootTimerMax:Float;
+	private var _hasSeenPlayer:Bool;
 
     public function new()
     {
+		_hasSeenPlayer = false;
         super();
     }
 
@@ -75,6 +77,7 @@ class Enemy extends FlxObject
         {
             _health -=  damage;
             checkDead();
+			_hasSeenPlayer = true;
         }
     }
 

@@ -15,6 +15,8 @@ class GameProperties
 	public static var PlayerHealthDefault:Float = 15;
 	public static var PlayerLivesDefault:Int = 2;
 
+	public static var EnemyViewRange:Float = 60;
+	
 	public static var EnemyTankMovementSpeed:Float = 25;
 	public static var EnemyTankTurnSpeed:Float = 0.75;
 	public static var EnemyTankDefaultHealth:Float = 10;
@@ -34,4 +36,5 @@ class GameProperties
 	public static var ExplosionDamage:Float = 7;
 	
 	public static var AutoCannonRange:Float = 50;
+	
 }

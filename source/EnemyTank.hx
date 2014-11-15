@@ -53,58 +53,68 @@ class EnemyTank extends Enemy
     
     override public function update():Void 
     {
-        // drive towards player
 		var playerPos:FlxVector= new FlxVector(_state._player.x, _state._player.y);
 		var tankPos:FlxVector  = new FlxVector(x,y);
 		
 		var direction:FlxVector = new FlxVector(playerPos.x - tankPos.x,playerPos.y - tankPos.y);
 		var l = direction.length;
-		
-		var targetAngle:Float = direction.degrees;
-		var currentAngle:Float = angle;
-		
-		var angleDifference:Float = targetAngle - currentAngle;
-		
-		if (angleDifference > 0 && angleDifference >= GameProperties.EnemyTankTurnSpeed)
+		if (_hasSeenPlayer)
 		{
-			angleDifference = GameProperties.EnemyTankTurnSpeed;
-		}
-		else if (angleDifference <= 0 && angleDifference <= GameProperties.EnemyTankTurnSpeed)
-		{
-			angleDifference = -GameProperties.EnemyTankTurnSpeed;
-		}
-		
-		
-		
-		currentAngle+= angleDifference;
-		
-		var rad:Float = currentAngle / 180 * Math.PI;
-        var dx:Float = Math.cos(rad);
-        var dy:Float = Math.sin(rad);
-		
-		direction = new FlxVector(dx, dy);
-		angle = direction.degrees;
-		
-		if(l >= 40)
-		{
-			direction = direction.normalize();
+			// drive towards player
 			
-			var tmp:Float = GameProperties.EnemyTankMovementSpeed * FlxG.elapsed;
 			
-			velocity.x += direction.x * tmp;
-			velocity.y += direction.y * tmp;
-		}
-		
+			var targetAngle:Float = direction.degrees;
+			var currentAngle:Float = angle;
+			
+			var angleDifference:Float = targetAngle - currentAngle;
+			
+			if (angleDifference > 0 && angleDifference >= GameProperties.EnemyTankTurnSpeed)
+			{
+				angleDifference = GameProperties.EnemyTankTurnSpeed;
+			}
+			else if (angleDifference <= 0 && angleDifference <= GameProperties.EnemyTankTurnSpeed)
+			{
+				angleDifference = -GameProperties.EnemyTankTurnSpeed;
+			}
+			
+			
+			
+			currentAngle+= angleDifference;
+			
+			var rad:Float = currentAngle / 180 * Math.PI;
+			var dx:Float = Math.cos(rad);
+			var dy:Float = Math.sin(rad);
+			
+			direction = new FlxVector(dx, dy);
+			angle = direction.degrees;
+			
+			if(l >= 40)
+			{
+				direction = direction.normalize();
 				
-		
-		var angletoTurn = targetAngle - currentAngle;
-		if ( Math.abs(angletoTurn) <= 1 && l <= 120)
-		{
-			shoot();
+				var tmp:Float = GameProperties.EnemyTankMovementSpeed * FlxG.elapsed;
+				
+				velocity.x += direction.x * tmp;
+				velocity.y += direction.y * tmp;
+			}
+			
+					
+			
+			var angletoTurn = targetAngle - currentAngle;
+			if ( Math.abs(angletoTurn) <= 1 && l <= 120)
+			{
+				shoot();
+			}
+			
+			_shootTimer += FlxG.elapsed;
 		}
-		
-		_shootTimer += FlxG.elapsed;
-        
+		else
+		{
+			if (l < GameProperties.EnemyViewRange)
+			{
+				_hasSeenPlayer = true;
+			}
+		}
         super.update();
     }
     
