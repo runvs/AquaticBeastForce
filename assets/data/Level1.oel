@@ -61,7 +61,7 @@
 -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1</GroundForeground>
   <Entities>
     <LevelInfo id="2" x="0" y="0" MissionInfo="attack" targets="tank1,barrel1,barrel2" />
-    <Enemy id="1" x="112" y="176" Type="tank" Name="tank1" />
+    <Enemy id="1" x="112" y="176" Type="soldiers" Name="tank1" />
     <Destroy id="6" x="80" y="192" Type="barrel" Name="barrel1" />
     <Destroy id="7" x="48" y="224" Type="barrel" Name="barrel2" />
     <Player id="9" x="80" y="160" />

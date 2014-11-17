@@ -100,13 +100,13 @@ class Shot extends FlxObject
 		}
 		else if (type == ShotType.Ballistic)
 		{
-			velocity.x = dx * GameProperties.ShotMGMovementSpeed;
-			velocity.y = dy * GameProperties.ShotMGMovementSpeed;
-			sprite.loadGraphic(AssetPaths.shot_mg__png, false, 8, 1);
+			velocity.x = dx * GameProperties.ShotBallisticMovementSpeed;
+			velocity.y = dy * GameProperties.ShotBallisticMovementSpeed;
+			sprite.loadGraphic(AssetPaths.shot_ballistic__png, false, 4, 4);
 			sprite.alpha = 1.0;
 			sprite.angle = angle;
 			
-			_lifetime = GameProperties.ShotRocketLifeTime;
+			_lifetime = GameProperties.ShotBallisticLifeTime;
 		}
 		else if (type == ShotType.Laser)
 		{

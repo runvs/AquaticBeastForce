@@ -91,14 +91,14 @@ class PlayState extends FlxState
 			_explosionList.forEach(function(e:Explosion) { if (e.alive) newExploList.add(e); else e.destroy(); } );
 			_explosionList = newExploList;
 		}
-		{
 			var newEnemyList:FlxTypedGroup<Enemy> = new FlxTypedGroup<Enemy>();
-			_enemies.forEach(function(e:Enemy) { if (e.alive) newEnemyList.add(e); else e.destroy(); } );
+		{
+			_enemies.forEach(function(e:Enemy) { if (e.exists) newEnemyList.add(e); else e.destroy(); } );
 			_enemies = newEnemyList;
 		}
 		{
 			var newShotList:FlxTypedGroup<Shot> = new FlxTypedGroup<Shot>();
-			_shotlist.forEach(function(s:Shot) { if (s.alive) newShotList.add(s); else s.destroy(); } );
+			_shotlist.forEach(function(s:Shot) { if (s.exists ) newShotList.add(s); else s.destroy(); } );
 			_shotlist = newShotList;
 		}
 		//{
@@ -270,6 +270,8 @@ class PlayState extends FlxState
 		for (i in 0 ... _enemies.length)
 		{
 			var e:Enemy = _enemies.members[i];
+			if (!e.alive) continue;
+			
 			var dx:Float = e.x - _player.x;
 			var dy:Float = e.y - _player.y;
 			

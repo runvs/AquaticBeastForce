@@ -1,5 +1,6 @@
 package ;
 import flixel.FlxSprite;
+import flixel.util.FlxRandom;
 import flixel.util.FlxVector;
 import flash.display.BlendMode;
 import flixel.FlxG;
@@ -27,8 +28,8 @@ class EnemyHelicopter extends Enemy
         var shadowAnimation = [0, 1];
         _shadowDistance = 3;
         
-        _health = _healthMax = GameProperties.EnemyTankDefaultHealth;
-        _shootTimer = _shootTimerMax = 1;
+        _health = _healthMax = GameProperties.EnemyHeliDefaultHealth;
+        _shootTimer = _shootTimerMax = GameProperties.EnemyHeliShootInterval;
         isGround = false;
         // **********************
         // * stop tweaking here *

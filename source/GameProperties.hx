@@ -11,33 +11,36 @@ class GameProperties
 
 	public static var PlayerWeaponMgSpreadInDegree = 5;
 	
-	public static var PlayerHealthDefault:Float = 15;
+	public static var PlayerHealthDefault:Float = 25;
 	public static var PlayerLivesDefault:Int = 2;
 
 	public static var EnemyViewRange:Float = 60;
 	
-	public static var EnemySoldierMovementSpeed:Float = 10;
+	public static var EnemySoldierMovementSpeed:Float = 9;
 	public static var EnemySoldiersTurnSpeed:Float = 2;
-	public static var EnemySoldierDefaultHealth:Float = 3;
-	public static var EnemyHeliShootDefaultHealth:Float = 0.25;
+	public static var EnemySoldierDefaultHealth:Float = 2;
+	public static var EnemySoldierShootInterval:Float = 0.75;
 	
 	public static var EnemyTankMovementSpeed:Float = 25;
 	public static var EnemyTankTurnSpeed:Float = 0.75;
 	public static var EnemyTankDefaultHealth:Float = 14;
-	public static var EnemyTankShootInterval:Float = 1;
+	public static var EnemyTankShootInterval:Float = 1.5;
 	
-	public static var EnemyHeliTurnSpeed:Float = 2;
 	public static var EnemyHeliMovementSpeed:Float = 30;
+	public static var EnemyHeliTurnSpeed:Float = 2;
 	public static var EnemyHeliDefaultHealth:Float = 10;
-	public static var EnemyHeliShootInterval:Float = 0.25;
+	public static var EnemyHeliShootInterval:Float = 0.35;
+	
+	
+	public static var ShotBallisticMovementSpeed:Float = 100;
+	public static var ShotBallisticLifeTime:Float = 0.35;
 	
 	public static var ShotMGMovementSpeed:Float = 120;
-	public static var ShotBFGMovementSpeed:Float = 140;
-	
-
 	public static var ShotMGLifeTime:Float = 0.25;
+	
 	public static var ShotMGSmallLifeTime:Float = 0.25;
 	
+	public static var ShotBFGMovementSpeed:Float = 140;
 	public static var ShotBFGLifeTime:Float = 0.5;
 	
 	public static var ShotRocketLifeTime:Float = 1;
