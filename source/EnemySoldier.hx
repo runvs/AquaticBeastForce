@@ -27,7 +27,6 @@ class EnemySoldier extends Enemy
         var animationSpeed = 12;
         
         var mainAnimation = [0];
-        var shadowAnimation = [0];
 		var dieanimation = [1, 2, 3, 4, 5];
 		var deadanimation = [5];
 		
@@ -51,7 +50,9 @@ class EnemySoldier extends Enemy
         // Load sprite for the shadow
         _shadowSprite = new FlxSprite();
         _shadowSprite.loadGraphic(shadowSprite, true, 16, 16);
-        _shadowSprite.animation.add("base", shadowAnimation, animationSpeed, true);
+        _shadowSprite.animation.add("base", mainAnimation, animationSpeed, true);
+		_shadowSprite.animation.add("die", dieanimation, animationSpeed, false);
+		_shadowSprite.animation.add("dead", deadanimation, animationSpeed, true);
         _shadowSprite.animation.play("base");
         _shadowSprite.alpha = 0.75;
         _shadowSprite.blend = BlendMode.MULTIPLY;
@@ -157,6 +158,7 @@ class EnemySoldier extends Enemy
 		{
 			dieanimplaying = true;
 			sprite.animation.play("die", true);
+			_shadowSprite.animation.play("die", true);
 		}
     }
     
@@ -164,6 +166,7 @@ class EnemySoldier extends Enemy
 	{
 		alive = false;
 		sprite.animation.play("dead", true);
+		_shadowSprite.animation.play("dead", true);
 		//exists = false;
 	}
 }
