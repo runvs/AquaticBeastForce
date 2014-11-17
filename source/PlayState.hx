@@ -285,7 +285,6 @@ class PlayState extends FlxState
 					ret = e;
 				}
 			}
-			
 		}
 		return ret;
 	}

@@ -122,13 +122,14 @@ class EnemyTank extends Enemy
     {
         if (_shootTimer >= _shootTimerMax)
         {
+			trace ("shoot");
             //var dAngle = FlxRandom.floatRanged(-GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
             var rad:Float = (angle) / 180 * Math.PI;
             var dx:Float = Math.cos(rad) * 7 + 5;
             var dy:Float = Math.sin(rad) * 7 + 7;
             
             var s:Shot = new Shot(x + dx, y + dy, angle, ShotType.Ballistic, _state, false);
-			s.setDamage(4, 1);
+			s.setDamage(GameProperties.EnemyTankDamage, 1);
             _state.addShot(s);
             
             _shootTimer = 0;

@@ -143,7 +143,7 @@ class EnemySoldier extends Enemy
             var dy:Float = Math.sin(rad) * 7 + 7;
             
             var s:Shot = new Shot(x + dx, y + dy, angle + dAngle, ShotType.MgSmall, _state, false);
-			s.setDamage(4, 1);
+			s.setDamage(GameProperties.EnemySoldierDamage, 1);
             _state.addShot(s);
             
             _shootTimer = 0;

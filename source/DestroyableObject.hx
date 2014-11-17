@@ -122,7 +122,7 @@ class DestroyableObject extends FlxObject
 
     public function switchImage(t:FlxTimer):Void
     {
-		trace ("switch image");
+		//trace ("switch image");
         sprite.animation.play("destroyed");
     }
 

@@ -104,6 +104,8 @@ class Shot extends FlxObject
 			velocity.y = dy * GameProperties.ShotBallisticMovementSpeed;
 			sprite.loadGraphic(AssetPaths.shot_ballistic__png, false, 4, 4);
 			sprite.alpha = 1.0;
+			sprite.setGraphicSize(2, 2);
+			sprite.updateHitbox();
 			sprite.angle = angle;
 			
 			_lifetime = GameProperties.ShotBallisticLifeTime;
@@ -143,7 +145,7 @@ class Shot extends FlxObject
 		_lifetime -= FlxG.elapsed;
 		_timer += FlxG.elapsed;
 		
-		if (type == ShotType.Mg || type == ShotType.MgSmall)
+		if (type == ShotType.Mg || type == ShotType.MgSmall || type == ShotType.Ballistic)
 		{
 			//trace ("update mgshot");
 			updateMG();
