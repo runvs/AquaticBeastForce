@@ -130,7 +130,7 @@ class PlayState extends FlxState
 			var s:Shot = _shotlist.members[j];
 			if (s.alive && s.exists )
 			{
-				if (s._shooter)
+				if (s.isPlayer)
 				{
 					for (i in 0..._enemies.length)
 					{
@@ -139,17 +139,17 @@ class PlayState extends FlxState
 						{
 							continue;
 						}
-						if (e.isGround && s._type == ShotType.RocketAirAir)
+						if (e.isGround && s.type == ShotType.RocketAirAir)
 						{
 							continue;
 						}
-						if (!e.isGround && s._type == ShotType.RocketAirGround)
+						if (!e.isGround && s.type == ShotType.RocketAirGround)
 						{
 							continue;
 						}
-						if (FlxG.overlap(e.sprite, s._sprite))
+						if (FlxG.overlap(e.sprite, s.sprite))
 						{
-							if (FlxG.pixelPerfectOverlap(e.sprite, s._sprite,1))
+							if (FlxG.pixelPerfectOverlap(e.sprite, s.sprite,1))
 							{
 								shotEnemyCollision(e, s);
 							}
@@ -158,9 +158,9 @@ class PlayState extends FlxState
 				}
 				else
 				{
-					if (FlxG.overlap(_player._sprite, s._sprite))
+					if (FlxG.overlap(_player._sprite, s.sprite))
 						{
-							if (FlxG.pixelPerfectOverlap(_player._sprite, s._sprite,1))
+							if (FlxG.pixelPerfectOverlap(_player._sprite, s.sprite,1))
 							{
 								_player.takeDamage(1.5);
 								s.deleteObject();
@@ -174,9 +174,9 @@ class PlayState extends FlxState
 					{
 						continue;
 					}
-					if (FlxG.overlap(d.sprite, s._sprite))
+					if (FlxG.overlap(d.sprite, s.sprite))
 					{
-						if (FlxG.pixelPerfectOverlap(d.sprite, s._sprite,1))
+						if (FlxG.pixelPerfectOverlap(d.sprite, s.sprite,1))
 						{
 							shotDestroyableCollision(d, s);
 						}
@@ -251,14 +251,14 @@ class PlayState extends FlxState
 	
 	public function shotEnemyCollision (e:Enemy, s:Shot):Void
 	{
-        addExplosion(new Explosion(s._sprite.x - 4, s._sprite.y - 6, true));
+        addExplosion(new Explosion(s.sprite.x - 4, s.sprite.y - 6, true));
         s.deleteObject();
 		e.takeDamage(s.getDamage());
 	}
 	
 	public function shotDestroyableCollision (d:DestroyableObject, s:Shot):Void
 	{
-		addExplosion(new Explosion(s._sprite.x - 4, s._sprite.y - 4, true));
+		addExplosion(new Explosion(s.sprite.x - 4, s.sprite.y - 4, true));
 		s.deleteObject();
 		d.takeDamage(s.getDamage());
 	}
