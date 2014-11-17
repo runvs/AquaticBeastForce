@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <OgmoVersion>2.1.0.6</OgmoVersion>
+  <OgmoVersion>1.0</OgmoVersion>
   <Name>AquaticBeastForce</Name>
   <BackgroundColor A="255" R="125" G="160" B="255" />
   <GridColor A="255" R="255" G="240" B="90" />
@@ -16,7 +16,7 @@
     <Width>640</Width>
     <Height>480</Height>
   </LevelMaximumSize>
-  <Filename>C:\Projekte\aquatic-beast-force\assets\data\abflevels.oep</Filename>
+  <Filename>C:\dev\Projects\aquatic-beast-force\assets\data\abflevels.oep</Filename>
   <AngleMode>Degrees</AngleMode>
   <CameraEnabled>false</CameraEnabled>
   <CameraSize>
@@ -29,7 +29,19 @@
   </LevelValueDefinitions>
   <LayerDefinitions>
     <LayerDefinition xsi:type="TileLayerDefinition">
-      <Name>Background</Name>
+      <Name>GroundBackground</Name>
+      <Grid>
+        <Width>16</Width>
+        <Height>16</Height>
+      </Grid>
+      <ScrollFactor>
+        <X>1</X>
+        <Y>1</Y>
+      </ScrollFactor>
+      <ExportMode>CSV</ExportMode>
+    </LayerDefinition>
+    <LayerDefinition xsi:type="TileLayerDefinition">
+      <Name>GroundForeground</Name>
       <Grid>
         <Width>16</Width>
         <Height>16</Height>
@@ -51,23 +63,11 @@
         <Y>1</Y>
       </ScrollFactor>
     </LayerDefinition>
-    <LayerDefinition xsi:type="TileLayerDefinition">
-      <Name>Objects1</Name>
-      <Grid>
-        <Width>16</Width>
-        <Height>16</Height>
-      </Grid>
-      <ScrollFactor>
-        <X>1</X>
-        <Y>1</Y>
-      </ScrollFactor>
-      <ExportMode>CSV</ExportMode>
-    </LayerDefinition>
   </LayerDefinitions>
   <Tilesets>
     <Tileset>
-      <Name>TileSet1</Name>
-      <FilePath>..\images\tileset.png</FilePath>
+      <Name>GroundBackground</Name>
+      <FilePath>..\images\tilesetGroundBG.png</FilePath>
       <TileSize>
         <Width>16</Width>
         <Height>16</Height>
@@ -75,8 +75,8 @@
       <TileSep>0</TileSep>
     </Tileset>
     <Tileset>
-      <Name>ObjectSet</Name>
-      <FilePath>..\images\objects.png</FilePath>
+      <Name>GroundForeground</Name>
+      <FilePath>..\images\tilesetGroundFG.png</FilePath>
       <TileSize>
         <Width>16</Width>
         <Height>16</Height>
