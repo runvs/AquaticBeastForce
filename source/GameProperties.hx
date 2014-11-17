@@ -17,6 +17,8 @@ class GameProperties
 
 	public static var EnemyViewRange:Float = 60;
 	
+	public static var SoldierTankMovementSpeed:Float = 10;
+	
 	public static var EnemyTankMovementSpeed:Float = 25;
 	public static var EnemyTankTurnSpeed:Float = 0.75;
 	public static var EnemyTankDefaultHealth:Float = 10;
