@@ -113,9 +113,12 @@ class DestroyableObject extends FlxObject
         if (alive && exists)
         {
             alive = false;
-            
             _state.addExplosion(new Explosion(x + (GetScale(_type)-16)/2, y + (GetScale(_type) - 16)/2));	// probably just a small explosion?
             var t: FlxTimer = new FlxTimer(0.2, switchImage);	// this timer is needed so the image is flipped after the explosion has started. Fancy juicy shit :D
+			if (name != "")
+			{
+				trace ("object " + name + " destroyed");
+			}
         }
         
     }
