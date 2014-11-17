@@ -68,17 +68,15 @@ class EnemySoldier extends Enemy
 			
 			var angleDifference:Float = targetAngle - currentAngle;
 			
-			if (angleDifference > 0 && angleDifference >= GameProperties.EnemyTankTurnSpeed)
+			if (angleDifference > 0 && angleDifference >= GameProperties.EnemySoldiersTurnSpeed)
 			{
-				angleDifference = GameProperties.EnemyTankTurnSpeed;
+				angleDifference = GameProperties.EnemySoldiersTurnSpeed;
 			}
-			else if (angleDifference <= 0 && angleDifference <= GameProperties.EnemyTankTurnSpeed)
+			else if (angleDifference <= 0 && angleDifference <= GameProperties.EnemySoldiersTurnSpeed)
 			{
-				angleDifference = -GameProperties.EnemySol;
+				angleDifference = -GameProperties.EnemySoldiersTurnSpeed;
 			}
-			
-			
-			
+
 			currentAngle+= angleDifference;
 			
 			var rad:Float = currentAngle / 180 * Math.PI;
@@ -105,7 +103,6 @@ class EnemySoldier extends Enemy
 			{
 				shoot();
 			}
-			
 			_shootTimer += FlxG.elapsed;
 		}
 		else
@@ -116,6 +113,23 @@ class EnemySoldier extends Enemy
 			}
 		}
         super.update();
+    }
+	
+	public override function shoot():Void
+    {
+        if (_shootTimer >= _shootTimerMax)
+        {
+            //var dAngle = FlxRandom.floatRanged(-GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
+            var rad:Float = (angle) / 180 * Math.PI;
+            var dx:Float = Math.cos(rad) * 7 + 5;
+            var dy:Float = Math.sin(rad) * 7 + 7;
+            
+            var s:Shot = new Shot(x + dx, y + dy, angle + dAngle, ShotType.MgSmall, _state, false);
+			s.setDamage(4, 1);
+            _state.addShot(s);
+            
+            _shootTimer = 0;
+        }
     }
     
 }

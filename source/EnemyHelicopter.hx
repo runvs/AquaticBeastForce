@@ -51,4 +51,92 @@ class EnemyHelicopter extends Enemy
         super();
     }
     
+	
+	override public function update():Void 
+    {
+		var playerPos:FlxVector= new FlxVector(_state._player.x, _state._player.y);
+		var heliPos:FlxVector  = new FlxVector(x,y);
+		
+		var direction:FlxVector = new FlxVector(playerPos.x - heliPos.x,playerPos.y - heliPos.y);
+		var l = direction.length;
+		if (_hasSeenPlayer)
+		{
+			// drive towards player
+			
+			
+			var targetAngle:Float = direction.degrees;
+			var currentAngle:Float = angle;
+			
+			var angleDifference:Float = targetAngle - currentAngle;
+			
+			if (angleDifference > 0 && angleDifference >= GameProperties.EnemyHeliTurnSpeed)
+			{
+				angleDifference = GameProperties.EnemyHeliTurnSpeed;
+			}
+			else if (angleDifference <= 0 && angleDifference <= GameProperties.EnemyHeliTurnSpeed)
+			{
+				angleDifference = -GameProperties.EnemyHeliTurnSpeed;
+			}
+			
+			
+			
+			currentAngle+= angleDifference;
+			
+			var rad:Float = currentAngle / 180 * Math.PI;
+			var dx:Float = Math.cos(rad);
+			var dy:Float = Math.sin(rad);
+			
+			direction = new FlxVector(dx, dy);
+			angle = direction.degrees;
+			
+			if(l >= 40)
+			{
+				direction = direction.normalize();
+				
+				var tmp:Float = GameProperties.EnemyHeliMovementSpeed * FlxG.elapsed;
+				
+				velocity.x += direction.x * tmp;
+				velocity.y += direction.y * tmp;
+			}
+			
+					
+			
+			var angletoTurn = targetAngle - currentAngle;
+			if ( Math.abs(angletoTurn) <= 1 && l <= 120)
+			{
+				shoot();
+			}
+			
+			_shootTimer += FlxG.elapsed;
+		}
+		else
+		{
+			if (l < GameProperties.EnemyViewRange)
+			{
+				_hasSeenPlayer = true;
+			}
+		}
+        super.update();
+    }
+	
+	
+	public override function shoot():Void
+    {
+        if (_shootTimer >= _shootTimerMax)
+        {
+            var dAngle = FlxRandom.floatRanged(-GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
+            var rad:Float = (angle) / 180 * Math.PI;
+            var dx:Float = Math.cos(rad) * 7 + 5;
+            var dy:Float = Math.sin(rad) * 7 + 7;
+            
+            var s:Shot = new Shot(x + dx, y + dy, angle + dAngle, ShotType.Mg, _state, false);
+			s.setDamage(1, 1);
+            _state.addShot(s);
+            
+            _shootTimer = 0;
+        }
+    }
+
+	
+	
 }

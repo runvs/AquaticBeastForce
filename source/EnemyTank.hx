@@ -28,7 +28,7 @@ class EnemyTank extends Enemy
         _shadowDistance = 1;
         
         _health = _healthMax = GameProperties.EnemyTankDefaultHealth;
-        _shootTimer = _shootTimerMax = 1;
+        _shootTimer = _shootTimerMax = GameProperties.EnemyTankShootInterval;
         isGround = true;
         // **********************
         // * stop tweaking here *
@@ -116,6 +116,23 @@ class EnemyTank extends Enemy
 			}
 		}
         super.update();
+    }
+	
+	public override function shoot():Void
+    {
+        if (_shootTimer >= _shootTimerMax)
+        {
+            //var dAngle = FlxRandom.floatRanged(-GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
+            var rad:Float = (angle) / 180 * Math.PI;
+            var dx:Float = Math.cos(rad) * 7 + 5;
+            var dy:Float = Math.sin(rad) * 7 + 7;
+            
+            var s:Shot = new Shot(x + dx, y + dy, angle + dAngle, ShotType.Ballistic, _state, false);
+			s.setDamage(4, 1);
+            _state.addShot(s);
+            
+            _shootTimer = 0;
+        }
     }
     
 }
