@@ -45,8 +45,8 @@ class Level extends FlxBasic
 		trace("Levelfile parsed");
 		
 		
-		_mapBackground = _map.loadTilemap(AssetPaths.tileset__png, 16, 16, "Background");
-		_mapObjects1 = _map.loadTilemap(AssetPaths.objects__png, 16, 16, "Objects1");
+		_mapBackground = _map.loadTilemap(AssetPaths.tilesetGroundBG__png, 16, 16, "Background");
+		_mapObjects1 = _map.loadTilemap(AssetPaths.tilesetGroundFG__png, 16, 16, "Objects1");
 		trace("Background created ");
 		
 		
