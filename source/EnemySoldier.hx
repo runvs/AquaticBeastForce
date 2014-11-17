@@ -54,9 +54,9 @@ class EnemySoldier extends Enemy
 	 override public function update():Void 
     {
 		var playerPos:FlxVector= new FlxVector(_state._player.x, _state._player.y);
-		var tankPos:FlxVector  = new FlxVector(x,y);
+		var soldierPos:FlxVector  = new FlxVector(x,y);
 		
-		var direction:FlxVector = new FlxVector(playerPos.x - tankPos.x,playerPos.y - tankPos.y);
+		var direction:FlxVector = new FlxVector(playerPos.x - soldierPos.x,playerPos.y - soldierPos.y);
 		var l = direction.length;
 		if (_hasSeenPlayer)
 		{
@@ -74,7 +74,7 @@ class EnemySoldier extends Enemy
 			}
 			else if (angleDifference <= 0 && angleDifference <= GameProperties.EnemyTankTurnSpeed)
 			{
-				angleDifference = -GameProperties.EnemyTankTurnSpeed;
+				angleDifference = -GameProperties.EnemySol;
 			}
 			
 			
