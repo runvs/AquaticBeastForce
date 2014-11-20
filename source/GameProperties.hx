@@ -20,17 +20,19 @@ class GameProperties
 	public static var EnemySoldiersTurnSpeed:Float = 2;
 	public static var EnemySoldierDefaultHealth:Float = 2;
 	public static var EnemySoldierShootInterval:Float = 0.75;
+	public static var EnemySoldierDamage:Float = 1;
 	
 	public static var EnemyTankMovementSpeed:Float = 25;
 	public static var EnemyTankTurnSpeed:Float = 0.75;
 	public static var EnemyTankDefaultHealth:Float = 14;
 	public static var EnemyTankShootInterval:Float = 1.5;
+	public static var EnemyTankDamage:Float = 4;
 	
 	public static var EnemyHeliMovementSpeed:Float = 30;
 	public static var EnemyHeliTurnSpeed:Float = 2;
 	public static var EnemyHeliDefaultHealth:Float = 10;
 	public static var EnemyHeliShootInterval:Float = 0.35;
-	
+	public static var EnemyHeliDamage:Float = 2;
 	
 	public static var ShotBallisticMovementSpeed:Float = 100;
 	public static var ShotBallisticLifeTime:Float = 0.35;

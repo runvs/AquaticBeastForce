@@ -131,7 +131,7 @@ class EnemyHelicopter extends Enemy
             var dy:Float = Math.sin(rad) * 7 + 7;
             
             var s:Shot = new Shot(x + dx, y + dy, angle + dAngle, ShotType.Mg, _state, false);
-			s.setDamage(1, 1);
+			s.setDamage(GameProperties.EnemyHeliDamage, 1);
             _state.addShot(s);
             
             _shootTimer = 0;
