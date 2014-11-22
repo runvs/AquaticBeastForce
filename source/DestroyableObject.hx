@@ -16,7 +16,7 @@ class DestroyableObject extends FlxObject
     public var sprite:FlxSprite;
     public var name:String;
     
-    private var _type:String;
+    public var _type:String;
     private var _health:Float;
     private var _state:PlayState;
     
@@ -35,8 +35,10 @@ class DestroyableObject extends FlxObject
             return 1;
         }
     }
+	
+	
 
-    static private function GetScale(type:String):Int
+    static public function GetScale(type:String):Int
     {
         if (type == "barrel")
         {

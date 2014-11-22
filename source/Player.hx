@@ -6,6 +6,7 @@ import flixel.FlxG;
 import flixel.util.FlxColor;
 import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
+import flixel.util.FlxVector;
 import lime.math.Vector2;
 
 /**
@@ -33,6 +34,8 @@ class Player extends FlxObject
 	public var _specialWeaponFireTime:Float;
 	public var _dead:Bool;
 	
+	private var _locator:FlxSprite;
+	
 	public function new(state:PlayState)
 	{   
 		_dead = false;
@@ -58,6 +61,15 @@ class Player extends FlxObject
         _shadowSprite.alpha = 0.75;
         _shadowSprite.blend = BlendMode.MULTIPLY;
 		
+		_locator = new FlxSprite();
+		_locator.loadGraphic(AssetPaths.locator__png, true, 16, 16);
+		_locator.animation.add("base", [0, 1, 2, 3, 4, 5], 5, true);
+		_locator.alpha = 0.5;
+		_locator.setGraphicSize(8, 8);
+		_locator.updateHitbox();
+		_locator.animation.play("base");
+		
+		
 		_health = _healthMax = GameProperties.PlayerHealthDefault;
 		_remainingLives = GameProperties.PlayerLivesDefault;
 		
@@ -80,6 +92,8 @@ class Player extends FlxObject
         _shadowSprite.setPosition(x + 3, y + 3);
         _shadowSprite.angle = angle;
         _shadowSprite.update();
+		
+		_locator.update();
         
         velocity.x *= 0.98;
         velocity.y *= 0.98;
@@ -103,6 +117,22 @@ class Player extends FlxObject
 	{
 		
 	}
+	
+	// pass the target's center position
+	public function drawLocator(targetX:Float, targetY:Float):Void
+	{
+		// take into account that the players position is on its top left corner (so the -8 offset to get to the sprite's center)
+		var direction:FlxVector = new FlxVector(targetX - x - 8, targetY - y - 8);
+
+		_locator.angle = direction.degrees;
+		var l:Float = direction.length;
+		direction.normalize();
+		var distanceScale = (l < 100) ? l * 0.5  : 50;
+		_locator.x = x + direction.x * distanceScale + 4;
+		_locator.y = y + direction.y * distanceScale + 4;
+		_locator.draw();
+	}
+	
 	
     
     private function getInput():Void

@@ -298,8 +298,44 @@ class PlayState extends FlxState
 		_shotlist.draw();
 		_explosionList.draw();
 		
+		drawHud();
+		
         super.draw();
     }
+	
+	private function drawHud():Void
+	{
+		if (_level._missionInfo == "attack")
+		{
+			
+			if (_level._targets.length > 0)
+			{
+				var n:String = _level._targets[0];
+		
+				for (j in 0 ... _enemies.length)
+				{
+					var e:Enemy = _enemies.members[j];
+					if ( e.name == n) 
+					{
+						_player.drawLocator(e.x, e.y);
+						return;
+					}
+				}
+				for (j in 0 ... _destroyableList.length)
+				{
+					var e:DestroyableObject = _destroyableList.members[j];
+					if (e.alive && e.name == n) 
+					{
+						var offset:Float = DestroyableObject.GetScale(e._type) * 0.5;
+						_player.drawLocator(e.x + offset, e.y + offset);
+						return;
+					}
+				}
+			}
+			
+			
+		}
+	}
 	
 	public function addEnemy(enemy:Enemy):Void
 	{
