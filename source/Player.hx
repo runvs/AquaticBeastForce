@@ -74,7 +74,7 @@ class Player extends FlxObject
 		_hudBackground = new FlxSprite();
 		_hudBackground.loadGraphic(AssetPaths.hud_underlay__png, false, 160, 16);
 		_hudBackground.x = 0;
-		_hudBackground.y = 112;
+		_hudBackground.y = 128;
 		_hudBackground.scrollFactor.set();
 		
 		_health = _healthMax = GameProperties.PlayerHealthDefault;
@@ -122,8 +122,6 @@ class Player extends FlxObject
 	
 	public function drawHud():Void
 	{
-		trace(_hudBackground.x);
-		
 		_hudBackground.draw();
 	}
 	
