@@ -240,7 +240,7 @@ class PlayState extends FlxState
 			for (j in 0 ... _destroyableList.length)
 			{
 				var e:DestroyableObject = _destroyableList.members[j];
-				if ( e.name == n) 
+				if ( e.name == n && e.alive && e.exists) 
 				{
 					return false;
 				}
