@@ -36,6 +36,8 @@ class Player extends FlxObject
 	
 	private var _locator:FlxSprite;
 	
+	private var _hudBackground:FlxSprite;
+	
 	public function new(state:PlayState)
 	{   
 		_dead = false;
@@ -69,6 +71,11 @@ class Player extends FlxObject
 		_locator.updateHitbox();
 		_locator.animation.play("base");
 		
+		_hudBackground = new FlxSprite();
+		_hudBackground.loadGraphic(AssetPaths.hud_underlay__png, false, 160, 32);
+		_hudBackground.x = 0;
+		_hudBackground.y = 112;
+		_hudBackground.scrollFactor.set();
 		
 		_health = _healthMax = GameProperties.PlayerHealthDefault;
 		_remainingLives = GameProperties.PlayerLivesDefault;
@@ -115,7 +122,9 @@ class Player extends FlxObject
 	
 	public function drawHud():Void
 	{
+		trace(_hudBackground.x);
 		
+		_hudBackground.draw();
 	}
 	
 	// pass the target's center position
