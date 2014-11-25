@@ -72,7 +72,7 @@ class Player extends FlxObject
 		_locator.animation.play("base");
 		
 		_hudBackground = new FlxSprite();
-		_hudBackground.loadGraphic(AssetPaths.hud_underlay__png, false, 160, 32);
+		_hudBackground.loadGraphic(AssetPaths.hud_underlay__png, false, 160, 16);
 		_hudBackground.x = 0;
 		_hudBackground.y = 112;
 		_hudBackground.scrollFactor.set();
@@ -139,6 +139,10 @@ class Player extends FlxObject
 		var distanceScale = (l < 100) ? l * 0.5  : 50;
 		_locator.x = x + direction.x * distanceScale + 4;
 		_locator.y = y + direction.y * distanceScale + 4;
+		if (direction.y * distanceScale + 4 > 120) 
+		{
+			_locator.y  = 120 + y;
+		}
 		_locator.draw();
 	}
 	
