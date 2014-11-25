@@ -240,7 +240,7 @@ class PlayState extends FlxState
 			for (j in 0 ... _destroyableList.length)
 			{
 				var e:DestroyableObject = _destroyableList.members[j];
-				if ( e.name == n) 
+				if ( e.name == n && e.alive && e.exists) 
 				{
 					return false;
 				}
@@ -305,6 +305,7 @@ class PlayState extends FlxState
 	
 	private function drawHud():Void
 	{
+		_player.drawHud();
 		if (_level._missionInfo == "attack")
 		{
 			for (i in 0 ... _level._targets.length)
@@ -331,6 +332,9 @@ class PlayState extends FlxState
 				}
 			}
 		}
+		
+		
+		
 	}
 	
 	public function addEnemy(enemy:Enemy):Void
