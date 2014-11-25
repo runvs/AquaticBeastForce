@@ -307,11 +307,9 @@ class PlayState extends FlxState
 	{
 		if (_level._missionInfo == "attack")
 		{
-			
-			if (_level._targets.length > 0)
+			for (i in 0 ... _level._targets.length)
 			{
-				var n:String = _level._targets[0];
-		
+				var n:String = _level._targets[i];
 				for (j in 0 ... _enemies.length)
 				{
 					var e:Enemy = _enemies.members[j];
@@ -332,8 +330,6 @@ class PlayState extends FlxState
 					}
 				}
 			}
-			
-			
 		}
 	}
 	
