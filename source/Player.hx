@@ -4,6 +4,7 @@ import flixel.FlxSprite;
 import flash.display.BlendMode;
 import flixel.FlxG;
 import flixel.util.FlxColor;
+import flixel.util.FlxColorUtil;
 import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
 import flixel.util.FlxVector;
@@ -37,6 +38,7 @@ class Player extends FlxObject
 	private var _locator:FlxSprite;
 	
 	private var _hudBackground:FlxSprite;
+	private var _hudHealthBar:FlxSprite;
 	
 	public function new(state:PlayState)
 	{   
@@ -75,7 +77,14 @@ class Player extends FlxObject
 		_hudBackground.loadGraphic(AssetPaths.hud_underlay__png, false, 160, 16);
 		_hudBackground.x = 0;
 		_hudBackground.y = 128;
-		_hudBackground.scrollFactor.set();
+		_hudBackground.scrollFactor.set(0,0);
+		
+		_hudHealthBar = new FlxSprite();
+		_hudHealthBar.loadGraphic(AssetPaths.hud_health__png, false, 71, 6);
+		_hudHealthBar.x = 78;
+		_hudHealthBar.y = _hudBackground.y + 7;
+		_hudHealthBar.scrollFactor.set(0, 0);
+		_hudHealthBar.origin.set(0, 0);
 		
 		_health = _healthMax = GameProperties.PlayerHealthDefault;
 		_remainingLives = GameProperties.PlayerLivesDefault;
@@ -123,6 +132,10 @@ class Player extends FlxObject
 	public function drawHud():Void
 	{
 		_hudBackground.draw();
+		
+		var factor:Float = _health / _healthMax;
+		_hudHealthBar.scale.set(factor, 1);
+		_hudHealthBar.draw();
 	}
 	
 	// pass the target's center position
@@ -298,8 +311,9 @@ class Player extends FlxObject
 	
 	public function takeDamage(damage:Float):Void
 	{
-		FlxG.camera.shake(0.005,0.25);
-		FlxG.camera.flash(FlxColor.RED, 0.25);
+		FlxG.camera.shake(0.005, 0.25);
+		var col = FlxColorUtil.makeFromARGB(0.5, 255, 0, 0);
+		FlxG.camera.flash(col, 0.25);
 		_health -=  damage;
 		checkDead();
 		
