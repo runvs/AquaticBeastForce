@@ -43,8 +43,10 @@ class MenuState extends FlxState
 	
 	public function startGame():Void
 	{
-		trace("switch to playstate");
-		FlxG.switchState(new PlayState());
+        var state = new BriefingRoomState();
+        state.init(new PlayState(), AssetPaths.missionBriefing1__txt);
+        
+		FlxG.switchState(state);
 	}
     
     public function onOutButton():Void
