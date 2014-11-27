@@ -82,6 +82,7 @@ class PlayState extends FlxState
 	{
 		super.destroy();
 	}
+	
 
 	
 	private function cleanUp():Void
@@ -382,6 +383,11 @@ class PlayState extends FlxState
 	public function addDestroyable(d:DestroyableObject):Void
 	{
 		_destroyableList.add(d);
+	}
+	
+	public function PlayerDead():Void
+	{
+		_enemies.forEach(function(e:Enemy):Void { e.UnseePlayer(); } );
 	}
 	
 	

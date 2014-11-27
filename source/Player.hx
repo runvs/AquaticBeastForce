@@ -330,17 +330,24 @@ class Player extends FlxObject
 	
 	private function die():Void
 	{
-		alive = false;
-		// start Die animation
-		
-		FlxG.camera.fade(FlxColor.BLACK, 1, false, endThisLife);
+		if (alive)
+		{
+			alive = false;
+			// start Die animation
+			trace("die");
+			//FlxG.camera.fade(FlxColor.BLACK, 1, false, endThisLife);
+			endThisLife();
+			_state.PlayerDead();
+		}
 	}
 	
 	public function endThisLife():Void
 	{
+		trace ("endlife");
 		_remainingLives = _remainingLives - 1;
 		if (_remainingLives >= 0)
 		{
+			trace ("remaining lives " + _remainingLives );
 			respawn();
 		}
 		else 
@@ -352,10 +359,13 @@ class Player extends FlxObject
 	
 	private function respawn():Void
 	{
-		alive = true;
-		FlxG.camera.fade(FlxColor.BLACK, 1, true);
-		x = _respawnPosition.x;
-		y = _respawnPosition.y;
+			trace ("alive");
+			_health = _healthMax;
+			alive = true;
+			//trace (FlxG.camera.color);
+			FlxG.camera.fade(FlxColor.BLACK, 1, true);
+			x = _respawnPosition.x;
+			y = _respawnPosition.y;
 	}
 	
 	public function setRespawnPosition(pos:FlxPoint, moveToPosition:Bool = false):Void
