@@ -60,6 +60,11 @@ class BriefingRoomState extends FlxState
     {
         super.update();
         
+        if (FlxG.mouse.justReleased)
+        {
+            _bubbleTimer = 0;
+        }
+        
         if (_bubbleTimer <= 0)
         {
             // Switch to the next state

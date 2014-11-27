@@ -37,8 +37,10 @@ class Player extends FlxObject
 	
 	private var _locator:FlxSprite;
 	
-	private var _hudBackground:FlxSprite;
+	private var _hud:FlxSprite;
 	private var _hudHealthBar:FlxSprite;
+    private var _hudBackground:FlxSprite;
+    
 	
 	public function new(state:PlayState)
 	{   
@@ -73,22 +75,27 @@ class Player extends FlxObject
 		_locator.updateHitbox();
 		_locator.animation.play("base");
 		
-		_hudBackground = new FlxSprite();
-		_hudBackground.loadGraphic(AssetPaths.hud_underlay__png, false, 160, 16);
+		_hud = new FlxSprite();
+		_hud.loadGraphic(AssetPaths.hud__png);
+		_hud.x = 0;
+		_hud.y = 128;
+		_hud.scrollFactor.set(0,0);
+		
+		_hudHealthBar = new FlxSprite();
+		_hudHealthBar.loadGraphic(AssetPaths.hud_health__png);
+		_hudHealthBar.x = 76;
+		_hudHealthBar.y = _hud.y + 6;
+		_hudHealthBar.scrollFactor.set(0, 0);
+		_hudHealthBar.origin.set(0, 0);
+        
+        _hudBackground = new FlxSprite();
+        _hudBackground.loadGraphic(AssetPaths.hud_background__png);
 		_hudBackground.x = 0;
 		_hudBackground.y = 128;
 		_hudBackground.scrollFactor.set(0,0);
 		
-		_hudHealthBar = new FlxSprite();
-		_hudHealthBar.loadGraphic(AssetPaths.hud_health__png, false, 71, 6);
-		_hudHealthBar.x = 78;
-		_hudHealthBar.y = _hudBackground.y + 7;
-		_hudHealthBar.scrollFactor.set(0, 0);
-		_hudHealthBar.origin.set(0, 0);
-		
 		_health = _healthMax = GameProperties.PlayerHealthDefault;
 		_remainingLives = GameProperties.PlayerLivesDefault;
-		
 		
 		_mgfireTime = 0;
 		_specialWeaponFireTime = 0;
@@ -131,11 +138,18 @@ class Player extends FlxObject
 	
 	public function drawHud():Void
 	{
-		_hudBackground.draw();
+        _hudBackground.draw();
 		
 		var factor:Float = _health / _healthMax;
-		_hudHealthBar.scale.set(factor, 1);
+        if (factor < 0)
+        {
+            factor = 0.0;
+        }
+        
+        _hudHealthBar.x = 77 + factor * _hudHealthBar.width;
 		_hudHealthBar.draw();
+        
+		_hud.draw();
 	}
 	
 	// pass the target's center position
