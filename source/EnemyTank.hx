@@ -13,6 +13,8 @@ class EnemyTank extends Enemy
     
     public function new(state:PlayState) 
     {
+    	super();
+
         type = EnemyType.Tank;
         _state = state;
         
@@ -47,8 +49,6 @@ class EnemyTank extends Enemy
         _shadowSprite.animation.play("base");
         _shadowSprite.alpha = 0.75;
         _shadowSprite.blend = BlendMode.MULTIPLY;
-        
-        super();
     }
     
     override public function update():Void 

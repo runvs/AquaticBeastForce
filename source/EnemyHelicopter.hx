@@ -14,6 +14,8 @@ class EnemyHelicopter extends Enemy
 
     public function new(state:PlayState) 
     {
+    	super();
+
         type = EnemyType.Helicopter;
         _state = state;
         
@@ -48,8 +50,6 @@ class EnemyHelicopter extends Enemy
         _shadowSprite.animation.play("base");
         _shadowSprite.alpha = 0.75;
         _shadowSprite.blend = BlendMode.MULTIPLY;
-        
-        super();
     }
     
 	
