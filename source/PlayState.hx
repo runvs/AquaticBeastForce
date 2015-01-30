@@ -10,6 +10,7 @@ import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
+import flixel.util.FlxPoint;
 import flixel.util.FlxTimer;
 import flixel.util.FlxVector;
 
@@ -27,6 +28,7 @@ class PlayState extends FlxState
 	private var _shotlist:FlxTypedGroup<Shot>;
 	private var _explosionList:FlxTypedGroup<Explosion>;
 	private var _destroyableList:FlxTypedGroup<DestroyableObject>;
+	private var _pickUpList:FlxTypedGroup<PickUp>;
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -38,6 +40,10 @@ class PlayState extends FlxState
 		_shotlist = new FlxTypedGroup<Shot>();
 		_explosionList = new FlxTypedGroup<Explosion>();
 		_destroyableList = new FlxTypedGroup<DestroyableObject>();
+		_pickUpList = new FlxTypedGroup<PickUp>();
+		
+		var p : PickUp = new PickUp(new FlxPoint(100, 100));
+		_pickUpList.add(p);
 		
 		//add(_enemies);
 		trace("playstate create start");
@@ -72,6 +78,8 @@ class PlayState extends FlxState
 
 		
 		super.create();
+		
+		
 	}
 	
 	/**
@@ -120,10 +128,14 @@ class PlayState extends FlxState
 		_enemies.update();
 		_shotlist.update();
 		_explosionList.update();
+		_pickUpList.update();
 		
 		cleanUp();
 		
 		CheckEndCondition();
+		
+		FlxG.overlap(_player, _pickUpList, DoPlayerPickUp);
+		
 		
 		// TODO Rework and Refactor once finished
 		for (j in 0..._shotlist.length)
@@ -192,6 +204,11 @@ class PlayState extends FlxState
 		super.update();
 	}
 
+	public function DoPlayerPickUp(player:Player, p:PickUp) : Void 
+	{
+		player.AddPickUp(p);
+		p.kill();
+	}
 	
 	private function CheckEndCondition():Void
 	{
@@ -299,9 +316,11 @@ class PlayState extends FlxState
 		_shotlist.draw();
 		_explosionList.draw();
 		
-		drawHud();
+		_pickUpList.draw();
 		
+		drawHud();
         super.draw();
+		
     }
 	
 	private function drawHud():Void

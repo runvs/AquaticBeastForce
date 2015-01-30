@@ -40,6 +40,8 @@ class Player extends FlxObject
 	private var _hud:FlxSprite;
 	private var _hudHealthBar:FlxSprite;
     private var _hudBackground:FlxSprite;
+	
+	private var _points:Int;
     
 	
 	public function new(state:PlayState)
@@ -370,16 +372,15 @@ class Player extends FlxObject
 		}
 	}
 	
-	
 	private function respawn():Void
 	{
-			trace ("alive");
-			_health = _healthMax;
-			alive = true;
-			//trace (FlxG.camera.color);
-			FlxG.camera.fade(FlxColor.BLACK, 1, true);
-			x = _respawnPosition.x;
-			y = _respawnPosition.y;
+		trace ("alive");
+		_health = _healthMax;
+		alive = true;
+		//trace (FlxG.camera.color);
+		FlxG.camera.fade(FlxColor.BLACK, 1, true);
+		x = _respawnPosition.x;
+		y = _respawnPosition.y;
 	}
 	
 	public function setRespawnPosition(pos:FlxPoint, moveToPosition:Bool = false):Void
@@ -388,6 +389,42 @@ class Player extends FlxObject
 		if (moveToPosition)
 		{
 			respawn();
+		}
+	}
+	
+	public function AddPickUp ( p: PickUp ) : Void
+	{
+		if (p._type == PickUpTypes.Points1)
+		{
+			_points += 10;
+		}
+		else if (p._type == PickUpTypes.Points2)
+		{
+			_points += 20;
+		}
+		else if (p._type == PickUpTypes.Points5)
+		{
+			_points += 50;
+		}
+		else if (p._type == PickUpTypes.Health)
+		{
+			trace ("not implemented yet");
+		}
+		else if (p._type == PickUpTypes.PowerUpShootDamage)
+		{
+			trace ("not implemented yet");
+		}
+		else if (p._type == PickUpTypes.PowerUpShootFrequency)
+		{
+			trace ("not implemented yet");
+		}
+		else if (p._type == PickUpTypes.PowerUpInvulnerable)
+		{
+			trace ("not implemented yet");
+		}
+		else 
+		{
+			trace ("not implemented yet");
 		}
 	}
 	

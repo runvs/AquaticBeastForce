@@ -7,7 +7,7 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxVector;
-import sys.io.File;
+import openfl.Assets;
 
 /**
  * ...
@@ -53,7 +53,8 @@ class BriefingRoomState extends FlxState
     public function init(nextState:FlxState, missionStringsLocation:String):Void
     {
         _nextState = nextState;
-        _missionStrings = File.getContent(missionStringsLocation).split('\n');
+        _missionStrings = Assets.getText(missionStringsLocation).split('\n');
+		//_missionStrings = [""];
     }
     
     override public function update():Void 

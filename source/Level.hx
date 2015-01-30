@@ -31,6 +31,7 @@ class Level extends FlxBasic
 	public var _missionInfo:String;
 	public var _targets:Array<String>;
 	
+	
 	public function loadLevel(levelNumber:Int)
 	{
 		_levelNumber = levelNumber;
