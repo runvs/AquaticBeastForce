@@ -7,7 +7,7 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxVector;
-import sys.io.File;
+import openfl.Assets;
 
 /**
  * ...
@@ -47,13 +47,14 @@ class BriefingRoomState extends FlxState
         _briefingText = new FlxText();
         _briefingText.alignment = 'center';
         _briefingText.wordWrap = true;
+        _briefingText.fieldWidth = 100;
         add(_briefingText);
     }
     
     public function init(nextState:FlxState, missionStringsLocation:String):Void
     {
         _nextState = nextState;
-        _missionStrings = File.getContent(missionStringsLocation).split('\n');
+        _missionStrings = Assets.getText(missionStringsLocation).split('\n');
     }
     
     override public function update():Void 
@@ -81,8 +82,7 @@ class BriefingRoomState extends FlxState
             }
             
             _bubbleTimer += 2.5;
-            
-            trace(_briefingText.fieldWidth);
+
             _missionStringIndex++;
         }
         
@@ -91,7 +91,7 @@ class BriefingRoomState extends FlxState
             _briefingText.text = _missionStrings[_missionStringIndex];
             
             _bubblePosition.set(
-                50 + Math.sin(_timeSinceStart * 2 + 4.2),
+                30 + Math.sin(_timeSinceStart * 2 + 4.2),
                 20 + 2 * Math.sin(_timeSinceStart * 1.5)
             );
             _briefingText.setPosition(_bubblePosition.x, _bubblePosition.y);
