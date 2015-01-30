@@ -15,7 +15,8 @@ class EnemySoldier extends Enemy
 	private var dieanimplaying:Bool;
     public function new(state:PlayState) 
     {
-		super();
+    	super();
+
         type = EnemyType.Soldiers;
         _state = state;
         
@@ -57,8 +58,6 @@ class EnemySoldier extends Enemy
         _shadowSprite.animation.play("base");
         _shadowSprite.alpha = 0.75;
         _shadowSprite.blend = BlendMode.MULTIPLY;
-        
-        
     }
 	
 	 override public function update():Void 

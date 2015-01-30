@@ -47,6 +47,7 @@ class BriefingRoomState extends FlxState
         _briefingText = new FlxText();
         _briefingText.alignment = 'center';
         _briefingText.wordWrap = true;
+        _briefingText.fieldWidth = 100;
         add(_briefingText);
     }
     
@@ -54,7 +55,6 @@ class BriefingRoomState extends FlxState
     {
         _nextState = nextState;
         _missionStrings = Assets.getText(missionStringsLocation).split('\n');
-		//_missionStrings = [""];
     }
     
     override public function update():Void 
@@ -82,8 +82,7 @@ class BriefingRoomState extends FlxState
             }
             
             _bubbleTimer += 2.5;
-            
-            trace(_briefingText.fieldWidth);
+
             _missionStringIndex++;
         }
         
@@ -92,7 +91,7 @@ class BriefingRoomState extends FlxState
             _briefingText.text = _missionStrings[_missionStringIndex];
             
             _bubblePosition.set(
-                50 + Math.sin(_timeSinceStart * 2 + 4.2),
+                30 + Math.sin(_timeSinceStart * 2 + 4.2),
                 20 + 2 * Math.sin(_timeSinceStart * 1.5)
             );
             _briefingText.setPosition(_bubblePosition.x, _bubblePosition.y);
