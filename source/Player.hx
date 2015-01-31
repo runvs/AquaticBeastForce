@@ -184,6 +184,12 @@ class Player extends FlxObject
         var left:Bool = FlxG.keys.anyPressed(["A", "LEFT"]);
         var right:Bool = FlxG.keys.anyPressed(["D", "RIGHT"]);
 		var shot:Bool = FlxG.keys.anyPressed(["Space","X"]);
+		var suicide:Bool = FlxG.keys.pressed.P;
+
+		if(suicide)
+		{
+			_health = 0;
+		}
         
         if (!(left && right))
         {
