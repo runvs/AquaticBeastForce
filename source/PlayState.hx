@@ -206,8 +206,11 @@ class PlayState extends FlxState
 
 	public function DoPlayerPickUp(player:Player, p:PickUp) : Void 
 	{
-		player.AddPickUp(p);
-		p.kill();
+		if (p.alive)
+		{
+			player.AddPickUp(p);
+			p.kill();
+		}
 	}
 	
 	private function CheckEndCondition():Void
@@ -402,6 +405,10 @@ class PlayState extends FlxState
 	public function addDestroyable(d:DestroyableObject):Void
 	{
 		_destroyableList.add(d);
+	}
+	public function addPickUp(p:PickUp) : Void 
+	{
+		_pickUpList.add(p);
 	}
 	
 	public function PlayerDead():Void

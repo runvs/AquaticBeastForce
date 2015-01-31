@@ -56,10 +56,6 @@ class PickUp extends FlxSprite
 		{
 			loadGraphic(AssetPaths.pickup_Shots_Speed__png, false, 16, 16);
 		}
-		else if (_type == PickUpTypes.PowerUpInvulnerable)
-		{
-			loadGraphic(AssetPaths.pickup_Invul__png, false, 16, 16);
-		}
 	}
 	
 	public override function kill () : Void

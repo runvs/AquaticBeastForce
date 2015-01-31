@@ -418,10 +418,6 @@ class Player extends FlxObject
 		{
 			trace ("not implemented yet");
 		}
-		else if (p._type == PickUpTypes.PowerUpInvulnerable)
-		{
-			trace ("not implemented yet");
-		}
 		else 
 		{
 			trace ("not implemented yet");

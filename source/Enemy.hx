@@ -30,10 +30,12 @@ class Enemy extends FlxObject
     private var _shootTimer:Float;
     private var _shootTimerMax:Float;
 	private var _hasSeenPlayer:Bool;
+	private var _spawnedPickUp:Bool;
 
     public function new()
     {
 		_hasSeenPlayer = false;
+		_spawnedPickUp = false;
         super();
     }
 
@@ -88,11 +90,25 @@ class Enemy extends FlxObject
             if (_health <= 0)
             {
                 kill();
+				SpawnPickUp();
             }
         }
     }
 
-     override public function draw():Void 
+	private function SpawnPickUp() : Void 
+	{
+		if (!_spawnedPickUp)
+		{
+			if (FlxRandom.float() < 0.2)
+			{
+				var p : PickUp = new PickUp(new FlxPoint(x, y));
+				_state.addPickUp(p);
+			}
+			_spawnedPickUp = true;
+		}
+	}
+	
+    override public function draw():Void 
     {
         _shadowSprite.draw();
         sprite.draw();

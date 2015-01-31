@@ -12,5 +12,4 @@ enum PickUpTypes
 	Health;
 	PowerUpShootFrequency;
 	PowerUpShootDamage;
-	PowerUpInvulnerable;	
 }
