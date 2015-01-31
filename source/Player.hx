@@ -427,5 +427,23 @@ class Player extends FlxObject
 		}
 	}
 	
+	public function HasEnoughPoints( p : Int) : Bool
+	{
+		return (_currentPoints >= p);
+	}
+	
+	public function ChangePoints( diff: Int ) : Void 
+	{
+		if (diff > 0)
+		{
+			TotalPoints += diff;
+			_currentPoints += diff;
+		}
+		else
+		{
+			_currentPoints -= diff;
+		}
+	}
+	
 	
 }
