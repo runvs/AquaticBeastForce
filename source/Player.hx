@@ -41,8 +41,8 @@ class Player extends FlxObject
 	private var _hudHealthBar:FlxSprite;
     private var _hudBackground:FlxSprite;
 	
-	private var _points:Int = 0;
-    
+	private var _currentPoints:Int = 0;
+    public static var TotalPoints:Int = 0;
 	
 	public function new(state:PlayState)
 	{   
@@ -396,15 +396,18 @@ class Player extends FlxObject
 	{
 		if (p._type == PickUpTypes.Points1)
 		{
-			_points += 10;
+			_currentPoints += 10;
+			TotalPoints += 10;
 		}
 		else if (p._type == PickUpTypes.Points2)
 		{
-			_points += 20;
+			_currentPoints += 20;
+			TotalPoints += 20;
 		}
 		else if (p._type == PickUpTypes.Points5)
 		{
-			_points += 50;
+			_currentPoints += 50;
+			TotalPoints += 50;
 		}
 		else if (p._type == PickUpTypes.Health)
 		{
