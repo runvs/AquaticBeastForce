@@ -12,7 +12,6 @@ class GameOverState extends FlxState
 {
     private var _ignoreInputTimer:Float = 0.5;
     private var _winning:Bool;
-    private var _nextState:FlxState;
     private var _gameOverText:FlxText;
 
     override public function create():Void
@@ -22,7 +21,7 @@ class GameOverState extends FlxState
         _gameOverText = new FlxText();
         _gameOverText.alignment = 'center';
         _gameOverText.wordWrap = true;
-        _gameOverText.fieldWidth = 100;
+        _gameOverText.fieldWidth = 160;
         _gameOverText.text = "dafuq?";
         add(_gameOverText);
 
@@ -32,7 +31,6 @@ class GameOverState extends FlxState
     public function init(winning:Bool, nextState:FlxState):Void
     {
         _winning = winning;
-        _nextState = nextState;
     }
 
     override public function destroy():Void
@@ -48,7 +46,7 @@ class GameOverState extends FlxState
         
         if (_ignoreInputTimer <= 0.0 && FlxG.keys.justPressed.ANY)
         {
-            FlxG.switchState(_nextState);
+            FlxG.switchState(new MenuState());
         }
     }
     

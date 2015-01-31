@@ -220,7 +220,7 @@ class PlayState extends FlxState
 		{
 			// Player lost
 			var state = new GameOverState();
-			state.init(true, new BriefingRoomState());
+			state.init(true);
 
 			FlxG.switchState(state);
 		}
@@ -231,7 +231,7 @@ class PlayState extends FlxState
 			{
 				// Player won
 				var state = new GameOverState();
-				state.init(true, new MenuState());
+				state.init(true);
 
 				FlxG.switchState(state);
 			}
