@@ -66,7 +66,9 @@ class Upgrade extends FlxObject
 	{
 		if (_state._player.HasEnoughPoints(_costArmor))
 		{
-			_state._player.ChangePoints( - _costRepair);
+			_state._player.ChangePoints( - _costArmor);
+			_state._player.SetMaxHealth(_state._player._health + GameProperties.UpgradeHealthAdd);
+			_costArmor *= 2;
 		}
 	}
 	private function DoRate () : Void 

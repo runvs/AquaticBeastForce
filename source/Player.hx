@@ -22,8 +22,8 @@ class Player extends FlxObject
 	
 	
 	
-	private var _health:Float;
-	private var _healthMax:Float;
+	public var _health:Float;
+	public var _healthMax:Float;
 	
 	private var _remainingLives:Int;
 	
@@ -101,6 +101,8 @@ class Player extends FlxObject
 		
 		_mgfireTime = 0;
 		_specialWeaponFireTime = 0;
+		
+		_currentPoints = 100;
         
         super();
 	}
@@ -344,6 +346,11 @@ class Player extends FlxObject
 		}
 	}
 	
+	public function SetMaxHealth ( newVal : Float) : Void 
+	{
+		_healthMax = newVal;
+	}
+	
 	private function die():Void
 	{
 		if (alive)
@@ -441,7 +448,7 @@ class Player extends FlxObject
 		}
 		else
 		{
-			_currentPoints -= diff;
+			_currentPoints += diff;
 		}
 	}
 	

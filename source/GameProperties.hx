@@ -12,6 +12,7 @@ class GameProperties
 	public static var PlayerWeaponMgSpreadInDegree = 5;
 	
 	public static var PlayerHealthDefault:Float = 25;
+	public static var UpgradeHealthAdd:Float = 5;
 	public static var PlayerLivesDefault:Int = 0;
 
 	public static var EnemyViewRange:Float = 60;
