@@ -29,7 +29,7 @@ class Player extends FlxObject
 	
 	private var _respawnPosition:FlxPoint;
 	
-	private var _weaponSystems:WeaponSystems;
+	public var _weaponSystems:WeaponSystems;
 	
 	public var _mgfireTime:Float;
 	public var _specialWeaponFireTime:Float;

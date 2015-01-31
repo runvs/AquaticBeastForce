@@ -29,23 +29,27 @@ class Upgrade extends FlxObject
 	private var _costSpecial:Int = 10;
 	
 	
+	
+	
+	
+	
 	public function new(state:PlayState) 
 	{
 		super();
 		_state = state;
 		_background = new FlxSprite();
-		_background.makeGraphic(100, 100, FlxColorUtil.makeFromARGB(1.0, 8, 47, 27));
+		_background.makeGraphic(120, 100, FlxColorUtil.makeFromARGB(1.0, 8, 47, 27));
 		_background.scrollFactor.set();
 		_background.origin.set();
-		_background.setPosition(30, 22);
+		_background.setPosition(20, 22);
 		
 		_btnRepair  = new FlxButton (40, 11 + 10, "Repair", DoRepair);
 		_btnArmor = new FlxButton (40, 11 + 30, "Armor +", DoArmor);
 		_btnFirerate = new FlxButton (40, 11 + 50, "Firerate +", DoRate);
-		_btnSpecBuy = new FlxButton (40, 11 + 70, "Special", DoSpecial);
-		_btnSpecNext = new FlxButton (110, 11 + 70, ">", SpecialNext);
+		_btnSpecBuy = new FlxButton (40, 11 + 70, "Turret", DoSpecial);
+		_btnSpecNext = new FlxButton (120, 11 + 70, ">", SpecialNext);
 		_btnSpecNext.loadGraphic(AssetPaths.button__png, true, 20, 20);
-		_btnSpecPrev = new FlxButton (30, 11 + 70, "<", SpecialPrev);
+		_btnSpecPrev = new FlxButton (20, 11 + 70, "<", SpecialPrev);
 		_btnSpecPrev.loadGraphic(AssetPaths.button__png, true, 20, 20);
 		_btnQuit = new FlxButton (40, 11 + 90, "Quit", Quit);
 	}
@@ -70,6 +74,8 @@ class Upgrade extends FlxObject
 		if (_state._player.HasEnoughPoints(_costFirerate))
 		{
 			_state._player.ChangePoints( - _costRepair);
+			_state._player._weaponSystems._mgFireTimeMax -= 0.025;
+			_costFirerate *= 2;
 		}
 	}
 	
@@ -106,6 +112,11 @@ class Upgrade extends FlxObject
 		_btnSpecNext.update();
 		_btnSpecPrev.update();
 		_btnQuit.update();
+		
+		_btnRepair.text = "Repair " + Std.string(_costRepair);
+		_btnFirerate.text = "Rate " + Std.string(_costFirerate);
+		_btnSpecBuy.text = "Special " + Std.string(_costSpecial);
+		_btnArmor.text = "Armor" + Std.string(_costArmor);
 	}
 	override public function draw():Void 
 	{
