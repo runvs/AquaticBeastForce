@@ -12,27 +12,28 @@ class GameOverState extends FlxState
 {
     private var _ignoreInputTimer:Float = 0.5;
     private var _gameOverText:FlxText;
+    private var _winning:Bool;
+
+    override public function new(winning:Bool):Void
+    {
+        super();
+
+        _winning = winning;
+    }
 
     override public function create():Void
     {
-        super.create();
-
         _gameOverText = new FlxText();
         _gameOverText.alignment = 'center';
         add(_gameOverText);
 
-        trace('Game Over!');
-    }
-
-    public function init(winning:Bool):Void
-    {
-        if(winning)
+        if(_winning)
         {
-            _gameOverText.text = '';
+            _gameOverText.text = 'You won. Your score: ' + Player.TotalPoints;
         }
         else
         {
-            _gameOverText.text = 'Game Over! You scored: ' + Player.TotalPoints;
+            _gameOverText.text = 'You lost. Your score: ' + Player.TotalPoints;
         }
     }
 
@@ -47,7 +48,7 @@ class GameOverState extends FlxState
 
         _ignoreInputTimer -= FlxG.elapsed;
         
-        if (_ignoreInputTimer <= 0.0 && FlxG.keys.justPressed.ANY)
+        if (_ignoreInputTimer <= 0.0 && (FlxG.keys.justPressed.ANY || FlxG.mouse.justPressed))
         {
             FlxG.switchState(new MenuState());
         }

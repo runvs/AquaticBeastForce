@@ -219,10 +219,7 @@ class PlayState extends FlxState
 		if (_player._dead)
 		{
 			// Player lost
-			var state = new GameOverState();
-			state.init(true);
-
-			FlxG.switchState(state);
+			FlxG.switchState(new GameOverState(false));
 		}
 		
 		if (_level._missionInfo == "attack")
@@ -230,10 +227,7 @@ class PlayState extends FlxState
 			if (CheckAllTargetsDead())
 			{
 				// Player won
-				var state = new GameOverState();
-				state.init(true);
-
-				FlxG.switchState(state);
+				FlxG.switchState(new GameOverState(true));
 			}
 		}
 		else if (_level._missionInfo == "defend")
