@@ -54,7 +54,7 @@ class BriefingRoomState extends FlxState
     public function init(nextState:FlxState, missionStringsLocation:String):Void
     {
         _nextState = nextState;
-        _missionStrings = Assets.getText(missionStringsLocation).split('\n');
+        _missionStrings = Assets.getText("assets/data/missionBriefing1.txt").split('\n');
     }
     
     override public function update():Void 
