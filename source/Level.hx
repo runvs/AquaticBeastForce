@@ -50,7 +50,7 @@ class Level extends FlxBasic
 		_mapObjects1 = _map.loadTilemap(AssetPaths.tilesetGroundFG__png, 16, 16, "GroundForeground");
 		trace("Background created ");
 		
-		
+		trace("placing entities");
 		_map.loadEntities(placeEntities, "Entities");
 		
 		if (_missionInfo == "")
@@ -61,7 +61,6 @@ class Level extends FlxBasic
 	
 	private function placeEntities(entityName:String, entityData:Xml):Void
 	{
-		trace("placing entities");
 		var x:Int = Std.parseInt(entityData.get("x"));
 		var y:Int = Std.parseInt(entityData.get("y"));
 		if (entityName == "Player")
@@ -91,7 +90,7 @@ class Level extends FlxBasic
 		}
 		if (entityName == "Destroy")
 		{
-			trace ("creating destoyable object");
+			trace ("creating destroyable object");
 			var type:String = entityData.get("Type");
 			var d : DestroyableObject = new  DestroyableObject(x, y, type, _state);
 			d.name = entityData.get("Name");
