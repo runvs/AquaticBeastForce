@@ -8,7 +8,9 @@ import flixel.FlxState;
 import flixel.group.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
+import flixel.tweens.FlxTween;
 import flixel.ui.FlxButton;
+import flixel.util.FlxColorUtil;
 import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
 import flixel.util.FlxTimer;
@@ -31,6 +33,8 @@ class PlayState extends FlxState
 	private var _pickUpList:FlxTypedGroup<PickUp>;
 	
 	private var _upgrade : Upgrade;
+	
+	private var _overlay : FlxSprite;
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -78,9 +82,14 @@ class PlayState extends FlxState
 
 		_upgrade = new Upgrade(this);
 		
+		_overlay = new FlxSprite();
+		_overlay.makeGraphic(FlxG.width, FlxG.height, FlxColorUtil.makeFromARGB(1.0, 0, 0, 0));
+		_overlay.scrollFactor.set();
+		_overlay.origin.set();
+		
+		FlxTween.tween(_overlay, { alpha:0.0 }, 0.75);
+		
 		super.create();
-		
-		
 	}
 	
 	/**
@@ -132,6 +141,7 @@ class PlayState extends FlxState
 			_shotlist.update();
 			_explosionList.update();
 			_pickUpList.update();
+			_overlay.update();
 			
 			cleanUp();
 			
@@ -267,6 +277,7 @@ class PlayState extends FlxState
 		_explosionList.draw();
 		
 		_pickUpList.draw();
+		_overlay.draw();
 		
 		drawHud();
 		if (_upgrade.alive)

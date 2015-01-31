@@ -3,6 +3,8 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flash.display.BlendMode;
 import flixel.FlxG;
+import flixel.text.FlxText;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxPoint;
@@ -43,6 +45,8 @@ class Player extends FlxObject
 	
 	private var _currentPoints:Int = 0;
     public static var TotalPoints:Int = 0;
+	
+	private var _textPoints : FlxText;
 	
 	public function new(state:PlayState)
 	{   
@@ -103,7 +107,11 @@ class Player extends FlxObject
 		_specialWeaponFireTime = 0;
 		
 		_currentPoints = 100;
-        
+		
+		_textPoints = new FlxText(5, 5, 161, "");
+		_textPoints.color = FlxColorUtil.makeFromARGB(1.0, 3, 32, 4);
+		_textPoints.scrollFactor.set();
+        _textPoints.origin.set(8, 4);
         super();
 	}
 	
@@ -127,6 +135,9 @@ class Player extends FlxObject
 		
 		_mgfireTime += FlxG.elapsed;
 		_specialWeaponFireTime += FlxG.elapsed;
+		
+		_textPoints.text = Std.string(_currentPoints);
+		_textPoints.update();
 		
 		
         super.update();
@@ -153,7 +164,9 @@ class Player extends FlxObject
         _hudHealthBar.x = 77 + factor * _hudHealthBar.width;
 		_hudHealthBar.draw();
         
+		
 		_hud.draw();
+		_textPoints.draw();
 	}
 	
 	// pass the target's center position
@@ -405,18 +418,15 @@ class Player extends FlxObject
 	{
 		if (p._type == PickUpTypes.Points1)
 		{
-			_currentPoints += 10;
-			TotalPoints += 10;
+			ChangePoints(10);
 		}
 		else if (p._type == PickUpTypes.Points2)
 		{
-			_currentPoints += 20;
-			TotalPoints += 20;
+			ChangePoints(20);
 		}
 		else if (p._type == PickUpTypes.Points5)
 		{
-			_currentPoints += 50;
-			TotalPoints += 50;
+			ChangePoints(50);
 		}
 		else if (p._type == PickUpTypes.Health)
 		{
@@ -447,6 +457,10 @@ class Player extends FlxObject
 		{
 			TotalPoints += diff;
 			_currentPoints += diff;
+			
+			_textPoints.scale.set(1.5, 1.5);
+			FlxTween.tween(_textPoints.scale, { x:1.0, y:1.0 }, 0.25);
+			
 		}
 		else
 		{

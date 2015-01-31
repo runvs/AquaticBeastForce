@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.util.FlxPoint;
+import flixel.util.FlxRandom;
 import flixel.util.FlxTimer;
 import haxe.ds.StringMap;
 
@@ -107,6 +108,7 @@ class DestroyableObject extends FlxObject
         if (_health <= 0)
         {
             kill();
+			_state._player.ChangePoints(FlxRandom.intRanged(2, 4));
         }
     }
 

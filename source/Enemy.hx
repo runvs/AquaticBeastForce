@@ -91,6 +91,7 @@ class Enemy extends FlxObject
             {
                 kill();
 				SpawnPickUp();
+				_state._player.ChangePoints(FlxRandom.intRanged(4, 8));
             }
         }
     }
