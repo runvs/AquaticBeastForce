@@ -50,7 +50,7 @@ class Player extends FlxObject
 		_weaponSystems = new WeaponSystems();
 		
 		// for testing
-		_weaponSystems._hasAutoTurret = true;
+		_weaponSystems._hasAutoTurret = false;
 		
 		FlxG.stage.quality = flash.display.StageQuality.BEST;
 		_state = state;
@@ -286,10 +286,6 @@ class Player extends FlxObject
 			var s:Shot = new Shot(x + dx, y + dy, tarAngle, ShotType.MgSmall, _state);
 			s.setDamage(_weaponSystems._autoDamageBase, _weaponSystems._autoDamageFactor);
 			_state.addShot(s);
-		}
-		else if (_weaponSystems._hasLaser)
-		{
-			
 		}
 		else if (_weaponSystems._hasBFG)
 		{

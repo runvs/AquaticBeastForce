@@ -26,9 +26,14 @@ class Upgrade extends FlxObject
 	private var _costRepair:Int = 10;
 	private var _costArmor:Int = 10;
 	private var _costFirerate:Int = 10;
-	private var _costSpecial:Int = 10;
+	private var _costSpecial:Int = 30;
 	
+	private var _specialID : Int = 0;
 	
+	private var _hasBoughtAAR : Bool = false;
+	private var _hasBoughtAGR : Bool = false;
+	private var _hasBoughtAutoTurret : Bool = false;
+	private var _hasBoughtBFG : Bool = false;
 	
 	
 	
@@ -85,16 +90,76 @@ class Upgrade extends FlxObject
 	{
 		if (_state._player.HasEnoughPoints(_costSpecial))
 		{
-			_state._player.ChangePoints( - _costRepair);
+			if (_specialID == 0)
+			{
+				if (!_hasBoughtAutoTurret)
+				{
+					_state._player.ChangePoints( - _costSpecial);
+				}
+				_state._player._weaponSystems._hasAutoTurret = true;
+				_state._player._weaponSystems._hasAirAirRockets = false;
+				_state._player._weaponSystems._hasAirGroundRockets= false;
+				_state._player._weaponSystems._hasBFG = false;
+				_hasBoughtAutoTurret = true;
+				
+
+			}
+			else if (_specialID == 1)
+			{
+				
+				if (!_hasBoughtAAR)
+				{
+					_state._player.ChangePoints( - _costSpecial);
+				}
+				_state._player._weaponSystems._hasAutoTurret = false;
+				_state._player._weaponSystems._hasAirAirRockets = true;
+				_state._player._weaponSystems._hasAirGroundRockets= false;
+				_state._player._weaponSystems._hasBFG = false;
+				_hasBoughtAAR = true;
+			}
+			else if (_specialID == 2)
+			{
+				
+				if (!_hasBoughtAGR)
+				{
+					_state._player.ChangePoints( - _costSpecial);
+				}
+				_state._player._weaponSystems._hasAutoTurret = false;
+				_state._player._weaponSystems._hasAirAirRockets = false;
+				_state._player._weaponSystems._hasAirGroundRockets= true;
+				_state._player._weaponSystems._hasBFG = false;
+				_hasBoughtAGR = true;
+			}
+			else if (_specialID == 3)
+			{
+				
+				if (!_hasBoughtBFG)
+				{
+					_state._player.ChangePoints( - _costSpecial);
+				}
+				_state._player._weaponSystems._hasAutoTurret = false;
+				_state._player._weaponSystems._hasAirAirRockets = false;
+				_state._player._weaponSystems._hasAirGroundRockets= false;
+				_state._player._weaponSystems._hasBFG = true;
+				_hasBoughtBFG = true;
+			}		
 		}
 	}
 	private function SpecialNext () : Void 
 	{
-		
+		_specialID++;
+		if (_specialID > 3)
+		{
+			_specialID = 0;
+		}
 	}
 	private function SpecialPrev () : Void 
 	{
-		
+		_specialID--;
+		if (_specialID < 0)
+		{
+			_specialID = 3;
+		}
 	}
 	private function Quit() : Void 
 	{
@@ -117,7 +182,53 @@ class Upgrade extends FlxObject
 		
 		_btnRepair.text = "Repair " + Std.string(_costRepair);
 		_btnFirerate.text = "Rate " + Std.string(_costFirerate);
-		_btnSpecBuy.text = "Special " + Std.string(_costSpecial);
+		if (_specialID == 0)
+		{
+			if (!_hasBoughtAutoTurret)
+			{
+				_btnSpecBuy.text = "Turret " + Std.string(_costSpecial);
+			}
+			else
+			{
+				_btnSpecBuy.text = "Turret " + "Bought";
+			}
+		}
+		else if (_specialID == 1)
+		{
+			
+			if (!_hasBoughtAAR)
+			{
+				_btnSpecBuy.text = "AAM " + Std.string(_costSpecial);
+			}
+			else
+			{
+				_btnSpecBuy.text = "AAM " + "Bought";
+			}
+		}
+		else if (_specialID == 2)
+		{
+			
+			if (!_hasBoughtAGR)
+			{
+				_btnSpecBuy.text = "AGM " + Std.string(_costSpecial);
+			}
+			else
+			{
+				_btnSpecBuy.text = "AGM " + "Bought";
+			}
+		}
+		else if (_specialID == 3)
+		{
+			
+			if (!_hasBoughtBFG)
+			{
+				_btnSpecBuy.text = "BFG " + Std.string(_costSpecial);
+			}
+			else
+			{
+				_btnSpecBuy.text = "BFG " + "Bought";
+			}
+		}
 		_btnArmor.text = "Armor" + Std.string(_costArmor);
 	}
 	override public function draw():Void 
