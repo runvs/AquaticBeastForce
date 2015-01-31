@@ -41,7 +41,7 @@ class Player extends FlxObject
 	private var _hudHealthBar:FlxSprite;
     private var _hudBackground:FlxSprite;
 	
-	private var _points:Int;
+	private var _points:Int = 0;
     
 	
 	public function new(state:PlayState)
