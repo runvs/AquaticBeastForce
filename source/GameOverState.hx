@@ -11,7 +11,6 @@ import flixel.text.FlxText;
 class GameOverState extends FlxState
 {
     private var _ignoreInputTimer:Float = 0.5;
-    private var _winning:Bool;
     private var _gameOverText:FlxText;
 
     override public function create():Void
@@ -20,17 +19,21 @@ class GameOverState extends FlxState
 
         _gameOverText = new FlxText();
         _gameOverText.alignment = 'center';
-        _gameOverText.wordWrap = true;
-        _gameOverText.fieldWidth = 160;
-        _gameOverText.text = "dafuq?";
         add(_gameOverText);
 
         trace('Game Over!');
     }
 
-    public function init(winning:Bool, nextState:FlxState):Void
+    public function init(winning:Bool):Void
     {
-        _winning = winning;
+        if(winning)
+        {
+            _gameOverText.text = '';
+        }
+        else
+        {
+            _gameOverText.text = 'Game Over! You scored: ' + Player.TotalPoints;
+        }
     }
 
     override public function destroy():Void
