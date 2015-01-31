@@ -52,4 +52,6 @@ class GameProperties
 	
 	public static var AutoCannonRange:Float = 50;
 	
+	public static var PickUpDropChance: Float = 0.2;
+	
 }

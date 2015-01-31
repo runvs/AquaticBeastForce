@@ -99,7 +99,7 @@ class Enemy extends FlxObject
 	{
 		if (!_spawnedPickUp)
 		{
-			if (FlxRandom.float() < 0.2)
+			if (FlxRandom.float() < GameProperties.PickUpDropChance)
 			{
 				var p : PickUp = new PickUp(new FlxPoint(x, y));
 				_state.addPickUp(p);
