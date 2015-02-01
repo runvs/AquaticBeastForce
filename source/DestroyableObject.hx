@@ -71,12 +71,12 @@ class DestroyableObject extends FlxObject
         }
     }
     
-    private function addAnimation():Void
+    private function addAnimations():Void
     {
         switch(_type)
         {
             case "radar":
-                sprite.animation.add("normal", [0, 1, 2, 3, 4, 5, 6, 7], 30, true);
+                sprite.animation.add("normal", [0, 1, 2, 3, 4, 5, 6, 7], 12, true);
                 sprite.animation.add("destroyed", [8], 30, true);
             default:
                 sprite.animation.add("normal", [0], 30, true);
@@ -98,8 +98,7 @@ class DestroyableObject extends FlxObject
         sprite.setGraphicSize(Std.int(scale.x), Std.int(scale.y));
         sprite.updateHitbox();
         
-        addAnimation();
-        
+        addAnimations();
         sprite.animation.play("normal");
         
         _health = GetHitpoints(_type);
@@ -155,6 +154,7 @@ class DestroyableObject extends FlxObject
     {
         sprite.x = x;
         sprite.y = y;
+        sprite.update();
         super.update();
     }
 
