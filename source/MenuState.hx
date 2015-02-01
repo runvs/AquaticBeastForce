@@ -17,10 +17,14 @@ class MenuState extends FlxState
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
-	private var _playButton :FlxButton;
+	private var _playButton:FlxButton;
+	private var _helpButton:FlxButton;
+
     private var _intro:FlxSprite;
-	
-	private var _vignette : FlxSprite;
+    private var _helpScreen:FlxSprite;
+	private var _vignette:FlxSprite;
+
+	private var _helpShown:Bool = false;
     
 	override public function create():Void
 	{
@@ -36,9 +40,23 @@ class MenuState extends FlxState
         _playButton.loadGraphic(AssetPaths.playButton__png, true, 48, 21);
         _playButton.animation.add('idle', [0]);
         _playButton.animation.add('hover', [1]);
-        _playButton.onOver.callback = onOverButton;
-        _playButton.onOut.callback = onOutButton;
+        _playButton.onOver.callback = onOverPlayButton;
+        _playButton.onOut.callback = onOutPlayButton;
         _playButton.visible = false;
+        
+		_helpButton = new FlxButton(92, 114, "", showHelp);
+        _helpButton.loadGraphic(AssetPaths.helpButton__png, true, 48, 21);
+        _helpButton.animation.add('idle', [0]);
+        _helpButton.animation.add('hover', [1]);
+        _helpButton.onOver.callback = onOverHelpButton;
+        _helpButton.onOut.callback = onOutHelpButton;
+        _helpButton.visible = false;
+
+        _helpScreen = new FlxSprite();
+        _helpScreen.loadGraphic(AssetPaths.help__png, false, 160, 144);
+        _helpScreen.scrollFactor.set();
+        _helpScreen.origin.set();
+        _helpScreen.visible = false;
 		
 		_vignette = new FlxSprite();
 		_vignette.loadGraphic(AssetPaths.Vignette__png, false, 160, 144);
@@ -47,13 +65,16 @@ class MenuState extends FlxState
 		_vignette.alpha = 0.4;
 		
 		add(_playButton);
+		add(_helpButton);
+
+		add(_helpScreen);
+		add(_vignette);
 
 		#if flash
 		FlxG.sound.playMusic(AssetPaths.ABF_OST__mp3, 1.0, true);
 		#else
 		FlxG.sound.playMusic(AssetPaths.ABF_OST__ogg, 1.0, true);
 		#end
-		add(_vignette);
 	}
 	
 	public function startGame():Void
@@ -63,15 +84,30 @@ class MenuState extends FlxState
         
 		FlxG.switchState(state);
 	}
+
+	public function showHelp():Void
+	{
+			_helpShown = true;
+	}
     
-    public function onOutButton():Void
+    public function onOutPlayButton():Void
     {
         _playButton.animation.play('idle');
     }
     
-    public function onOverButton():Void
+    public function onOverPlayButton():Void
     {
         _playButton.animation.play('hover');
+    }
+    
+    public function onOutHelpButton():Void
+    {
+        _helpButton.animation.play('idle');
+    }
+    
+    public function onOverHelpButton():Void
+    {
+        _helpButton.animation.play('hover');
     }
 	
 	/**
@@ -83,6 +119,16 @@ class MenuState extends FlxState
 		super.destroy();
 	}
 
+	override public function draw():Void
+	{
+		super.draw();
+
+		if(_helpShown)
+		{
+			_helpScreen.draw();
+		}
+	}
+
 	/**
 	 * Function that is called once every frame.
 	 */
@@ -92,6 +138,15 @@ class MenuState extends FlxState
         if (_intro.animation.finished)
         {
             _playButton.visible = true;
+            _helpButton.visible = true;
+        }
+
+        if(_helpShown)
+        {
+        	if(FlxG.keys.justPressed.ANY)
+        	{
+        		_helpShown = false;
+        	}
         }
         
 		super.update();
