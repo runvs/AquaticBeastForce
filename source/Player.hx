@@ -67,11 +67,14 @@ class Player extends FlxObject
 		_state = state;
         // Load sprite for the player
         _sprite = new FlxSprite();
-		trace(AssetPaths.player__png);
+		//trace(AssetPaths.player__png);
         _sprite.loadGraphic(AssetPaths.player__png, true, 16, 16);
         _sprite.animation.add("base", [0, 1, 2, 3], 12, true);
         _sprite.animation.play("base");
         
+		width = _sprite.width;
+		height = _sprite.health;
+		
 		// Load sprite for the shadow
         _shadowSprite = new FlxSprite();
         _shadowSprite.loadGraphic(AssetPaths.playerShadow__png, true, 16, 16);
@@ -87,6 +90,7 @@ class Player extends FlxObject
 		_locator.setGraphicSize(8, 8);
 		_locator.updateHitbox();
 		_locator.animation.play("base");
+		
 		
 		_hud = new FlxSprite();
 		_hud.loadGraphic(AssetPaths.hud__png);
@@ -396,22 +400,19 @@ class Player extends FlxObject
 		if (alive)
 		{
 			alive = false;
-			// start Die animation
-			trace("die");
-			//FlxG.camera.fade(FlxColor.BLACK, 1, false, endThisLife);
+			//trace("die");
 			endThisLife();
 			_state.PlayerDead();
-			
 		}
 	}
 	
 	public function endThisLife():Void
 	{
-		trace ("endlife");
+		//trace ("endlife");
 		_remainingLives = _remainingLives - 1;
 		if (_remainingLives >= 0)
 		{
-			trace ("remaining lives " + _remainingLives );
+			//trace ("remaining lives " + _remainingLives );
 			respawn();
 		}
 		else 
@@ -453,7 +454,7 @@ class Player extends FlxObject
 		}
 		else if (p._type == PickUpTypes.Points5)
 		{
-			ChangePoints(50);
+			ChangePoints(40);
 		}
 		else if (p._type == PickUpTypes.Health)
 		{
@@ -462,13 +463,12 @@ class Player extends FlxObject
 		else if (p._type == PickUpTypes.PowerUpShootDamage)
 		{
 			_weaponSystems._mgDamageFactor *= 2.0;
-			var t : FlxTimer = new FlxTimer(3.0, function(t:FlxTimer) : Void { _weaponSystems._mgDamageFactor /= 2.0; } );
+			var t : FlxTimer = new FlxTimer(4.0, function(t:FlxTimer) : Void { _weaponSystems._mgDamageFactor /= 2.0; } );
 		}
 		else if (p._type == PickUpTypes.PowerUpShootFrequency)
 		{
 			_weaponSystems._mgFireTimeMax /= 2.0;
-			var t : FlxTimer = new FlxTimer(3.0, function(t:FlxTimer) : Void { _weaponSystems._mgFireTimeMax *= 2.0; } );
-			
+			var t : FlxTimer = new FlxTimer(4.0, function(t:FlxTimer) : Void { _weaponSystems._mgFireTimeMax *= 2.0; } );
 		}
 		else 
 		{
@@ -490,7 +490,6 @@ class Player extends FlxObject
 			
 			_textPoints.scale.set(1.5, 1.5);
 			FlxTween.tween(_textPoints.scale, { x:1.0, y:1.0 }, 0.25);
-			
 		}
 		else
 		{

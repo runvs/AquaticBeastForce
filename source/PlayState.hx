@@ -61,10 +61,10 @@ class PlayState extends FlxState
 		_pickUpList.add(p);
 		
 		//add(_enemies);
-		trace("playstate create start");
+		//trace("playstate create start");
         
         _player = new Player(this);
-        trace("Player created");
+        //trace("Player created");
 		
 		_level = new Level(this);
 		
@@ -87,7 +87,7 @@ class PlayState extends FlxState
 		}
 		
 		//add(_level);
-		trace("Level Loaded");
+		//trace("Level Loaded");
 		
 		FlxG.camera.follow(_player, FlxCamera.STYLE_TOPDOWN_TIGHT);
 
@@ -100,7 +100,7 @@ class PlayState extends FlxState
 		
 		FlxTween.tween(_overlay, { alpha:0.0 }, 0.75);
 		
-		_tutorialText = new FlxText(10, 70, 124, "Press U for Upgrades", 8);
+		_tutorialText = new FlxText(10, 70, 124, "Please identify yourself as a human by pressing [U] for upgrades.", 8);
 		_tutorialText.alpha = 1.0;
 		_tutorialText.scrollFactor.set();
 		FlxTween.tween(_tutorialText, { alpha:0.0 }, 2, {startDelay:2});
@@ -421,7 +421,7 @@ class PlayState extends FlxState
 	public function addEnemy(enemy:Enemy):Void
 	{
 		_enemies.add(enemy);
-		trace ("spawning Enemy");
+		//trace ("spawning Enemy");
 	}
 	public function addShot(shot:Shot):Void
 	{

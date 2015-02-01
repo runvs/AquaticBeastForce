@@ -38,24 +38,24 @@ class Level extends FlxBasic
 		
 		if (_levelNumber == 1)
 		{
-			trace("Loading level file " + AssetPaths.Level1__oel);
+			//trace("Loading level file " + AssetPaths.Level1__oel);
 			_map = new FlxOgmoLoader(AssetPaths.Level1__oel);
 		}
 		else if(_levelNumber == 2)
 		{
-			trace("Loading level file " + AssetPaths.Level2__oel);
+			//trace("Loading level file " + AssetPaths.Level2__oel);
 			_map = new FlxOgmoLoader(AssetPaths.Level2__oel);
 		}
 
 		
-		trace("Levelfile parsed");
+		//trace("Levelfile parsed");
 		
 		
 		_mapBackground = _map.loadTilemap(AssetPaths.tilesetGroundBG__png, 16, 16, "GroundBackground");
 		_mapObjects1 = _map.loadTilemap(AssetPaths.tilesetGroundFG__png, 16, 16, "GroundForeground");
-		trace("Background created ");
+		//trace("Background created ");
 		
-		trace("placing entities");
+		//trace("placing entities");
 		_map.loadEntities(placeEntities, "Entities");
 		
 		if (_missionInfo == "")
@@ -78,9 +78,9 @@ class Level extends FlxBasic
 		if (entityName == "LevelInfo")
 		{
 			_missionInfo = entityData.get("MissionInfo");
-			trace("MissionType: " + _missionInfo);
+			//trace("MissionType: " + _missionInfo);
 			_targets = entityData.get("targets").split(",");
-			trace(_targets);
+			//trace(_targets);
 		}
 		if (entityName == "Enemy")
 		{
@@ -95,7 +95,7 @@ class Level extends FlxBasic
 		}
 		if (entityName == "Destroy")
 		{
-			trace ("creating destroyable object");
+			//trace ("creating destroyable object");
 			var type:String = entityData.get("Type");
 			var d : DestroyableObject = new  DestroyableObject(x, y, type, _state);
 			d.name = entityData.get("Name");
