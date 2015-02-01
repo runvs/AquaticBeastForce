@@ -1,4 +1,5 @@
 package ;
+import flixel.effects.FlxSpriteFilter;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flash.display.BlendMode;
@@ -9,8 +10,10 @@ import flixel.util.FlxColor;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
+import flixel.util.FlxTimer;
 import flixel.util.FlxVector;
 import lime.math.Vector2;
+import openfl.filters.BlurFilter;
 
 /**
  * ...
@@ -21,8 +24,6 @@ class Player extends FlxObject
     public var _sprite:FlxSprite;
     private var _shadowSprite:FlxSprite;
     private var _state:PlayState;    
-	
-	
 	
 	public var _health:Float;
 	public var _healthMax:Float;
@@ -52,6 +53,7 @@ class Player extends FlxObject
 	{   
 		_dead = false;
 		_weaponSystems = new WeaponSystems();
+
 		
 		// for testing
 		_weaponSystems._hasAutoTurret = false;
@@ -112,6 +114,7 @@ class Player extends FlxObject
 		_textPoints.color = FlxColorUtil.makeFromARGB(1.0, 3, 32, 4);
 		_textPoints.scrollFactor.set();
         _textPoints.origin.set(8, 4);
+		
         super();
 	}
 	
@@ -138,7 +141,7 @@ class Player extends FlxObject
 		
 		_textPoints.text = Std.string(_currentPoints);
 		_textPoints.update();
-		
+		_spriteFilter.applyFilters();
 		
         super.update();
     }
@@ -262,6 +265,9 @@ class Player extends FlxObject
 	private function shootSpecial():Void
 	{
 		_specialWeaponFireTime = 0;
+		
+		
+		
 		if (_weaponSystems._hasAirGroundRockets)
 		{
 			//var dangle = FlxRandom.floatRanged( -GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
@@ -316,6 +322,7 @@ class Player extends FlxObject
 			s.setDamage(_weaponSystems._bfgDamageBase, _weaponSystems._bfgDamageFactor);
 			_state.addShot(s);
 		}
+		
 	}
 	
 	
@@ -334,6 +341,8 @@ class Player extends FlxObject
 
 		//trace ("Shot created");
 		_mgfireTime = 0;
+		
+		
 	}
 	
 	public function repair():Void
@@ -430,15 +439,18 @@ class Player extends FlxObject
 		}
 		else if (p._type == PickUpTypes.Health)
 		{
-			trace ("not implemented yet");
+			repair();
 		}
 		else if (p._type == PickUpTypes.PowerUpShootDamage)
 		{
-			trace ("not implemented yet");
+			_weaponSystems._mgDamageFactor *= 2.0;
+			var t : FlxTimer = new FlxTimer(3.0, function(t:FlxTimer) : Void { _weaponSystems._mgDamageFactor /= 2.0; } );
 		}
 		else if (p._type == PickUpTypes.PowerUpShootFrequency)
 		{
-			trace ("not implemented yet");
+			_weaponSystems._mgFireTimeMax /= 2.0;
+			var t : FlxTimer = new FlxTimer(3.0, function(t:FlxTimer) : Void { _weaponSystems._mgFireTimeMax *= 2.0; } );
+			
 		}
 		else 
 		{

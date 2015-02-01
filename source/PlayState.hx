@@ -271,8 +271,9 @@ class PlayState extends FlxState
 			
 		_level.draw();
         _destroyableList.draw();
-		_player.draw();
+
 		_enemies.draw();
+		_player.draw();
 		_shotlist.draw();
 		_explosionList.draw();
 		
