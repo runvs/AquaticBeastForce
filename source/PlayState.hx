@@ -100,7 +100,7 @@ class PlayState extends FlxState
 		
 		FlxTween.tween(_overlay, { alpha:0.0 }, 0.75);
 		
-		_tutorialText = new FlxText(10, 70, 124, "Please identify yourself as a human by pressing [U] for upgrades.", 8);
+		_tutorialText = new FlxText(10, 70, 124, "Please identify yourself as human by pressing [U] for upgrades.", 8);
 		_tutorialText.alpha = 1.0;
 		_tutorialText.scrollFactor.set();
 		FlxTween.tween(_tutorialText, { alpha:0.0 }, 2, {startDelay:2});
