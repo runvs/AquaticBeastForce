@@ -186,5 +186,40 @@
     <Enemy id="63" x="272" y="64" Type="tank" Name="" />
     <Enemy id="64" x="304" y="64" Type="tank" Name="" />
     <Destroy id="65" x="272" y="576" Type="fueltank" Name="fuel1" />
+    <Enemy id="66" x="400" y="560" Type="soldiers" Name="" />
+    <Enemy id="67" x="432" y="512" Type="soldiers" Name="" />
+    <Enemy id="68" x="384" y="464" Type="soldiers" Name="" />
+    <Enemy id="69" x="192" y="368" Type="soldiers" Name="" />
+    <Enemy id="70" x="480" y="64" Type="soldiers" Name="" />
+    <Enemy id="71" x="592" y="80" Type="soldiers" Name="" />
+    <Enemy id="72" x="224" y="192" Type="soldiers" Name="" />
+    <Enemy id="73" x="304" y="192" Type="soldiers" Name="" />
+    <Enemy id="74" x="304" y="128" Type="soldiers" Name="" />
+    <Enemy id="75" x="240" y="112" Type="soldiers" Name="" />
+    <Destroy id="76" x="288" y="304" Type="barrel" Name="" />
+    <Destroy id="77" x="304" y="304" Type="barrel" Name="" />
+    <Destroy id="78" x="288" y="288" Type="barrel" Name="" />
+    <Destroy id="79" x="304" y="288" Type="barrel" Name="" />
+    <Destroy id="80" x="192" y="336" Type="barrel" Name="" />
+    <Destroy id="81" x="128" y="320" Type="barrel" Name="" />
+    <Destroy id="82" x="144" y="320" Type="barrel" Name="" />
+    <Destroy id="83" x="256" y="96" Type="barrel" Name="" />
+    <Destroy id="84" x="256" y="112" Type="barrel" Name="" />
+    <Destroy id="85" x="528" y="48" Type="barrel" Name="" />
+    <Destroy id="86" x="544" y="48" Type="barrel" Name="" />
+    <Destroy id="87" x="192" y="32" Type="barrel" Name="" />
+    <Destroy id="88" x="208" y="32" Type="barrel" Name="" />
+    <Destroy id="89" x="64" y="96" Type="barrel" Name="" />
+    <Destroy id="90" x="80" y="96" Type="barrel" Name="" />
+    <Destroy id="91" x="80" y="112" Type="barrel" Name="" />
+    <Destroy id="92" x="64" y="112" Type="barrel" Name="" />
+    <Destroy id="93" x="432" y="640" Type="barrel" Name="" />
+    <Destroy id="94" x="432" y="656" Type="barrel" Name="" />
+    <Destroy id="95" x="432" y="848" Type="barrel" Name="" />
+    <Destroy id="96" x="432" y="864" Type="barrel" Name="" />
+    <Destroy id="97" x="544" y="816" Type="barrel" Name="" />
+    <Destroy id="98" x="448" y="752" Type="barrel" Name="" />
+    <Destroy id="99" x="448" y="768" Type="barrel" Name="" />
+    <Enemy id="100" x="448" y="800" Type="soldiers" Name="" />
   </Entities>
 </level>

@@ -14,7 +14,7 @@ class PickUp extends FlxSprite
 	public  var _type : PickUpTypes;
 	public static function getRandomPickupType (): PickUpTypes
     {
-        var maxNumber = PickUpTypes.getConstructors().length -1;  // ugly but at least dynamic        
+        var maxNumber = PickUpTypes.getConstructors().length -1;  
         
         var retval: PickUpTypes = PickUpTypes.createByIndex(FlxRandom.intRanged(0, maxNumber));
 
@@ -26,6 +26,9 @@ class PickUp extends FlxSprite
 		super();
 		getRandomType();
 		setPosition(pos.x, pos.y);
+		scale.set(0.9, 0.9);
+		FlxTween.tween(this.scale, { x:1.2, y: 1.2 }, 1, { type: FlxTween.PINGPONG } );
+		FlxTween.tween(this, { alpha:0.8}, 1, { type: FlxTween.PINGPONG , startDelay: 1.0} );
 	}
 	
 	private function getRandomType() : Void 

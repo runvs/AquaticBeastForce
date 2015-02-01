@@ -76,7 +76,7 @@ class DestroyableObject extends FlxObject
         switch(_type)
         {
             case "radar":
-                sprite.animation.add("normal", [0, 1, 2, 3, 4, 5, 6, 7], 12, true);
+                sprite.animation.add("normal", [0, 1, 2, 3, 4, 5, 6, 7], 8, true);
                 sprite.animation.add("destroyed", [8], 30, true);
             default:
                 sprite.animation.add("normal", [0], 30, true);
@@ -129,7 +129,7 @@ class DestroyableObject extends FlxObject
         if (alive && exists)
         {
             alive = false;
-            _state.addExplosion(new Explosion(x + Std.int((GetScale(_type).x) - 16) / 2, y + (Std.int(GetScale(_type).y) - 16) / 2));	// probably just a small explosion?
+            _state.addExplosion(new Explosion(x + Std.int((GetScale(_type).x) - 16) / 2, y + (Std.int(GetScale(_type).y) - 16) / 2, false, true));	// probably just a small explosion?
             var t: FlxTimer = new FlxTimer(0.2, switchImage);	// this timer is needed so the image is flipped after the explosion has started. Fancy juicy shit :D
             if (name != "")
             {

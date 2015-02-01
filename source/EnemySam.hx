@@ -110,7 +110,7 @@ class EnemySam extends Enemy
             var dx:Float = Math.cos(rad) * 7 + 5;
             var dy:Float = Math.sin(rad) * 7 + 7;
             
-            var s:Shot = new Shot(x + dx, y + dy, angle, ShotType.RocketAirAir, _state, false);
+            var s:Shot = new Shot(x + dx, y + dy, angle, ShotType.RocketAirGround, _state, false);
 			s.setDamage(GameProperties.EnemySamDamage, 1);
             _state.addShot(s);
             

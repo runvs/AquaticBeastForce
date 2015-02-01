@@ -82,7 +82,7 @@ class Upgrade extends FlxObject
 		if (_state._player.HasEnoughPoints(_costFirerate))
 		{
 			_state._player.ChangePoints( - _costRepair);
-			_state._player._weaponSystems._mgFireTimeMax -= 0.0125;
+			_state._player._weaponSystems._mgFireTimeMax -= 0.015;
 			_costFirerate *= 2;
 			
 		}
