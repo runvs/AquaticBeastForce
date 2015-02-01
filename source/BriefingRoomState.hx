@@ -26,6 +26,8 @@ class BriefingRoomState extends FlxState
     private var _missionStringIndex = 0;
     
     private var _nextState:FlxState;
+	
+	private var _vignette : FlxSprite;
 
     override public function create():Void
     {
@@ -49,6 +51,13 @@ class BriefingRoomState extends FlxState
         _briefingText.wordWrap = true;
         _briefingText.fieldWidth = 100;
         add(_briefingText);
+		
+		_vignette = new FlxSprite();
+		_vignette.loadGraphic(AssetPaths.Vignette__png, false, 160, 144);
+		_vignette.scrollFactor.set();
+		_vignette.origin.set();
+		_vignette.alpha = 0.4;
+		add(_vignette);
     }
     
     public function init(nextState:FlxState, missionStringsLocation:String):Void

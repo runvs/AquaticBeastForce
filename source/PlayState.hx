@@ -36,6 +36,7 @@ class PlayState extends FlxState
 	private var _upgrade : Upgrade;
 	
 	private var _overlay : FlxSprite;
+	private var _vignette : FlxSprite;
 	
 	private var _tutorialText : FlxText;
 
@@ -50,6 +51,11 @@ class PlayState extends FlxState
 		_explosionList = new FlxTypedGroup<Explosion>();
 		_destroyableList = new FlxTypedGroup<DestroyableObject>();
 		_pickUpList = new FlxTypedGroup<PickUp>();
+		_vignette = new FlxSprite();
+		_vignette.loadGraphic(AssetPaths.Vignette__png, false, 160, 144);
+		_vignette.scrollFactor.set();
+		_vignette.origin.set();
+		_vignette.alpha = 0.4;
 		
 		var p : PickUp = new PickUp(new FlxPoint(100, 100));
 		_pickUpList.add(p);
@@ -96,6 +102,7 @@ class PlayState extends FlxState
 		
 		_tutorialText = new FlxText(10, 70, 124, "Press U for Upgrades", 8);
 		_tutorialText.alpha = 1.0;
+		_tutorialText.scrollFactor.set();
 		FlxTween.tween(_tutorialText, { alpha:0.0 }, 2, {startDelay:2});
 		_upgrade.alive = false;
 		
@@ -152,6 +159,9 @@ class PlayState extends FlxState
 			_explosionList.update();
 			_pickUpList.update();
 			_overlay.update();
+			
+			//FlxG.collide(_enemies, _level._mapObjects1);
+			FlxG.collide(_enemies, _enemies);
 			
 			cleanUp();
 			
@@ -308,7 +318,7 @@ class PlayState extends FlxState
 		
 		
         super.draw();
-		
+		_vignette.draw();
     }
 	
 	private function drawHud():Void

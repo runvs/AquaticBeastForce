@@ -19,6 +19,8 @@ class MenuState extends FlxState
 	 */
 	private var _playButton :FlxButton;
     private var _intro:FlxSprite;
+	
+	private var _vignette : FlxSprite;
     
 	override public function create():Void
 	{
@@ -38,6 +40,12 @@ class MenuState extends FlxState
         _playButton.onOut.callback = onOutButton;
         _playButton.visible = false;
 		
+		_vignette = new FlxSprite();
+		_vignette.loadGraphic(AssetPaths.Vignette__png, false, 160, 144);
+		_vignette.scrollFactor.set();
+		_vignette.origin.set();
+		_vignette.alpha = 0.4;
+		
 		add(_playButton);
 
 		#if flash
@@ -45,6 +53,7 @@ class MenuState extends FlxState
 		#else
 		FlxG.sound.playMusic(AssetPaths.ABF_OST__ogg, 1.0, true);
 		#end
+		add(_vignette);
 	}
 	
 	public function startGame():Void

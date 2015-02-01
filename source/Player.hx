@@ -153,8 +153,7 @@ class Player extends FlxObject
 		_mgfireTime += FlxG.elapsed;
 		_specialWeaponFireTime += FlxG.elapsed;
 		
-		_textPoints.text = Std.string(_currentPoints);
-		_textPoints.update();
+		
 		
         super.update();
     }
@@ -170,7 +169,8 @@ class Player extends FlxObject
 	public function drawHud():Void
 	{
         _hudBackground.draw();
-		
+		_textPoints.text = Std.string(_currentPoints);
+		_textPoints.update();
 		var factor:Float = _health / _healthMax;
         if (factor < 0)
         {

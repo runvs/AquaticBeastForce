@@ -1,5 +1,6 @@
 package ;
 
+import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.ui.FlxButton;
@@ -23,8 +24,8 @@ class Upgrade extends FlxObject
 	private var _btnSpecPrev : FlxButton;
 	private var _btnQuit : FlxButton;
 
-	private var _costRepair:Int = 10;
-	private var _costArmor:Int = 10;
+	private var _costRepair:Int = 15;
+	private var _costArmor:Int = 12;
 	private var _costFirerate:Int = 10;
 	private var _costSpecial:Int = 30;
 	
@@ -52,11 +53,11 @@ class Upgrade extends FlxObject
 		_btnArmor = new FlxButton (40, 11 + 30, "Armor +", DoArmor);
 		_btnFirerate = new FlxButton (40, 11 + 50, "Firerate +", DoRate);
 		_btnSpecBuy = new FlxButton (40, 11 + 70, "Turret", DoSpecial);
-		_btnSpecNext = new FlxButton (120, 11 + 70, ">", SpecialNext);
+		_btnSpecNext = new FlxButton (120, 11 + 70, "[>]", SpecialNext);
 		_btnSpecNext.loadGraphic(AssetPaths.button__png, true, 20, 20);
-		_btnSpecPrev = new FlxButton (20, 11 + 70, "<", SpecialPrev);
+		_btnSpecPrev = new FlxButton (20, 11 + 70, "[<]", SpecialPrev);
 		_btnSpecPrev.loadGraphic(AssetPaths.button__png, true, 20, 20);
-		_btnQuit = new FlxButton (40, 11 + 90, "Quit", Quit);
+		_btnQuit = new FlxButton (40, 11 + 90, "[Q]uit", Quit);
 	}
 	
 	private function DoRepair () : Void 
@@ -72,7 +73,7 @@ class Upgrade extends FlxObject
 		if (_state._player.HasEnoughPoints(_costArmor))
 		{
 			_state._player.ChangePoints( - _costArmor);
-			_state._player.SetMaxHealth(_state._player._health + GameProperties.UpgradeHealthAdd);
+			_state._player.SetMaxHealth(_state._player._healthMax + GameProperties.UpgradeHealthAdd);
 			_costArmor *= 2;
 		}
 	}
@@ -81,8 +82,9 @@ class Upgrade extends FlxObject
 		if (_state._player.HasEnoughPoints(_costFirerate))
 		{
 			_state._player.ChangePoints( - _costRepair);
-			_state._player._weaponSystems._mgFireTimeMax -= 0.025;
+			_state._player._weaponSystems._mgFireTimeMax -= 0.0125;
 			_costFirerate *= 2;
+			
 		}
 	}
 	
@@ -180,13 +182,42 @@ class Upgrade extends FlxObject
 		_btnSpecPrev.update();
 		_btnQuit.update();
 		
-		_btnRepair.text = "Repair " + Std.string(_costRepair);
-		_btnFirerate.text = "Rate " + Std.string(_costFirerate);
+		if (FlxG.keys.justPressed.LEFT || FlxG.keys.justPressed.A)
+		{
+			SpecialPrev();
+		}
+		else if(FlxG.keys.justPressed.RIGHT || FlxG.keys.justPressed.D)
+		{
+			SpecialNext();
+		}
+		if ( FlxG.keys.justPressed.R)
+		{
+			DoRepair();
+		}
+		if ( FlxG.keys.justPressed.E)
+		{
+			DoRate();
+		}
+		if ( FlxG.keys.justPressed.M)
+		{
+			DoArmor();
+		}
+		if ( FlxG.keys.justPressed.S)
+		{
+			DoSpecial();
+		}
+		if ( FlxG.keys.justPressed.Q)
+		{
+			Quit();
+		}
+		
+		_btnRepair.text = "[R]epair " + Std.string(_costRepair);
+		_btnFirerate.text = "Rat[e] " + Std.string(_costFirerate);
 		if (_specialID == 0)
 		{
 			if (!_hasBoughtAutoTurret)
 			{
-				_btnSpecBuy.text = "Turret " + Std.string(_costSpecial);
+				_btnSpecBuy.text = "[S]Turret " + Std.string(_costSpecial);
 			}
 			else
 			{
@@ -198,11 +229,11 @@ class Upgrade extends FlxObject
 			
 			if (!_hasBoughtAAR)
 			{
-				_btnSpecBuy.text = "AAM " + Std.string(_costSpecial);
+				_btnSpecBuy.text = "[S]AAM " + Std.string(_costSpecial);
 			}
 			else
 			{
-				_btnSpecBuy.text = "AAM " + "Bought";
+				_btnSpecBuy.text = "[S]AAM " + "Bought";
 			}
 		}
 		else if (_specialID == 2)
@@ -210,11 +241,11 @@ class Upgrade extends FlxObject
 			
 			if (!_hasBoughtAGR)
 			{
-				_btnSpecBuy.text = "AGM " + Std.string(_costSpecial);
+				_btnSpecBuy.text = "[S]AGM " + Std.string(_costSpecial);
 			}
 			else
 			{
-				_btnSpecBuy.text = "AGM " + "Bought";
+				_btnSpecBuy.text = "[S]AGM " + "Bought";
 			}
 		}
 		else if (_specialID == 3)
@@ -222,14 +253,14 @@ class Upgrade extends FlxObject
 			
 			if (!_hasBoughtBFG)
 			{
-				_btnSpecBuy.text = "BFG " + Std.string(_costSpecial);
+				_btnSpecBuy.text = "[S]BFG " + Std.string(_costSpecial);
 			}
 			else
 			{
-				_btnSpecBuy.text = "BFG " + "Bought";
+				_btnSpecBuy.text = "[S]BFG " + "Bought";
 			}
 		}
-		_btnArmor.text = "Armor" + Std.string(_costArmor);
+		_btnArmor.text = "Ar[m]or" + Std.string(_costArmor);
 	}
 	override public function draw():Void 
 	{
