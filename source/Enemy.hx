@@ -120,7 +120,7 @@ class Enemy extends FlxObject
     {
         super.kill();
         // we need to call kill first, otherwise the enemy could get damaged by its own explosion and cause an endless loop
-        _state.addExplosion(new Explosion(x , y ));
+        _state.addExplosion(new Explosion(x , y, false , true ));
     }
 	
 	public function UnseePlayer():Void
