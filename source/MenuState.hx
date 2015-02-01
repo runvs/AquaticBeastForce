@@ -39,6 +39,12 @@ class MenuState extends FlxState
         _playButton.visible = false;
 		
 		add(_playButton);
+
+		#if flash
+		FlxG.sound.playMusic(AssetPaths.ABF_OST__mp3, 1.0, true);
+		#else
+		FlxG.sound.playMusic(AssetPaths.ABF_OST__ogg, 1.0, true);
+		#end
 	}
 	
 	public function startGame():Void

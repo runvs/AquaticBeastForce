@@ -3,6 +3,8 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flash.display.BlendMode;
 import flixel.FlxG;
+import flixel.text.FlxText;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxPoint;
@@ -22,14 +24,14 @@ class Player extends FlxObject
 	
 	
 	
-	private var _health:Float;
-	private var _healthMax:Float;
+	public var _health:Float;
+	public var _healthMax:Float;
 	
 	private var _remainingLives:Int;
 	
 	private var _respawnPosition:FlxPoint;
 	
-	private var _weaponSystems:WeaponSystems;
+	public var _weaponSystems:WeaponSystems;
 	
 	public var _mgfireTime:Float;
 	public var _specialWeaponFireTime:Float;
@@ -44,13 +46,15 @@ class Player extends FlxObject
 	private var _currentPoints:Int = 0;
     public static var TotalPoints:Int = 0;
 	
+	private var _textPoints : FlxText;
+	
 	public function new(state:PlayState)
 	{   
 		_dead = false;
 		_weaponSystems = new WeaponSystems();
 		
 		// for testing
-		_weaponSystems._hasAutoTurret = true;
+		_weaponSystems._hasAutoTurret = false;
 		
 		FlxG.stage.quality = flash.display.StageQuality.BEST;
 		_state = state;
@@ -101,7 +105,13 @@ class Player extends FlxObject
 		
 		_mgfireTime = 0;
 		_specialWeaponFireTime = 0;
-        
+		
+		_currentPoints = 100;
+		
+		_textPoints = new FlxText(5, 5, 161, "");
+		_textPoints.color = FlxColorUtil.makeFromARGB(1.0, 3, 32, 4);
+		_textPoints.scrollFactor.set();
+        _textPoints.origin.set(8, 4);
         super();
 	}
 	
@@ -125,6 +135,9 @@ class Player extends FlxObject
 		
 		_mgfireTime += FlxG.elapsed;
 		_specialWeaponFireTime += FlxG.elapsed;
+		
+		_textPoints.text = Std.string(_currentPoints);
+		_textPoints.update();
 		
 		
         super.update();
@@ -151,7 +164,9 @@ class Player extends FlxObject
         _hudHealthBar.x = 77 + factor * _hudHealthBar.width;
 		_hudHealthBar.draw();
         
+		
 		_hud.draw();
+		_textPoints.draw();
 	}
 	
 	// pass the target's center position
@@ -291,10 +306,6 @@ class Player extends FlxObject
 			s.setDamage(_weaponSystems._autoDamageBase, _weaponSystems._autoDamageFactor);
 			_state.addShot(s);
 		}
-		else if (_weaponSystems._hasLaser)
-		{
-			
-		}
 		else if (_weaponSystems._hasBFG)
 		{
 			var rad:Float = (angle) / 180 * Math.PI;
@@ -350,6 +361,11 @@ class Player extends FlxObject
 		}
 	}
 	
+	public function SetMaxHealth ( newVal : Float) : Void 
+	{
+		_healthMax = newVal;
+	}
+	
 	private function die():Void
 	{
 		if (alive)
@@ -402,18 +418,15 @@ class Player extends FlxObject
 	{
 		if (p._type == PickUpTypes.Points1)
 		{
-			_currentPoints += 10;
-			TotalPoints += 10;
+			ChangePoints(10);
 		}
 		else if (p._type == PickUpTypes.Points2)
 		{
-			_currentPoints += 20;
-			TotalPoints += 20;
+			ChangePoints(20);
 		}
 		else if (p._type == PickUpTypes.Points5)
 		{
-			_currentPoints += 50;
-			TotalPoints += 50;
+			ChangePoints(50);
 		}
 		else if (p._type == PickUpTypes.Health)
 		{
@@ -430,6 +443,28 @@ class Player extends FlxObject
 		else 
 		{
 			trace ("not implemented yet");
+		}
+	}
+	
+	public function HasEnoughPoints( p : Int) : Bool
+	{
+		return (_currentPoints >= p);
+	}
+	
+	public function ChangePoints( diff: Int ) : Void 
+	{
+		if (diff > 0)
+		{
+			TotalPoints += diff;
+			_currentPoints += diff;
+			
+			_textPoints.scale.set(1.5, 1.5);
+			FlxTween.tween(_textPoints.scale, { x:1.0, y:1.0 }, 0.25);
+			
+		}
+		else
+		{
+			_currentPoints += diff;
 		}
 	}
 	

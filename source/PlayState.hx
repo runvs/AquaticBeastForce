@@ -8,7 +8,9 @@ import flixel.FlxState;
 import flixel.group.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.tile.FlxTilemap;
+import flixel.tweens.FlxTween;
 import flixel.ui.FlxButton;
+import flixel.util.FlxColorUtil;
 import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
 import flixel.util.FlxTimer;
@@ -29,6 +31,10 @@ class PlayState extends FlxState
 	private var _explosionList:FlxTypedGroup<Explosion>;
 	private var _destroyableList:FlxTypedGroup<DestroyableObject>;
 	private var _pickUpList:FlxTypedGroup<PickUp>;
+	
+	private var _upgrade : Upgrade;
+	
+	private var _overlay : FlxSprite;
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -71,15 +77,19 @@ class PlayState extends FlxState
 		
 		//add(_level);
 		trace("Level Loaded");
-        
-        add(_player);
 		
 		FlxG.camera.follow(_player, FlxCamera.STYLE_TOPDOWN);
 
+		_upgrade = new Upgrade(this);
+		
+		_overlay = new FlxSprite();
+		_overlay.makeGraphic(FlxG.width, FlxG.height, FlxColorUtil.makeFromARGB(1.0, 0, 0, 0));
+		_overlay.scrollFactor.set();
+		_overlay.origin.set();
+		
+		FlxTween.tween(_overlay, { alpha:0.0 }, 0.75);
 		
 		super.create();
-		
-		
 	}
 	
 	/**
@@ -122,85 +132,31 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
-		_level.update();
-		_destroyableList.update();
-        _player.update();
-		_enemies.update();
-		_shotlist.update();
-		_explosionList.update();
-		_pickUpList.update();
-		
-		cleanUp();
-		
-		CheckEndCondition();
-		
-		FlxG.overlap(_player, _pickUpList, DoPlayerPickUp);
-		
-		
-		// TODO Rework and Refactor once finished
-		for (j in 0..._shotlist.length)
-		{
-			var s:Shot = _shotlist.members[j];
-			if (s.alive && s.exists )
-			{
-				if (s.isPlayer)
-				{
-					for (i in 0..._enemies.length)
-					{
-						var e:Enemy = _enemies.members[i];
-						if (!(e.alive && e.exists))
-						{
-							continue;
-						}
-						if (e.isGround && s.type == ShotType.RocketAirAir)
-						{
-							continue;
-						}
-						if (!e.isGround && s.type == ShotType.RocketAirGround)
-						{
-							continue;
-						}
-						if (FlxG.overlap(e.sprite, s.sprite))
-						{
-							if (FlxG.pixelPerfectOverlap(e.sprite, s.sprite,1))
-							{
-								shotEnemyCollision(e, s);
-							}
-						}
-					}
-				}
-				else
-				{
-					if (FlxG.overlap(_player._sprite, s.sprite))
-						{
-							if (FlxG.pixelPerfectOverlap(_player._sprite, s.sprite,1))
-							{
-								_player.takeDamage(1.5);
-								s.deleteObject();
-							}
-						}
-				}
-				for (i in 0 ... _destroyableList.length)
-				{
-					var d:DestroyableObject = _destroyableList.members[i];
-					if (!(d.alive && d.exists))
-					{
-						continue;
-					}
-					if (FlxG.overlap(d.sprite, s.sprite))
-					{
-						if (FlxG.pixelPerfectOverlap(d.sprite, s.sprite,1))
-						{
-							shotDestroyableCollision(d, s);
-						}
-					}
-				}
-			}
+		if (!_upgrade.alive)
+		{		
+			_level.update();
+			_destroyableList.update();
+			_player.update();
+			_enemies.update();
+			_shotlist.update();
+			_explosionList.update();
+			_pickUpList.update();
+			_overlay.update();
+			
+			cleanUp();
+			
+			CheckEndCondition();
+			
+			FlxG.overlap(_player, _pickUpList, DoPlayerPickUp);
+			
+			HandleCollisions();
+			
+			CheckEndCondition();
 		}
-		
-		CheckEndCondition();
-
-		
+		else
+		{
+			_upgrade.update();
+		}
 		super.update();
 	}
 
@@ -312,6 +268,7 @@ class PlayState extends FlxState
     
     override public function draw():Void 
     {
+			
 		_level.draw();
         _destroyableList.draw();
 		_player.draw();
@@ -320,8 +277,14 @@ class PlayState extends FlxState
 		_explosionList.draw();
 		
 		_pickUpList.draw();
+		_overlay.draw();
 		
 		drawHud();
+		if (_upgrade.alive)
+		{	
+			_upgrade.draw();
+		}
+		
         super.draw();
 		
     }
@@ -358,6 +321,69 @@ class PlayState extends FlxState
 		
 		
 		
+	}
+	
+	function HandleCollisions():Void 
+	{
+		for (j in 0..._shotlist.length)
+		{
+			var s:Shot = _shotlist.members[j];
+			if (s.alive && s.exists )
+			{
+				if (s.isPlayer)
+				{
+					for (i in 0..._enemies.length)
+					{
+						var e:Enemy = _enemies.members[i];
+						if (!(e.alive && e.exists))
+						{
+							continue;
+						}
+						if (e.isGround && s.type == ShotType.RocketAirAir)
+						{
+							continue;
+						}
+						if (!e.isGround && s.type == ShotType.RocketAirGround)
+						{
+							continue;
+						}
+						if (FlxG.overlap(e.sprite, s.sprite))
+						{
+							if (FlxG.pixelPerfectOverlap(e.sprite, s.sprite,1))
+							{
+								shotEnemyCollision(e, s);
+							}
+						}
+					}
+				}
+				else
+				{
+					if (FlxG.overlap(_player._sprite, s.sprite))
+						{
+							if (FlxG.pixelPerfectOverlap(_player._sprite, s.sprite,1))
+							{
+								_player.takeDamage(1.5);
+								s.deleteObject();
+							}
+						}
+				}
+				for (i in 0 ... _destroyableList.length)
+				{
+					var d:DestroyableObject = _destroyableList.members[i];
+					if (!(d.alive && d.exists))
+					{
+						continue;
+					}
+					if (FlxG.overlap(d.sprite, s.sprite))
+					{
+						if (FlxG.pixelPerfectOverlap(d.sprite, s.sprite,1))
+						{
+							shotDestroyableCollision(d, s);
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	public function addEnemy(enemy:Enemy):Void
