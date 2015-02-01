@@ -4,6 +4,7 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flash.display.BlendMode;
 import flixel.FlxG;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -48,6 +49,10 @@ class Player extends FlxObject
     public static var TotalPoints:Int = 0;
 	
 	private var _textPoints : FlxText;
+	
+	private var _soundShoot : FlxSound;
+	private var _soundPickup : FlxSound;
+	private var _soundHit : FlxSound;
 	
 	public function new(state:PlayState)
 	{   
@@ -108,12 +113,21 @@ class Player extends FlxObject
 		_mgfireTime = 0;
 		_specialWeaponFireTime = 0;
 		
-		_currentPoints = 100;
+		//_currentPoints = 100;
 		
 		_textPoints = new FlxText(5, 5, 161, "");
 		_textPoints.color = FlxColorUtil.makeFromARGB(1.0, 3, 32, 4);
 		_textPoints.scrollFactor.set();
         _textPoints.origin.set(8, 4);
+		
+		_soundShoot = new FlxSound();
+        _soundShoot = FlxG.sound.load(AssetPaths.shoot__ogg, 0.5 , false, false , false);
+		
+		_soundPickup = new FlxSound();
+		_soundPickup = FlxG.sound.load(AssetPaths.Pickup__ogg, 0.5, false , false , false);
+		
+		_soundHit = new FlxSound();
+		_soundHit = FlxG.sound.load(AssetPaths.hit__ogg, 0.5, false , false, false);
 		
         super();
 	}
@@ -141,7 +155,6 @@ class Player extends FlxObject
 		
 		_textPoints.text = Std.string(_currentPoints);
 		_textPoints.update();
-		_spriteFilter.applyFilters();
 		
         super.update();
     }
@@ -342,6 +355,8 @@ class Player extends FlxObject
 		//trace ("Shot created");
 		_mgfireTime = 0;
 		
+		_soundShoot.play(true);
+		
 		
 	}
 	
@@ -353,7 +368,8 @@ class Player extends FlxObject
 	
 	public function takeDamage(damage:Float):Void
 	{
-		FlxG.camera.shake(0.005, 0.25);
+		_soundHit.play(true);
+		FlxG.camera.shake(0.007, 0.25);
 		var col = FlxColorUtil.makeFromARGB(0.5, 255, 0, 0);
 		FlxG.camera.flash(col, 0.25);
 		_health -=  damage;
@@ -385,6 +401,7 @@ class Player extends FlxObject
 			//FlxG.camera.fade(FlxColor.BLACK, 1, false, endThisLife);
 			endThisLife();
 			_state.PlayerDead();
+			
 		}
 	}
 	
@@ -425,6 +442,7 @@ class Player extends FlxObject
 	
 	public function AddPickUp ( p: PickUp ) : Void
 	{
+		_soundPickup.play();
 		if (p._type == PickUpTypes.Points1)
 		{
 			ChangePoints(10);
