@@ -56,7 +56,7 @@ class PlayState extends FlxState
 		var exitByException:Bool = false;
 		try 
 		{
-			_level.loadLevel(1);
+			_level.loadLevel(2);
 		}
 		catch ( msg : String ) 
 		{

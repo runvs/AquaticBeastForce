@@ -14,9 +14,9 @@
   </LevelMinimumSize>
   <LevelMaximumSize>
     <Width>640</Width>
-    <Height>480</Height>
+    <Height>1440</Height>
   </LevelMaximumSize>
-  <Filename>C:\Projekte\aquatic-beast-force\assets\data\abflevels.oep</Filename>
+  <Filename>\\psf\Home\Documents\projects\aquatic-beast-force\assets\data\abflevels.oep</Filename>
   <AngleMode>Degrees</AngleMode>
   <CameraEnabled>false</CameraEnabled>
   <CameraSize>
@@ -143,6 +143,7 @@
             <string>tank</string>
             <string>helicopter</string>
             <string>soldiers</string>
+            <string>sam</string>
           </Elements>
         </ValueDefinition>
         <ValueDefinition xsi:type="StringValueDefinition" Name="Name" Default="" MaxChars="-1" MultiLine="false" />

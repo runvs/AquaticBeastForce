@@ -41,7 +41,12 @@ class Level extends FlxBasic
 			trace("Loading level file " + AssetPaths.Level1__oel);
 			_map = new FlxOgmoLoader(AssetPaths.Level1__oel);
 		}
-		// TODO Extend to more levels
+		else if(_levelNumber == 2)
+		{
+			trace("Loading level file " + AssetPaths.Level2__oel);
+			_map = new FlxOgmoLoader(AssetPaths.Level2__oel);
+		}
+
 		
 		trace("Levelfile parsed");
 		
