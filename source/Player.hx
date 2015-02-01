@@ -216,6 +216,8 @@ class Player extends FlxObject
         var down:Bool = FlxG.keys.anyPressed(["S", "DOWN"]);
         var left:Bool = FlxG.keys.anyPressed(["A", "LEFT"]);
         var right:Bool = FlxG.keys.anyPressed(["D", "RIGHT"]);
+		var strafeRight:Bool = FlxG.keys.pressed.E;
+		var strafeLeft:Bool = FlxG.keys.pressed.Q;
 		var shot:Bool = FlxG.keys.anyPressed(["Space","X"]);
 		var suicide:Bool = FlxG.keys.pressed.P;
 
@@ -247,6 +249,25 @@ class Player extends FlxObject
                 move(-GameProperties.PlayerMovementSpeed * FlxG.elapsed);
             }
         }
+		
+		if (strafeLeft && !strafeRight )
+		{
+			var rad:Float = ((angle - 90) / 180 * Math.PI);
+			var dx:Float = Math.cos(rad) * GameProperties.PlayerMovementSpeed * FlxG.elapsed;
+			var dy:Float = Math.sin(rad) * GameProperties.PlayerMovementSpeed * FlxG.elapsed;
+			
+			velocity.x += dx;
+			velocity.y += dy;
+		}
+		if (strafeRight && ! strafeLeft)
+		{
+			var rad:Float = ((angle + 90) / 180 * Math.PI);
+			var dx:Float = Math.cos(rad) * GameProperties.PlayerMovementSpeed * FlxG.elapsed;
+			var dy:Float = Math.sin(rad) * GameProperties.PlayerMovementSpeed * FlxG.elapsed;
+			
+			velocity.x += dx;
+			velocity.y += dy;
+		}
 		
 		if (shot)
 		{

@@ -167,7 +167,7 @@ class PlayState extends FlxState
 			
 			CheckEndCondition();
 			
-			FlxG.overlap(_player, _pickUpList, DoPlayerPickUp);
+			FlxG.overlap(_player._sprite, _pickUpList, DoPlayerPickUp);
 			
 			HandleCollisions();
 			
@@ -186,15 +186,12 @@ class PlayState extends FlxState
 		super.update();
 	}
 
-	public function DoPlayerPickUp(player:Player, p:PickUp) : Void 
+	public function DoPlayerPickUp(player:FlxSprite, p:PickUp) : Void 
 	{
 		if (p.alive)
 		{
-			if (FlxG.pixelPerfectOverlap(player._sprite, p))
-			{
-				player.AddPickUp(p);
-				p.kill();
-			}
+			_player.AddPickUp(p);
+			p.kill();
 		}
 	}
 	

@@ -42,8 +42,8 @@ class Explosion extends FlxSprite
 		
 		if (!smallExplosion && slowDown)
 		{
-			FlxG.camera.flash(FlxColorUtil.makeFromARGB(0.8, 242, 249, 246), 0.125);
-			var t : FlxTimer = new FlxTimer(0.125, function (t:FlxTimer) : Void 
+			FlxG.camera.flash(FlxColorUtil.makeFromARGB(0.8, 242, 249, 246), 0.15);
+			var t : FlxTimer = new FlxTimer(0.14, function (t:FlxTimer) : Void 
 			{
 				FlxG.timeScale = 0.05; 
 				FlxTween.tween(FlxG, { timeScale : 1.0 }, 0.2 );
