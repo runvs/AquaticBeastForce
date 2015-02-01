@@ -1,16 +1,20 @@
 package ;
+import flixel.effects.FlxSpriteFilter;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flash.display.BlendMode;
 import flixel.FlxG;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
+import flixel.util.FlxTimer;
 import flixel.util.FlxVector;
 import lime.math.Vector2;
+import openfl.filters.BlurFilter;
 
 /**
  * ...
@@ -21,8 +25,6 @@ class Player extends FlxObject
     public var _sprite:FlxSprite;
     private var _shadowSprite:FlxSprite;
     private var _state:PlayState;    
-	
-	
 	
 	public var _health:Float;
 	public var _healthMax:Float;
@@ -48,10 +50,15 @@ class Player extends FlxObject
 	
 	private var _textPoints : FlxText;
 	
+	private var _soundShoot : FlxSound;
+	private var _soundPickup : FlxSound;
+	private var _soundHit : FlxSound;
+	
 	public function new(state:PlayState)
 	{   
 		_dead = false;
 		_weaponSystems = new WeaponSystems();
+
 		
 		// for testing
 		_weaponSystems._hasAutoTurret = false;
@@ -106,12 +113,22 @@ class Player extends FlxObject
 		_mgfireTime = 0;
 		_specialWeaponFireTime = 0;
 		
-		_currentPoints = 100;
+		//_currentPoints = 100;
 		
 		_textPoints = new FlxText(5, 5, 161, "");
 		_textPoints.color = FlxColorUtil.makeFromARGB(1.0, 3, 32, 4);
 		_textPoints.scrollFactor.set();
         _textPoints.origin.set(8, 4);
+		
+		_soundShoot = new FlxSound();
+        _soundShoot = FlxG.sound.load(AssetPaths.shoot__ogg, 0.5 , false, false , false);
+		
+		_soundPickup = new FlxSound();
+		_soundPickup = FlxG.sound.load(AssetPaths.Pickup__ogg, 0.5, false , false , false);
+		
+		_soundHit = new FlxSound();
+		_soundHit = FlxG.sound.load(AssetPaths.hit__ogg, 0.5, false , false, false);
+		
         super();
 	}
 	
@@ -138,7 +155,6 @@ class Player extends FlxObject
 		
 		_textPoints.text = Std.string(_currentPoints);
 		_textPoints.update();
-		
 		
         super.update();
     }
@@ -262,6 +278,9 @@ class Player extends FlxObject
 	private function shootSpecial():Void
 	{
 		_specialWeaponFireTime = 0;
+		
+		
+		
 		if (_weaponSystems._hasAirGroundRockets)
 		{
 			//var dangle = FlxRandom.floatRanged( -GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
@@ -316,6 +335,7 @@ class Player extends FlxObject
 			s.setDamage(_weaponSystems._bfgDamageBase, _weaponSystems._bfgDamageFactor);
 			_state.addShot(s);
 		}
+		
 	}
 	
 	
@@ -334,6 +354,10 @@ class Player extends FlxObject
 
 		//trace ("Shot created");
 		_mgfireTime = 0;
+		
+		_soundShoot.play(true);
+		
+		
 	}
 	
 	public function repair():Void
@@ -344,7 +368,8 @@ class Player extends FlxObject
 	
 	public function takeDamage(damage:Float):Void
 	{
-		FlxG.camera.shake(0.005, 0.25);
+		_soundHit.play(true);
+		FlxG.camera.shake(0.007, 0.25);
 		var col = FlxColorUtil.makeFromARGB(0.5, 255, 0, 0);
 		FlxG.camera.flash(col, 0.25);
 		_health -=  damage;
@@ -376,6 +401,7 @@ class Player extends FlxObject
 			//FlxG.camera.fade(FlxColor.BLACK, 1, false, endThisLife);
 			endThisLife();
 			_state.PlayerDead();
+			
 		}
 	}
 	
@@ -416,6 +442,7 @@ class Player extends FlxObject
 	
 	public function AddPickUp ( p: PickUp ) : Void
 	{
+		_soundPickup.play();
 		if (p._type == PickUpTypes.Points1)
 		{
 			ChangePoints(10);
@@ -430,15 +457,18 @@ class Player extends FlxObject
 		}
 		else if (p._type == PickUpTypes.Health)
 		{
-			trace ("not implemented yet");
+			repair();
 		}
 		else if (p._type == PickUpTypes.PowerUpShootDamage)
 		{
-			trace ("not implemented yet");
+			_weaponSystems._mgDamageFactor *= 2.0;
+			var t : FlxTimer = new FlxTimer(3.0, function(t:FlxTimer) : Void { _weaponSystems._mgDamageFactor /= 2.0; } );
 		}
 		else if (p._type == PickUpTypes.PowerUpShootFrequency)
 		{
-			trace ("not implemented yet");
+			_weaponSystems._mgFireTimeMax /= 2.0;
+			var t : FlxTimer = new FlxTimer(3.0, function(t:FlxTimer) : Void { _weaponSystems._mgFireTimeMax *= 2.0; } );
+			
 		}
 		else 
 		{

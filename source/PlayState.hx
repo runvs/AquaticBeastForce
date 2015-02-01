@@ -36,6 +36,8 @@ class PlayState extends FlxState
 	private var _upgrade : Upgrade;
 	
 	private var _overlay : FlxSprite;
+	
+	private var _tutorialText : FlxText;
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -81,7 +83,7 @@ class PlayState extends FlxState
 		//add(_level);
 		trace("Level Loaded");
 		
-		FlxG.camera.follow(_player, FlxCamera.STYLE_TOPDOWN);
+		FlxG.camera.follow(_player, FlxCamera.STYLE_TOPDOWN_TIGHT);
 
 		_upgrade = new Upgrade(this);
 		
@@ -91,6 +93,11 @@ class PlayState extends FlxState
 		_overlay.origin.set();
 		
 		FlxTween.tween(_overlay, { alpha:0.0 }, 0.75);
+		
+		_tutorialText = new FlxText(10, 70, 124, "Press U for Upgrades", 8);
+		_tutorialText.alpha = 1.0;
+		FlxTween.tween(_tutorialText, { alpha:0.0 }, 2, {startDelay:2});
+		_upgrade.alive = false;
 		
 		super.create();
 	}
@@ -155,10 +162,16 @@ class PlayState extends FlxState
 			HandleCollisions();
 			
 			CheckEndCondition();
+			if (FlxG.keys.justPressed.U)
+			{
+				_upgrade.alive = true;
+			}
 		}
 		else
 		{
 			_upgrade.update();
+			
+			
 		}
 		super.update();
 	}
@@ -167,8 +180,11 @@ class PlayState extends FlxState
 	{
 		if (p.alive)
 		{
-			player.AddPickUp(p);
-			p.kill();
+			if (FlxG.pixelPerfectOverlap(player._sprite, p))
+			{
+				player.AddPickUp(p);
+				p.kill();
+			}
 		}
 	}
 	
@@ -274,19 +290,22 @@ class PlayState extends FlxState
 			
 		_level.draw();
         _destroyableList.draw();
-		_player.draw();
+
 		_enemies.draw();
+		_player.draw();
 		_shotlist.draw();
 		_explosionList.draw();
 		
 		_pickUpList.draw();
 		_overlay.draw();
 		
+		_tutorialText.draw();
 		drawHud();
 		if (_upgrade.alive)
 		{	
 			_upgrade.draw();
 		}
+		
 		
         super.draw();
 		
