@@ -120,7 +120,7 @@
 -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,16,-1,-1,-1
 -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,16,-1,-1,-1</GroundForeground>
   <Entities>
-    <LevelInfo id="0" x="0" y="0" MissionInfo="attack" targets="" />
+    <LevelInfo id="0" x="0" y="0" MissionInfo="attack" targets="fuel1,radar1,fuel2,fuel3" />
     <Enemy id="1" x="144" y="336" Type="sam" Name="" />
     <Enemy id="2" x="416" y="352" Type="sam" Name="" />
     <Destroy id="7" x="192" y="512" Type="tent" Name="" />
@@ -133,7 +133,7 @@
     <Destroy id="12" x="288" y="400" Type="tower" Name="" />
     <Destroy id="13" x="352" y="512" Type="tower" Name="" />
     <Destroy id="14" x="352" y="480" Type="tower" Name="" />
-    <Destroy id="15" x="208" y="416" Type="radar" Name="" />
+    <Destroy id="15" x="208" y="416" Type="radar" Name="radar1" />
     <Destroy id="16" x="240" y="512" Type="barrel" Name="" />
     <Destroy id="17" x="240" y="496" Type="barrel" Name="" />
     <Destroy id="18" x="304" y="528" Type="barrel" Name="" />
@@ -169,8 +169,8 @@
     <Destroy id="46" x="416" y="32" Type="tent" Name="" />
     <Destroy id="47" x="400" y="80" Type="tower" Name="" />
     <Destroy id="48" x="400" y="112" Type="tower" Name="" />
-    <Destroy id="49" x="592" y="16" Type="fueltank" Name="" />
-    <Destroy id="50" x="592" y="32" Type="fueltank" Name="" />
+    <Destroy id="49" x="592" y="16" Type="fueltank" Name="fuel2" />
+    <Destroy id="50" x="592" y="32" Type="fueltank" Name="fuel3" />
     <Enemy id="51" x="512" y="16" Type="helicopter" Name="" />
     <Enemy id="52" x="480" y="16" Type="helicopter" Name="" />
     <Destroy id="53" x="576" y="112" Type="tent" Name="" />
@@ -185,5 +185,6 @@
     <Enemy id="62" x="416" y="112" Type="soldiers" Name="" />
     <Enemy id="63" x="272" y="64" Type="tank" Name="" />
     <Enemy id="64" x="304" y="64" Type="tank" Name="" />
+    <Destroy id="65" x="272" y="576" Type="fueltank" Name="fuel1" />
   </Entities>
 </level>
