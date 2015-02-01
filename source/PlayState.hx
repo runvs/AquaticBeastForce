@@ -106,6 +106,8 @@ class PlayState extends FlxState
 		FlxTween.tween(_tutorialText, { alpha:0.0 }, 2, {startDelay:2});
 		_upgrade.alive = false;
 		
+		FlxG.mouse.cursorContainer.visible = false;
+		
 		super.create();
 	}
 	
@@ -151,6 +153,7 @@ class PlayState extends FlxState
 	{
 		if (!_upgrade.alive)
 		{		
+			FlxG.mouse.cursorContainer.visible = false;
 			_level.update();
 			_destroyableList.update();
 			_player.update();
@@ -179,6 +182,7 @@ class PlayState extends FlxState
 		}
 		else
 		{
+			FlxG.mouse.cursorContainer.visible = true;
 			_upgrade.update();
 			
 			
