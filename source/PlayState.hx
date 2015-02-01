@@ -102,6 +102,7 @@ class PlayState extends FlxState
 		
 		_tutorialText = new FlxText(10, 70, 124, "Press U for Upgrades", 8);
 		_tutorialText.alpha = 1.0;
+		_tutorialText.scrollFactor.set();
 		FlxTween.tween(_tutorialText, { alpha:0.0 }, 2, {startDelay:2});
 		_upgrade.alive = false;
 		

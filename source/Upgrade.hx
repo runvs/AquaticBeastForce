@@ -73,7 +73,7 @@ class Upgrade extends FlxObject
 		if (_state._player.HasEnoughPoints(_costArmor))
 		{
 			_state._player.ChangePoints( - _costArmor);
-			_state._player.SetMaxHealth(_state._player._health + GameProperties.UpgradeHealthAdd);
+			_state._player.SetMaxHealth(_state._player._healthMax + GameProperties.UpgradeHealthAdd);
 			_costArmor *= 2;
 		}
 	}
@@ -82,8 +82,9 @@ class Upgrade extends FlxObject
 		if (_state._player.HasEnoughPoints(_costFirerate))
 		{
 			_state._player.ChangePoints( - _costRepair);
-			_state._player._weaponSystems._mgFireTimeMax -= 0.025;
+			_state._player._weaponSystems._mgFireTimeMax -= 0.0125;
 			_costFirerate *= 2;
+			
 		}
 	}
 	
