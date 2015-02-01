@@ -9,4 +9,5 @@ enum EnemyType
     Tank;
     Helicopter;
     Soldiers;
+    Sam;
 }

@@ -12,6 +12,8 @@ class EnemyFactory
         {
             case EnemyType.Tank:
                 return new EnemyTank(playState);
+            case EnemyType.Sam:
+                return new EnemySam(playState);
             case EnemyType.Soldiers:
                 return new EnemySoldier(playState);
             case EnemyType.Helicopter:
@@ -27,6 +29,8 @@ class EnemyFactory
         {
             case "tank":
                 return getEnemyByType(EnemyType.Tank, playState);
+            case "sam":
+                return getEnemyByType(EnemyType.Sam, playState);
             case "soldiers":
                 return getEnemyByType(EnemyType.Soldiers, playState);
             case "helicopter":
