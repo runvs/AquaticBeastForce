@@ -15,6 +15,7 @@ import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
 import flixel.util.FlxTimer;
 import flixel.util.FlxVector;
+import haxe.CallStack;
 
 
 /**
@@ -67,6 +68,8 @@ class PlayState extends FlxState
 		catch ( msg : String ) 
 		{
 			trace("Error occurred while loading the level: " + msg);
+            trace("Call stack:");
+            trace(CallStack.toString(CallStack.exceptionStack()));
 			exitByException = true;
 		}
 		
@@ -311,7 +314,7 @@ class PlayState extends FlxState
 					var e:DestroyableObject = _destroyableList.members[j];
 					if (e.alive && e.name == n) 
 					{
-						var offset:Float = DestroyableObject.GetScale(e._type) * 0.5;
+						var offset:Float = Std.int(DestroyableObject.GetScale(e._type).x) * 0.5;
 						_player.drawLocator(e.x + offset, e.y + offset);
 						return;
 					}

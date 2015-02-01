@@ -6,6 +6,7 @@ import flixel.FlxSprite;
 import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
 import flixel.util.FlxTimer;
+import flixel.util.FlxVector;
 import haxe.ds.StringMap;
 
 /**
@@ -23,51 +24,63 @@ class DestroyableObject extends FlxObject
     
     static private function GetHitpoints(type:String):Float
     {
-        if (type == "barrel")
+        switch(type)
         {
-            return 5;
-        }
-		else if (type == "fueltank")
-        {
-            return 25;
-        }
-        else
-        {
-            return 1;
+            case "barrel":
+                return 5;
+            case "fueltank":
+                return 25;
+            case "radar":
+                return 10;
+            case "tent":
+                return 8;
+            case "tower":
+                return 12;
+            default:
+                return 1;
         }
     }
-	
-	
 
-    static public function GetScale(type:String):Int
+    static public function GetScale(type:String):FlxVector
     {
-        if (type == "barrel")
+        switch(type)
         {
-            return 8;
-        }
-		else if (type == "fueltank")
-        {
-            return 24;
-        }
-        else
-        {
-            return 16;
+            case "barrel":
+                return new FlxVector(8, 8);
+            case "fueltank":
+                return new FlxVector(24, 24);
+            case "tent":
+                return new FlxVector(32, 16);
+            default:
+                return new FlxVector(16, 16);
         }
     }
-	
-	static private function GetSize(type:String):Int
+    
+    static private function GetSize(type:String):FlxVector
     {
-        if (type == "barrel")
+        switch(type)
         {
-            return 16;
+            case "barrel":
+                return new FlxVector(16, 16);
+            case "fueltank":
+                return new FlxVector(24, 24);
+            case "tent":
+                return new FlxVector(32, 16);
+            default:
+                return new FlxVector(16, 16);
         }
-		else if (type == "fueltank")
+    }
+    
+    private function addAnimation():Void
+    {
+        switch(_type)
         {
-            return 24;
-        }
-        else
-        {
-            return 16;
+            case "radar":
+                sprite.animation.add("normal", [0, 1, 2, 3, 4, 5, 6, 7], 30, true);
+                sprite.animation.add("destroyed", [8], 30, true);
+            default:
+                sprite.animation.add("normal", [0], 30, true);
+                sprite.animation.add("destroyed", [1],30,true);
         }
     }
 
@@ -76,29 +89,29 @@ class DestroyableObject extends FlxObject
         _type = type;
         _state = state;
         
-        var imagepath:String = "assets/images/" + type + ".png";
-        //trace ("destoyable constructor: " + imagepath);
+        var imagepath:String = "assets/images/" + _type + ".png";
+        var size:FlxVector = GetSize(_type);
+        var scale:FlxVector = GetScale(_type);
+        
         sprite = new FlxSprite();
-        sprite.loadGraphic(imagepath, true, GetSize(_type), GetSize(_type));
-        sprite.setGraphicSize(GetScale(_type), GetScale(_type));
+        sprite.loadGraphic(imagepath, true, Std.int(size.x), Std.int(size.y));
+        sprite.setGraphicSize(Std.int(scale.x), Std.int(scale.y));
         sprite.updateHitbox();
-        sprite.animation.add("normal", [0], 30, true);
-        sprite.animation.add("destroyed", [1],30,true);
+        
+        addAnimation();
+        
         sprite.animation.play("normal");
         
         _health = GetHitpoints(_type);
         
-        
         super(X, Y);
-        
     }
 
     public function takeDamage(damage:Float):Void
     {
         if (alive && exists)
         {
-            _health -=  damage;
-            //trace ("remaining health " + _health);
+            _health -= damage;
             checkDead();
         }
     }
@@ -108,7 +121,7 @@ class DestroyableObject extends FlxObject
         if (_health <= 0)
         {
             kill();
-			_state._player.ChangePoints(FlxRandom.intRanged(2, 4));
+            _state._player.ChangePoints(FlxRandom.intRanged(2, 4));
         }
     }
 
@@ -117,19 +130,18 @@ class DestroyableObject extends FlxObject
         if (alive && exists)
         {
             alive = false;
-            _state.addExplosion(new Explosion(x + (GetScale(_type)-16)/2, y + (GetScale(_type) - 16)/2));	// probably just a small explosion?
+            _state.addExplosion(new Explosion(x + Std.int((GetScale(_type).x) - 16) / 2, y + (Std.int(GetScale(_type).y) - 16) / 2));	// probably just a small explosion?
             var t: FlxTimer = new FlxTimer(0.2, switchImage);	// this timer is needed so the image is flipped after the explosion has started. Fancy juicy shit :D
-			if (name != "")
-			{
-				trace ("object " + name + " destroyed");
-			}
+            if (name != "")
+            {
+                trace ("object " + name + " destroyed");
+            }
         }
         
     }
 
     public function switchImage(t:FlxTimer):Void
     {
-		//trace ("switch image");
         sprite.animation.play("destroyed");
     }
 

@@ -16,7 +16,7 @@
     <Width>640</Width>
     <Height>1440</Height>
   </LevelMaximumSize>
-  <Filename>\\psf\Home\Documents\projects\aquatic-beast-force\assets\data\abflevels.oep</Filename>
+  <Filename>C:\dev\Projects\aquatic-beast-force\assets\data\abflevels.oep</Filename>
   <AngleMode>Degrees</AngleMode>
   <CameraEnabled>false</CameraEnabled>
   <CameraSize>
@@ -167,6 +167,9 @@
           <Elements>
             <string>barrel</string>
             <string>fueltank</string>
+            <string>tower</string>
+            <string>tent</string>
+            <string>radar</string>
           </Elements>
         </ValueDefinition>
         <ValueDefinition xsi:type="StringValueDefinition" Name="Name" Default="" MaxChars="-1" MultiLine="false" />
