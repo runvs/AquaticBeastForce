@@ -16,7 +16,7 @@
     <Width>640</Width>
     <Height>1440</Height>
   </LevelMaximumSize>
-  <Filename>C:\dev\Projects\aquatic-beast-force\assets\data\abflevels.oep</Filename>
+  <Filename>\\psf\Home\Documents\projects\aquatic-beast-force\assets\data\abflevels.oep</Filename>
   <AngleMode>Degrees</AngleMode>
   <CameraEnabled>false</CameraEnabled>
   <CameraSize>
