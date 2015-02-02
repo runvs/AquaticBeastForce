@@ -20,6 +20,7 @@ class MenuState extends FlxState
 	private var _playButton:FlxButton;
 	private var _helpButton:FlxButton;
 
+    private var _splash:FlxSprite;
     private var _intro:FlxSprite;
     private var _helpScreen:FlxSprite;
 	private var _vignette:FlxSprite;
@@ -30,10 +31,24 @@ class MenuState extends FlxState
 	{
 		super.create();
         
+        _splash = new FlxSprite();
+        _splash.loadGraphic(AssetPaths.runvs_splash__png, true, 160, 144);
+        _splash.animation.add(
+            'intro',
+            [
+                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+                25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46
+            ],
+            20,
+            false
+        );
+        _splash.animation.play('intro');
+        add(_splash);
+        
         _intro = new FlxSprite();
         _intro.loadGraphic(AssetPaths.logo__png, true, 166, 144);
         _intro.animation.add('intro', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], 10, false);
-        _intro.animation.play('intro');
+        _intro.visible = false;
         add(_intro);
         
 		_playButton = new FlxButton(35, 114, "", startGame);
@@ -134,8 +149,16 @@ class MenuState extends FlxState
 	 */
 	override public function update():Void
 	{
+        _splash.update();
+        
+        if (_splash.animation.finished && !_intro.visible)
+        {
+            _intro.animation.play('intro');
+            _intro.visible = true;
+        }
+        
         _intro.update();
-        if (_intro.animation.finished)
+        if (_splash.animation.finished && _intro.animation.finished)
         {
             _playButton.visible = true;
             _helpButton.visible = true;
