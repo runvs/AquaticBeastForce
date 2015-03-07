@@ -8,6 +8,7 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 import haxe.ds.Vector;
 using flixel.util.FlxSpriteUtil;
+import flixel.input.gamepad.XboxButtonID;
 
 /**
  * A FlxState which can be used for the game's menu.
@@ -85,11 +86,7 @@ class MenuState extends FlxState
 		add(_helpScreen);
 		add(_vignette);
 
-		#if flash
-		FlxG.sound.playMusic(AssetPaths.ABF_OST__mp3, 1.0, true);
-		#else
 		FlxG.sound.playMusic(AssetPaths.ABF_OST__ogg, 1.0, true);
-		#end
 	}
 	
 	public function startGame():Void
@@ -98,6 +95,7 @@ class MenuState extends FlxState
         state.init(new PlayState(), AssetPaths.missionBriefing1__txt);
         
 		FlxG.switchState(state);
+		Player.TotalPoints = 0;
 	}
 
 	public function showHelp():Void
@@ -162,6 +160,17 @@ class MenuState extends FlxState
         {
             _playButton.visible = true;
             _helpButton.visible = true;
+			
+			var _gamePad = FlxG.gamepads.lastActive;
+			if (_gamePad != null) 
+			{
+				if (_gamePad.pressed(XboxButtonID.DPAD_LEFT) || _gamePad.pressed(XboxButtonID.DPAD_RIGHT) ||
+				_gamePad.pressed(XboxButtonID.DPAD_UP) || _gamePad.pressed(XboxButtonID.DPAD_DOWN))
+				{
+					startGame();
+				}
+			}
+			
         }
 
         if(_helpShown)

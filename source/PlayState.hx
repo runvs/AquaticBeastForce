@@ -177,7 +177,7 @@ class PlayState extends FlxState
 			CheckEndCondition();
 			if (FlxG.keys.justPressed.U)
 			{
-				_upgrade.alive = true;
+				ShowUpgrades();
 			}
 		}
 		else
@@ -417,6 +417,11 @@ class PlayState extends FlxState
 				}
 			}
 		}
+	}
+	
+	public function ShowUpgrades():Void 
+	{
+		_upgrade.alive = true;
 	}
 	
 	public function addEnemy(enemy:Enemy):Void

@@ -63,6 +63,15 @@ class GameOverState extends FlxState
         {
             FlxG.switchState(new MenuState());
         }
+		var _gamePad = FlxG.gamepads.lastActive;
+		if (_timeSinceStart >= 0.5 && _gamePad != null) 
+		{
+			if (_gamePad.justReleased(XboxButtonID.DPAD_LEFT) || _gamePad.justReleased(XboxButtonID.DPAD_RIGHT) ||
+			_gamePad.justReleased(XboxButtonID.DPAD_UP) || _gamePad.justReleased(XboxButtonID.DPAD_DOWN))
+			{
+				FlxG.switchState(new MenuState());
+			}
+		}
     }
     
 }

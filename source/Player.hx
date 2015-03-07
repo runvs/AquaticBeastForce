@@ -15,6 +15,8 @@ import flixel.util.FlxTimer;
 import flixel.util.FlxVector;
 import lime.math.Vector2;
 import openfl.filters.BlurFilter;
+import flixel.input.gamepad.FlxGamepad;
+import flixel.input.gamepad.XboxButtonID;
 
 /**
  * ...
@@ -54,11 +56,14 @@ class Player extends FlxObject
 	private var _soundPickup : FlxSound;
 	private var _soundHit : FlxSound;
 	
+	private var _control : Controls;
+	
 	public function new(state:PlayState)
 	{   
 		_dead = false;
 		_weaponSystems = new WeaponSystems();
 
+		_control = new Controls(ControlType.GamePad);
 		
 		// for testing
 		_weaponSystems._hasAutoTurret = false;
@@ -212,45 +217,27 @@ class Player extends FlxObject
     
     private function getInput():Void
     {
-        var up:Bool = FlxG.keys.anyPressed(["W", "UP"]);
-        var down:Bool = FlxG.keys.anyPressed(["S", "DOWN"]);
-        var left:Bool = FlxG.keys.anyPressed(["A", "LEFT"]);
-        var right:Bool = FlxG.keys.anyPressed(["D", "RIGHT"]);
-		var strafeRight:Bool = FlxG.keys.pressed.E;
-		var strafeLeft:Bool = FlxG.keys.pressed.Q;
-		var shot:Bool = FlxG.keys.anyPressed(["Space","X"]);
-		var suicide:Bool = FlxG.keys.pressed.P;
-
-		if(suicide)
+		_control.update();
+        
+		if (_control.left)
 		{
-			_health = 0;
+			angle = (angle - GameProperties.PlayerRotationSpeed * _control.rotationfactor) % 360;
+		}
+		else if (_control.right)
+		{
+			angle = (angle + GameProperties.PlayerRotationSpeed * _control.rotationfactor) % 360;
 		}
         
-        if (!(left && right))
-        {
-            if (left)
-            {
-                angle = (angle - GameProperties.PlayerRotationSpeed) % 360;
-            }
-            else if (right)
-            {
-                angle = (angle + GameProperties.PlayerRotationSpeed) % 360;
-            }
-        }
-        
-        if (!(up && down))
-        {
-            if (up)
-            {
-                move(GameProperties.PlayerMovementSpeed * FlxG.elapsed);
-            }
-            else if (down)
-            {
-                move(-GameProperties.PlayerMovementSpeed * FlxG.elapsed);
-            }
-        }
+		if (_control.up)
+		{
+			move(GameProperties.PlayerMovementSpeed * FlxG.elapsed);
+		}
+		else if (_control.down)
+		{
+			move(-GameProperties.PlayerMovementSpeed * FlxG.elapsed);
+		}
 		
-		if (strafeLeft && !strafeRight )
+		if (_control.strafeLeft && !_control.strafeRight )
 		{
 			var rad:Float = ((angle - 90) / 180 * Math.PI);
 			var dx:Float = Math.cos(rad) * GameProperties.PlayerMovementSpeed * FlxG.elapsed;
@@ -259,7 +246,7 @@ class Player extends FlxObject
 			velocity.x += dx;
 			velocity.y += dy;
 		}
-		if (strafeRight && ! strafeLeft)
+		if (_control.strafeRight && ! _control.strafeLeft)
 		{
 			var rad:Float = ((angle + 90) / 180 * Math.PI);
 			var dx:Float = Math.cos(rad) * GameProperties.PlayerMovementSpeed * FlxG.elapsed;
@@ -269,7 +256,7 @@ class Player extends FlxObject
 			velocity.y += dy;
 		}
 		
-		if (shot)
+		if (_control.shot)
 		{
 			if (_mgfireTime >= _weaponSystems._mgFireTimeMax)
 			{

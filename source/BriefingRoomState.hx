@@ -8,6 +8,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxVector;
 import openfl.Assets;
+import flixel.input.gamepad.XboxButtonID;
 
 /**
  * ...
@@ -74,6 +75,15 @@ class BriefingRoomState extends FlxState
         {
             _bubbleTimer = 0;
         }
+		var _gamePad = FlxG.gamepads.lastActive;
+		if (_gamePad != null) 
+		{
+			if (_gamePad.justReleased(XboxButtonID.DPAD_LEFT) || _gamePad.justReleased(XboxButtonID.DPAD_RIGHT) ||
+			_gamePad.justReleased(XboxButtonID.DPAD_UP) || _gamePad.justReleased(XboxButtonID.DPAD_DOWN))
+			{
+				_bubbleTimer = 0;
+			}
+		}
         
         if (_bubbleTimer <= 0)
         {
