@@ -24,7 +24,9 @@ import haxe.CallStack;
 class PlayState extends FlxState
 {
 
-	public var _player:Player;
+	private var _player1:Player;
+	private var _player2:Player;
+	
 	private var _level:Level;
 	
 	private var _enemies:FlxTypedGroup<Enemy>;
@@ -63,7 +65,8 @@ class PlayState extends FlxState
 		//add(_enemies);
 		//trace("playstate create start");
         
-        _player = new Player(this);
+        _player1 = new Player(this,1);
+		_player2 = new Player(this,2);
         //trace("Player created");
 		
 		_level = new Level(this);
@@ -89,7 +92,15 @@ class PlayState extends FlxState
 		//add(_level);
 		//trace("Level Loaded");
 		
-		FlxG.camera.follow(_player, FlxCamera.STYLE_TOPDOWN_TIGHT);
+		var camera1:FlxCamera = new FlxCamera(0, 0, 80, 144);
+		camera1.follow(_player1);
+		FlxG.cameras.add(camera1);
+		
+		var camera2:FlxCamera = new FlxCamera(320, 0, 80, 144);
+		camera2.follow(_player2);
+		FlxG.cameras.add(camera2);
+		
+		//FlxG.camera.follow(_player1, FlxCamera.STYLE_TOPDOWN_TIGHT);
 
 		_upgrade = new Upgrade(this);
 		
@@ -156,7 +167,8 @@ class PlayState extends FlxState
 			FlxG.mouse.cursorContainer.visible = false;
 			_level.update();
 			_destroyableList.update();
-			_player.update();
+			_player1.update();
+			_player2.update();
 			_enemies.update();
 			_shotlist.update();
 			_explosionList.update();
@@ -170,7 +182,7 @@ class PlayState extends FlxState
 			
 			CheckEndCondition();
 			
-			FlxG.overlap(_player._sprite, _pickUpList, DoPlayerPickUp);
+			FlxG.overlap(_player1._sprite, _pickUpList, DoPlayerPickUp);
 			
 			HandleCollisions();
 			
@@ -194,7 +206,7 @@ class PlayState extends FlxState
 	{
 		if (p.alive)
 		{
-			_player.AddPickUp(p);
+			_player1.AddPickUp(p);
 			p.kill();
 		}
 	}
@@ -202,7 +214,7 @@ class PlayState extends FlxState
 	private function CheckEndCondition():Void
 	{
 		
-		if (_player._dead)
+		if (_player1._dead)
 		{
 			// Player lost
 			FlxG.switchState(new GameOverState(false));
@@ -279,8 +291,10 @@ class PlayState extends FlxState
 			var e:Enemy = _enemies.members[i];
 			if (!e.alive) continue;
 			
-			var dx:Float = e.x - _player.x;
-			var dy:Float = e.y - _player.y;
+			var dx:Float = e.x - _player1.x;
+			var dy:Float = e.y - _player1.y;
+			
+			// todo remove sqrt here
 			
 			var d:Float = Math.sqrt(dx * dx + dy * dy);
 			
@@ -303,7 +317,8 @@ class PlayState extends FlxState
         _destroyableList.draw();
 
 		_enemies.draw();
-		_player.draw();
+		_player1.draw();
+		_player2.draw();
 		_shotlist.draw();
 		_explosionList.draw();
 		
@@ -324,7 +339,7 @@ class PlayState extends FlxState
 	
 	private function drawHud():Void
 	{
-		_player.drawHud();
+		_player1.drawHud();
 		if (_level._missionInfo == "attack")
 		{
 			for (i in 0 ... _level._targets.length)
@@ -335,7 +350,7 @@ class PlayState extends FlxState
 					var e:Enemy = _enemies.members[j];
 					if ( e.name == n) 
 					{
-						_player.drawLocator(e.x, e.y);
+						_player1.drawLocator(e.x, e.y);
 						return;
 					}
 				}
@@ -345,7 +360,7 @@ class PlayState extends FlxState
 					if (e.alive && e.name == n) 
 					{
 						var offset:Float = Std.int(DestroyableObject.GetScale(e._type).x) * 0.5;
-						_player.drawLocator(e.x + offset, e.y + offset);
+						_player1.drawLocator(e.x + offset, e.y + offset);
 						return;
 					}
 				}
@@ -391,11 +406,11 @@ class PlayState extends FlxState
 				}
 				else
 				{
-					if (FlxG.overlap(_player._sprite, s.sprite))
+					if (FlxG.overlap(_player1._sprite, s.sprite))
 						{
-							if (FlxG.pixelPerfectOverlap(_player._sprite, s.sprite,1))
+							if (FlxG.pixelPerfectOverlap(_player1._sprite, s.sprite,1))
 							{
-								_player.takeDamage(1.5);
+								_player1.takeDamage(1.5);
 								s.deleteObject();
 							}
 						}
@@ -480,5 +495,25 @@ class PlayState extends FlxState
 		_enemies.forEach(function(e:Enemy):Void { e.UnseePlayer(); } );
 	}
 	
+	public function setPlayersRespawn (p :FlxPoint, moveToPosition:Bool):Void
+	{
+		_player1.setRespawnPosition(p, moveToPosition);
+		_player2.setRespawnPosition(p, moveToPosition);
+	}
+	
+	public function getNearestPlayer ( p:FlxPoint) : FlxVector
+	{
+		var t1 :FlxVector = new FlxVector(_player1.x - p.x, _player1.y - p.y);
+		var t2 :FlxVector = new FlxVector(_player2.x - p.x, _player2.y - p.y);
+		
+		if (t1.lengthSquared < t2.lengthSquared)
+		{
+			return new FlxVector(_player1.x, _player1.y);
+		}
+		else
+		{
+			return new FlxVector(_player2.x, _player2.y);
+		}
+	}
 	
 }

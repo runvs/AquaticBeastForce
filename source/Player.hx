@@ -58,12 +58,20 @@ class Player extends FlxObject
 	
 	private var _control : Controls;
 	
-	public function new(state:PlayState)
+	public function new(state:PlayState, controls : Int)
 	{   
 		_dead = false;
 		_weaponSystems = new WeaponSystems();
 
-		_control = new Controls(ControlType.GamePad);
+		if(controls == 1)
+		{	
+			_control = GameProperties.p1Controls;
+		}
+		else
+		{
+			_control = GameProperties.p2Controls;
+		}
+			
 		
 		// for testing
 		_weaponSystems._hasAutoTurret = false;
@@ -440,7 +448,7 @@ class Player extends FlxObject
 		y = _respawnPosition.y;
 	}
 	
-	public function setRespawnPosition(pos:FlxPoint, moveToPosition:Bool = false):Void
+	public function setRespawnPosition(pos:FlxPoint, moveToPosition  :Bool = false):Void
 	{
 		_respawnPosition = pos;
 		if (moveToPosition)

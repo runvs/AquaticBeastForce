@@ -1,5 +1,6 @@
 package ;
 import flixel.FlxSprite;
+import flixel.util.FlxPoint;
 import flixel.util.FlxVector;
 import flash.display.BlendMode;
 import flixel.FlxG;
@@ -53,7 +54,7 @@ class EnemyTank extends Enemy
     
     override public function update():Void 
     {
-		var playerPos:FlxVector= new FlxVector(_state._player.x, _state._player.y);
+		var playerPos:FlxVector = _state.getNearestPlayer(new FlxPoint(x, y));
 		var tankPos:FlxVector  = new FlxVector(x,y);
 		
 		var direction:FlxVector = new FlxVector(playerPos.x - tankPos.x,playerPos.y - tankPos.y);

@@ -1,5 +1,6 @@
 package ;
 import flixel.FlxSprite;
+import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
 import flixel.util.FlxVector;
 import flash.display.BlendMode;
@@ -56,7 +57,7 @@ class EnemyHelicopter extends Enemy
 	
 	override public function update():Void 
     {
-		var playerPos:FlxVector= new FlxVector(_state._player.x, _state._player.y);
+		var playerPos:FlxVector = _state.getNearestPlayer(new FlxPoint(x, y));
 		var heliPos:FlxVector  = new FlxVector(x,y);
 		
 		var direction:FlxVector = new FlxVector(playerPos.x - heliPos.x,playerPos.y - heliPos.y);

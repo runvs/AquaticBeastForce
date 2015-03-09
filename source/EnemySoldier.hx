@@ -1,5 +1,6 @@
 package ;
 import flixel.FlxSprite;
+import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
 import flixel.util.FlxVector;
 import flash.display.BlendMode;
@@ -64,7 +65,7 @@ class EnemySoldier extends Enemy
     {
 		if (alive)
 		{
-			var playerPos:FlxVector= new FlxVector(_state._player.x, _state._player.y);
+			var playerPos:FlxVector = _state.getNearestPlayer(new FlxPoint(x, y));
 			var soldierPos:FlxVector  = new FlxVector(x,y);
 			
 			var direction:FlxVector = new FlxVector(playerPos.x - soldierPos.x,playerPos.y - soldierPos.y);

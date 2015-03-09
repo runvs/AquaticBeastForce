@@ -60,4 +60,7 @@ class GameProperties
 	
 	public static var PickUpDropChance: Float = 0.2;
 	
+	public static var p1Controls : Controls = new Controls(ControlType.GamePad);
+	public static var p2Controls : Controls = new Controls(ControlType.Keyboard);
+	
 }

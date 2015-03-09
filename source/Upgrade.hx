@@ -62,90 +62,90 @@ class Upgrade extends FlxObject
 	
 	private function DoRepair () : Void 
 	{
-		if (_state._player.HasEnoughPoints(_costRepair))
-		{
-			_state._player.ChangePoints( - _costRepair);
-			_state._player.repair();
-		}
+		//if (_state._player.HasEnoughPoints(_costRepair))
+		//{
+			//_state._player.ChangePoints( - _costRepair);
+			//_state._player.repair();
+		//}
 	}
 	private function DoArmor () : Void 
 	{
-		if (_state._player.HasEnoughPoints(_costArmor))
-		{
-			_state._player.ChangePoints( - _costArmor);
-			_state._player.SetMaxHealth(_state._player._healthMax + GameProperties.UpgradeHealthAdd);
-			_costArmor *= 2;
-		}
+		//if (_state._player.HasEnoughPoints(_costArmor))
+		//{
+			//_state._player.ChangePoints( - _costArmor);
+			//_state._player.SetMaxHealth(_state._player._healthMax + GameProperties.UpgradeHealthAdd);
+			//_costArmor *= 2;
+		//}
 	}
 	private function DoRate () : Void 
 	{
-		if (_state._player.HasEnoughPoints(_costFirerate))
-		{
-			_state._player.ChangePoints( - _costRepair);
-			_state._player._weaponSystems._mgFireTimeMax -= 0.015;
-			_costFirerate *= 2;
-			
-		}
+		//if (_state._player.HasEnoughPoints(_costFirerate))
+		//{
+			//_state._player.ChangePoints( - _costRepair);
+			//_state._player._weaponSystems._mgFireTimeMax -= 0.015;
+			//_costFirerate *= 2;
+			//
+		//}
 	}
 	
 	private function DoSpecial () : Void 
 	{
-		if (_state._player.HasEnoughPoints(_costSpecial))
-		{
-			if (_specialID == 0)
-			{
-				if (!_hasBoughtAutoTurret)
-				{
-					_state._player.ChangePoints( - _costSpecial);
-				}
-				_state._player._weaponSystems._hasAutoTurret = true;
-				_state._player._weaponSystems._hasAirAirRockets = false;
-				_state._player._weaponSystems._hasAirGroundRockets= false;
-				_state._player._weaponSystems._hasBFG = false;
-				_hasBoughtAutoTurret = true;
-				
-
-			}
-			else if (_specialID == 1)
-			{
-				
-				if (!_hasBoughtAAR)
-				{
-					_state._player.ChangePoints( - _costSpecial);
-				}
-				_state._player._weaponSystems._hasAutoTurret = false;
-				_state._player._weaponSystems._hasAirAirRockets = true;
-				_state._player._weaponSystems._hasAirGroundRockets= false;
-				_state._player._weaponSystems._hasBFG = false;
-				_hasBoughtAAR = true;
-			}
-			else if (_specialID == 2)
-			{
-				
-				if (!_hasBoughtAGR)
-				{
-					_state._player.ChangePoints( - _costSpecial);
-				}
-				_state._player._weaponSystems._hasAutoTurret = false;
-				_state._player._weaponSystems._hasAirAirRockets = false;
-				_state._player._weaponSystems._hasAirGroundRockets= true;
-				_state._player._weaponSystems._hasBFG = false;
-				_hasBoughtAGR = true;
-			}
-			else if (_specialID == 3)
-			{
-				
-				if (!_hasBoughtBFG)
-				{
-					_state._player.ChangePoints( - _costSpecial);
-				}
-				_state._player._weaponSystems._hasAutoTurret = false;
-				_state._player._weaponSystems._hasAirAirRockets = false;
-				_state._player._weaponSystems._hasAirGroundRockets= false;
-				_state._player._weaponSystems._hasBFG = true;
-				_hasBoughtBFG = true;
-			}		
-		}
+		//if (_state._player.HasEnoughPoints(_costSpecial))
+		//{
+			//if (_specialID == 0)
+			//{
+				//if (!_hasBoughtAutoTurret)
+				//{
+					//_state._player.ChangePoints( - _costSpecial);
+				//}
+				//_state._player._weaponSystems._hasAutoTurret = true;
+				//_state._player._weaponSystems._hasAirAirRockets = false;
+				//_state._player._weaponSystems._hasAirGroundRockets= false;
+				//_state._player._weaponSystems._hasBFG = false;
+				//_hasBoughtAutoTurret = true;
+				//
+//
+			//}
+			//else if (_specialID == 1)
+			//{
+				//
+				//if (!_hasBoughtAAR)
+				//{
+					//_state._player.ChangePoints( - _costSpecial);
+				//}
+				//_state._player._weaponSystems._hasAutoTurret = false;
+				//_state._player._weaponSystems._hasAirAirRockets = true;
+				//_state._player._weaponSystems._hasAirGroundRockets= false;
+				//_state._player._weaponSystems._hasBFG = false;
+				//_hasBoughtAAR = true;
+			//}
+			//else if (_specialID == 2)
+			//{
+				//
+				//if (!_hasBoughtAGR)
+				//{
+					//_state._player.ChangePoints( - _costSpecial);
+				//}
+				//_state._player._weaponSystems._hasAutoTurret = false;
+				//_state._player._weaponSystems._hasAirAirRockets = false;
+				//_state._player._weaponSystems._hasAirGroundRockets= true;
+				//_state._player._weaponSystems._hasBFG = false;
+				//_hasBoughtAGR = true;
+			//}
+			//else if (_specialID == 3)
+			//{
+				//
+				//if (!_hasBoughtBFG)
+				//{
+					//_state._player.ChangePoints( - _costSpecial);
+				//}
+				//_state._player._weaponSystems._hasAutoTurret = false;
+				//_state._player._weaponSystems._hasAirAirRockets = false;
+				//_state._player._weaponSystems._hasAirGroundRockets= false;
+				//_state._player._weaponSystems._hasBFG = true;
+				//_hasBoughtBFG = true;
+			//}		
+		//}
 	}
 	private function SpecialNext () : Void 
 	{
