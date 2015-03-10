@@ -2,6 +2,8 @@ package ;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxG;
+import flixel.tweens.FlxTween;
+import flixel.util.FlxColorUtil;
 import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
 import flixel.util.FlxSpriteUtil;
@@ -78,8 +80,10 @@ class Enemy extends FlxObject
         if (alive && exists)
         {
             _health -=  damage;
+			FlashSprite();
             checkDead();
 			_hasSeenPlayer = true;
+			
         }
     }
 
@@ -115,6 +119,13 @@ class Enemy extends FlxObject
         sprite.draw();
         super.draw();
     }
+	
+	public function FlashSprite () :Void
+	{
+		sprite.color = FlxColorUtil.makeFromARGB(1.0, 0, 0, 0);
+		FlxTween.color(sprite, 0.1,  FlxColorUtil.makeFromARGB(1.0, 0, 0, 0),  FlxColorUtil.makeFromARGB(1.0, 255, 255, 255));
+	}
+	
 
     public override function kill():Void
     {

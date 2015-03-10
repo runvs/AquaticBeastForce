@@ -76,7 +76,7 @@ class Controls
 		var la :FlxPoint = updateAxis(GamepadIDs.LEFT_ANALOGUE_X, GamepadIDs.LEFT_ANALOGUE_Y);
 		// note the wrong axis numbers! For whatever reason this behaves wrong.
 		var ra :FlxPoint = updateAxis(GamepadIDs.RIGHT_ANALOGUE_Y, GamepadIDs.RIGHT_ANALOGUE_X);
-		trace (ra);
+		//trace (ra);
 		if ( ra.x < 0 )
 		{
 			left = true;

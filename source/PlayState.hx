@@ -330,8 +330,7 @@ class PlayState extends FlxState
 		if (_upgrade.alive)
 		{	
 			_upgrade.draw();
-		}
-		
+		}		
 		
         super.draw();
 		_vignette.draw();
@@ -339,7 +338,9 @@ class PlayState extends FlxState
 	
 	private function drawHud():Void
 	{
-		_player1.drawHud();
+		//_player1.drawHud();
+		
+		
 		if (_level._missionInfo == "attack")
 		{
 			for (i in 0 ... _level._targets.length)

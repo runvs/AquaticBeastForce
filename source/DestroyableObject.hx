@@ -3,6 +3,8 @@ package ;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.tweens.FlxTween;
+import flixel.util.FlxColorUtil;
 import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
 import flixel.util.FlxTimer;
@@ -111,6 +113,7 @@ class DestroyableObject extends FlxObject
         if (alive && exists)
         {
             _health -= damage;
+			FlashSprite();
             checkDead();
         }
     }
@@ -136,13 +139,19 @@ class DestroyableObject extends FlxObject
                 trace ("object " + name + " destroyed");
             }
         }
-        
     }
 
     public function switchImage(t:FlxTimer):Void
     {
         sprite.animation.play("destroyed");
     }
+	
+	public function FlashSprite () :Void
+	{
+		sprite.color = FlxColorUtil.makeFromARGB(1.0, 0, 0, 0);
+		FlxTween.color(sprite, 0.1,  FlxColorUtil.makeFromARGB(1.0, 0, 0, 0),  FlxColorUtil.makeFromARGB(1.0, 255, 255, 255));
+	}
+	
 
     override public function draw():Void 
     {
