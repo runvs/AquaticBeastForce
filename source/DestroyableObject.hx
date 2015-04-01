@@ -123,7 +123,7 @@ class DestroyableObject extends FlxObject
         if (_health <= 0)
         {
             kill();
-            //_state._player.ChangePoints(FlxRandom.intRanged(1, 3));
+            _state.addPoints(FlxRandom.intRanged(1, 3));
         }
     }
 

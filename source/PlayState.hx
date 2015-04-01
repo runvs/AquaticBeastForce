@@ -223,7 +223,9 @@ class PlayState extends FlxState
 		if (_player1._dead && _player2._dead)
 		{
 			// Player lost
-			FlxG.switchState(new GameOverState(false));
+			var s : GameOverState = new GameOverState(false);
+			s.SetPoints(_player1.TotalPoints, _player2.TotalPoints);
+			FlxG.switchState(s);
 		}
 		
 		if (_level._missionInfo == "attack")
@@ -231,7 +233,9 @@ class PlayState extends FlxState
 			if (CheckAllTargetsDead())
 			{
 				// Player won
-				FlxG.switchState(new GameOverState(true));
+				var s : GameOverState = new GameOverState(true);
+				s.SetPoints(_player1.TotalPoints, _player2.TotalPoints);
+				FlxG.switchState(s);
 			}
 		}
 		else if (_level._missionInfo == "defend")
@@ -540,6 +544,12 @@ class PlayState extends FlxState
 	{
 		_player1.setRespawnPosition(p, moveToPosition);
 		_player2.setRespawnPosition(p, moveToPosition);
+	}
+	
+	public function addPoints (p : Int )
+	{
+		_player1.ChangePoints(p);
+		_player2.ChangePoints(p);
 	}
 	
 	public function getNearestPlayer ( p:FlxPoint) : FlxVector
