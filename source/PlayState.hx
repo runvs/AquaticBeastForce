@@ -186,6 +186,8 @@ class PlayState extends FlxState
 			
 			CheckEndCondition();
 			
+            PickupMagnet();
+
 			FlxG.overlap(_player1._sprite, _pickUpList, DoPlayerPickUp);
 			
 			HandleCollisions();
@@ -246,6 +248,26 @@ class PlayState extends FlxState
 		}
 	}
 	
+    private function PickupMagnet():Void
+    {
+        for (i in 0 ... _pickUpList.length)
+        {
+            var p:PickUp = _pickUpList.members[i];
+            var distanceX:Float = p.x - _player1.x;
+            var distanceY:Float = p.y - _player1.y;
+
+            var distance:Float = distanceX * distanceX + distanceY * distanceY;
+            if (distance < GameProperties.PickUpMagnetDistance * GameProperties.PickUpMagnetDistance)
+            {
+                var distanceRoot:Float = Math.sqrt(distance);
+                var coefficent:Float = -1.0 / distanceRoot * (1.0 - distanceRoot / GameProperties.PickUpMagnetDistance) * GameProperties.PickUpMagnetMaxVelocity;
+
+                p.velocity.x = distanceX * coefficent;
+                p.velocity.y = distanceY * coefficent;
+            }
+        }
+    }
+
 	private function CheckAllTargetsDead():Bool
 	{
 		for (i in 0 ... _level._targets.length)
