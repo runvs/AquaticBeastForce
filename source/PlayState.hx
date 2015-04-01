@@ -41,13 +41,15 @@ class PlayState extends FlxState
 	private var _vignette : FlxSprite;
 	
 	private var _tutorialText : FlxText;
+	
+	private var camera1:FlxCamera = new FlxCamera(0, 0, 80, 144);
+	private var camera2:FlxCamera = new FlxCamera(320, 0, 80, 144);
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
 	override public function create():Void
 	{
-		//FlxG.camera.antialiasing = true;
 		_enemies = new FlxTypedGroup<Enemy>();
 		_shotlist = new FlxTypedGroup<Shot>();
 		_explosionList = new FlxTypedGroup<Explosion>();
@@ -62,11 +64,14 @@ class PlayState extends FlxState
 		var p : PickUp = new PickUp(new FlxPoint(100, 100));
 		_pickUpList.add(p);
 		
-		//add(_enemies);
-		//trace("playstate create start");
-        
-        _player1 = new Player(this,1);
-		_player2 = new Player(this,2);
+		
+        camera1 = new FlxCamera(0, 0, 80, 144);
+		
+		camera2 = new FlxCamera(320, 0, 80, 144);
+
+		
+        _player1 = new Player(this,1, camera1);
+		_player2 = new Player(this,2, camera2);
         //trace("Player created");
 		
 		_level = new Level(this);
@@ -92,12 +97,11 @@ class PlayState extends FlxState
 		//add(_level);
 		//trace("Level Loaded");
 		
-		var camera1:FlxCamera = new FlxCamera(0, 0, 80, 144);
-		camera1.follow(_player1);
-		FlxG.cameras.add(camera1);
 		
-		var camera2:FlxCamera = new FlxCamera(320, 0, 80, 144);
+		camera1.follow(_player1);
 		camera2.follow(_player2);
+		
+		FlxG.cameras.add(camera1);
 		FlxG.cameras.add(camera2);
 		
 		//FlxG.camera.follow(_player1, FlxCamera.STYLE_TOPDOWN_TIGHT);
@@ -214,7 +218,7 @@ class PlayState extends FlxState
 	private function CheckEndCondition():Void
 	{
 		
-		if (_player1._dead)
+		if (_player1._dead && _player2._dead)
 		{
 			// Player lost
 			FlxG.switchState(new GameOverState(false));
@@ -338,8 +342,13 @@ class PlayState extends FlxState
 	
 	private function drawHud():Void
 	{
-		//_player1.drawHud();
+		FlxG.cameras.remove(camera2, false);
 		
+		_player1.drawHud();
+		FlxG.cameras.remove(camera1, false);
+		FlxG.cameras.add(camera2);
+		_player2.drawHud();
+		FlxG.cameras.add(camera1);
 		
 		if (_level._missionInfo == "attack")
 		{
@@ -408,13 +417,22 @@ class PlayState extends FlxState
 				else
 				{
 					if (FlxG.overlap(_player1._sprite, s.sprite))
+					{
+						if (FlxG.pixelPerfectOverlap(_player1._sprite, s.sprite,1))
 						{
-							if (FlxG.pixelPerfectOverlap(_player1._sprite, s.sprite,1))
-							{
-								_player1.takeDamage(1.5);
-								s.deleteObject();
-							}
+							_player1.takeDamage(s.getDamage());
+							s.deleteObject();
 						}
+					}
+					if (FlxG.overlap(_player2._sprite, s.sprite))
+					{
+						trace ("test");
+						if (FlxG.pixelPerfectOverlap(_player2._sprite, s.sprite,1))
+						{
+							_player2.takeDamage(s.getDamage());
+							s.deleteObject();
+						}
+					}
 				}
 				for (i in 0 ... _destroyableList.length)
 				{

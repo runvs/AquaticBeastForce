@@ -1,5 +1,6 @@
 package ;
 import flixel.effects.FlxSpriteFilter;
+import flixel.FlxCamera;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flash.display.BlendMode;
@@ -57,8 +58,9 @@ class Player extends FlxObject
 	private var _soundHit : FlxSound;
 	
 	private var _control : Controls;
+	private var _cam : FlxCamera;
 	
-	public function new(state:PlayState, controls : Int)
+	public function new(state:PlayState, controls : Int, cam : FlxCamera)
 	{   
 		_dead = false;
 		_weaponSystems = new WeaponSystems();
@@ -113,14 +115,14 @@ class Player extends FlxObject
 		
 		_hudHealthBar = new FlxSprite();
 		_hudHealthBar.loadGraphic(AssetPaths.hud_health__png);
-		_hudHealthBar.x = 76;
+		_hudHealthBar.x = 20;
 		_hudHealthBar.y = _hud.y + 6;
 		_hudHealthBar.scrollFactor.set(0, 0);
 		_hudHealthBar.origin.set(0, 0);
         
         _hudBackground = new FlxSprite();
         _hudBackground.loadGraphic(AssetPaths.hud_background__png);
-		_hudBackground.x = 0;
+		_hudBackground.x =  0 ;
 		_hudBackground.y = 128;
 		_hudBackground.scrollFactor.set(0,0);
 		
@@ -185,7 +187,7 @@ class Player extends FlxObject
 	
 	public function drawHud():Void
 	{
-        _hudBackground.draw();
+		_hudBackground.draw();
 		_textPoints.text = Std.string(_currentPoints);
 		_textPoints.update();
 		var factor:Float = _health / _healthMax;
@@ -194,7 +196,7 @@ class Player extends FlxObject
             factor = 0.0;
         }
         
-        _hudHealthBar.x = 77 + factor * _hudHealthBar.width;
+        _hudHealthBar.x = 20 + factor * _hudHealthBar.width;
 		_hudHealthBar.draw();
         
 		

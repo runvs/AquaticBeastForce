@@ -7,6 +7,7 @@ import flixel.util.FlxColorUtil;
 import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
 import flixel.util.FlxSpriteUtil;
+import flixel.util.FlxTimer;
 import flixel.util.FlxVector;
 using flixel.util.FlxSpriteUtil;
 
