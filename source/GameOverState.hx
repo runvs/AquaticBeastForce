@@ -16,6 +16,16 @@ class GameOverState extends FlxState
     private var _timeSinceStart:Float = 0.0;
     private var _gameOverText:FlxText;
     private var _winning:Bool;
+	
+	private var Player1Points : Int;
+	private var Player2Points : Int;
+	
+	public function SetPoints ( p1 : Int, p2 : Int ) : Void 
+	{
+		Player1Points = p1;
+		Player2Points = p2;
+	}
+	
 
     override public function new(winning:Bool):Void
     {
@@ -33,11 +43,11 @@ class GameOverState extends FlxState
 
         if(_winning)
         {
-            _gameOverText.text = 'You won.\nFinal score: ' + Player.TotalPoints;
+            _gameOverText.text = 'You won.\nFinal score: ' + Player1Points ;
         }
         else
         {
-            _gameOverText.text = 'You lost.\nFinal score: ' + Player.TotalPoints;
+            _gameOverText.text = 'You lost.\nFinal score: ' + Player1Points ;
         }
 
         _gameOverText.setPosition(50, 20);

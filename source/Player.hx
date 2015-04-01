@@ -49,7 +49,7 @@ class Player extends FlxObject
     private var _hudBackground:FlxSprite;
 	
 	private var _currentPoints:Int = 0;
-    public static var TotalPoints:Int = 0;
+    public var TotalPoints:Int = 0;
 	
 	private var _textPoints : FlxText;
 	

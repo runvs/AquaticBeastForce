@@ -95,7 +95,6 @@ class MenuState extends FlxState
         state.init(new PlayState(), AssetPaths.missionBriefing1__txt);
         
 		FlxG.switchState(state);
-		Player.TotalPoints = 0;
 	}
 
 	public function showHelp():Void
