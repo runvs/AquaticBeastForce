@@ -352,39 +352,17 @@ class PlayState extends FlxState
 		FlxG.cameras.remove(camera2, false);
 		
 		_player1.drawHud();
+		
+		DrawLocator(_player1);
+		
 		FlxG.cameras.remove(camera1, false);
 		FlxG.cameras.add(camera2);
 		_player2.drawHud();
+		DrawLocator(_player2);
+		
+	
+		
 		FlxG.cameras.add(camera1);
-		
-		if (_level._missionInfo == "attack")
-		{
-			for (i in 0 ... _level._targets.length)
-			{
-				var n:String = _level._targets[i];
-				for (j in 0 ... _enemies.length)
-				{
-					var e:Enemy = _enemies.members[j];
-					if ( e.name == n) 
-					{
-						_player1.drawLocator(e.x, e.y);
-						return;
-					}
-				}
-				for (j in 0 ... _destroyableList.length)
-				{
-					var e:DestroyableObject = _destroyableList.members[j];
-					if (e.alive && e.name == n) 
-					{
-						var offset:Float = Std.int(DestroyableObject.GetScale(e._type).x) * 0.5;
-						_player1.drawLocator(e.x + offset, e.y + offset);
-						return;
-					}
-				}
-			}
-		}
-		
-		
 		
 	}
 	
@@ -454,6 +432,36 @@ class PlayState extends FlxState
 						{
 							shotDestroyableCollision(d, s);
 						}
+					}
+				}
+			}
+		}
+	}
+	
+	function DrawLocator(p:Player):Void 
+	{
+		if (_level._missionInfo == "attack")
+		{
+			for (i in 0 ... _level._targets.length)
+			{
+				var n:String = _level._targets[i];
+				for (j in 0 ... _enemies.length)
+				{
+					var e:Enemy = _enemies.members[j];
+					if ( e.name == n) 
+					{
+						p.drawLocator(e.x, e.y);
+						return;
+					}
+				}
+				for (j in 0 ... _destroyableList.length)
+				{
+					var e:DestroyableObject = _destroyableList.members[j];
+					if (e.alive && e.name == n) 
+					{
+						var offset:Float = Std.int(DestroyableObject.GetScale(e._type).x) * 0.5;
+						p.drawLocator(e.x + offset, e.y + offset);
+						return;
 					}
 				}
 			}
