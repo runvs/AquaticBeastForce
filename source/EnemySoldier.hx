@@ -160,6 +160,7 @@ class EnemySoldier extends Enemy
 			dieanimplaying = true;
 			sprite.animation.play("die", true);
 			_shadowSprite.animation.play("die", true);
+			alive = false;
 		}
     }
     
