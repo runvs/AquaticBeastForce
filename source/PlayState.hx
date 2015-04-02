@@ -13,6 +13,7 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxColorUtil;
 import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
+import flixel.util.FlxRandom;
 import flixel.util.FlxTimer;
 import flixel.util.FlxVector;
 import haxe.CallStack;
@@ -70,8 +71,8 @@ class PlayState extends FlxState
 		camera2 = new FlxCamera(320, 0, 80, 144);
 
 		
-        _player1 = new Player(this,1, camera1);
-		_player2 = new Player(this,2, camera2);
+        _player1 = new Player(this, 1);
+		_player2 = new Player(this,2);
         //trace("Player created");
 		
 		_level = new Level(this);
@@ -281,6 +282,7 @@ class PlayState extends FlxState
         addExplosion(new Explosion(s.sprite.x - 4, s.sprite.y - 6, true));
         s.deleteObject();
 		e.takeDamage(s.getDamage());
+		e.setLastHit(s._playerNumber);
 	}
 	
 	public function shotDestroyableCollision (d:DestroyableObject, s:Shot):Void
@@ -288,6 +290,7 @@ class PlayState extends FlxState
 		addExplosion(new Explosion(s.sprite.x - 4, s.sprite.y - 4, true));
 		s.deleteObject();
 		d.takeDamage(s.getDamage());
+		d.setLastHit(s._playerNumber);
 	}
 	
 	public function getNearestEnemy():Enemy 
@@ -392,7 +395,7 @@ class PlayState extends FlxState
 			var s:Shot = _shotlist.members[j];
 			if (s.alive && s.exists )
 			{
-				if (s.isPlayer)
+				if (s.isPlayer())
 				{
 					for (i in 0..._enemies.length)
 					{
@@ -524,10 +527,22 @@ class PlayState extends FlxState
 		_player2.setRespawnPosition(p, moveToPosition);
 	}
 	
-	public function addPoints (p : Int )
+	public function addPoints (p : Int, playerNumber : Int = -1 )
 	{
-		_player1.ChangePoints(p);
-		_player2.ChangePoints(p);
+		if (playerNumber == -1)
+		{
+			var s : Int = FlxRandom.sign();
+			_player1.ChangePoints(Std.int(p/2 +( 0.5 * s)));
+			_player2.ChangePoints(Std.int(p/2 -( 0.5 * 2)));
+		}
+		else if (playerNumber == 2)
+		{
+			_player2.ChangePoints(p);
+		}
+		else
+		{
+			_player1.ChangePoints(p);
+		}
 	}
 	
 	public function getNearestPlayer ( p:FlxPoint) : FlxVector

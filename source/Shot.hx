@@ -18,8 +18,7 @@ class Shot extends FlxObject
 {
     public var sprite:FlxSprite;
     public var type:ShotType;
-    public var isPlayer:Bool;
-
+	public var _playerNumber:Int;	// -1 for enemy, 1 and 2 for players
     private var _state:PlayState;
 
     private var _lifetime:Float;
@@ -28,6 +27,7 @@ class Shot extends FlxObject
 
     private var _damageBase:Float;
     private var _damageFactor:Float;
+	
 	
 	public function setDamage(base:Float, factor:Float = 1.0):Void
 	{
@@ -40,11 +40,11 @@ class Shot extends FlxObject
 		return _damageBase * _damageFactor;
 	}
 	
-	public function new(X:Float=0, Y:Float=0, Angle:Float=0, type:ShotType, state:PlayState, playerShot:Bool = true ) 
+	public function new(X:Float=0, Y:Float=0, Angle:Float=0, type:ShotType, state:PlayState, playerShot:Int = -1) 
 	{
 		super(X, Y);
 		
-		isPlayer = playerShot;
+		_playerNumber = playerShot;
 		_state = state;
 		_timer = 0;
 		
@@ -168,6 +168,11 @@ class Shot extends FlxObject
 			//trace ("kill");
 			kill();
 		}
+	}
+	
+	public function isPlayer() : Bool
+	{
+		return (_playerNumber != -1);
 		
 	}
 	

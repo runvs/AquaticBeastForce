@@ -58,9 +58,9 @@ class Player extends FlxObject
 	private var _soundHit : FlxSound;
 	
 	private var _control : Controls;
-	private var _cam : FlxCamera;
+	private var _playerNumber : Int ;
 	
-	public function new(state:PlayState, controls : Int, cam : FlxCamera)
+	public function new(state:PlayState, controls : Int)
 	{   
 		_dead = false;
 		_weaponSystems = new WeaponSystems();
@@ -68,10 +68,12 @@ class Player extends FlxObject
 		if(controls == 1)
 		{	
 			_control = GameProperties.p1Controls;
+			_playerNumber = 1;
 		}
 		else
 		{
 			_control = GameProperties.p2Controls;
+			_playerNumber = 2;
 		}
 			
 		
@@ -310,7 +312,7 @@ class Player extends FlxObject
 			var dx:Float = Math.cos(rad) * 7 + 5;
 			var dy:Float = Math.sin(rad) * 7 + 7;
 
-			var s:Shot = new Shot(x + dx, y + dy, angle , ShotType.RocketAirGround, _state);
+			var s:Shot = new Shot(x + dx, y + dy, angle , ShotType.RocketAirGround, _state, _playerNumber);
 			s.setDamage(_weaponSystems._rocketAirGroundDamageBase, _weaponSystems._rocketAirGroundDamageFactor);
 			_state.addShot(s);
 		}
@@ -321,7 +323,7 @@ class Player extends FlxObject
 			var dx:Float = Math.cos(rad) * 7 + 5;
 			var dy:Float = Math.sin(rad) * 7 + 7;
 
-			var s:Shot = new Shot(x + dx, y + dy, angle , ShotType.RocketAirAir, _state);
+			var s:Shot = new Shot(x + dx, y + dy, angle , ShotType.RocketAirAir, _state, _playerNumber);
 			s.setDamage(_weaponSystems._rocketAirAirDamageBase, _weaponSystems._rocketAirAirDamageFactor);
 			_state.addShot(s);
 		}
@@ -343,7 +345,7 @@ class Player extends FlxObject
 
 			var tarAngle:Float = Math.atan2(dey, dex) * 180/Math.PI;
 			//trace (dex + " " + dey + " " + tarAngle);
-			var s:Shot = new Shot(x + dx, y + dy, tarAngle, ShotType.MgSmall, _state);
+			var s:Shot = new Shot(x + dx, y + dy, tarAngle, ShotType.MgSmall, _state, _playerNumber);
 			s.setDamage(_weaponSystems._autoDamageBase, _weaponSystems._autoDamageFactor);
 			_state.addShot(s);
 		}
@@ -353,7 +355,7 @@ class Player extends FlxObject
 			var dx:Float = Math.cos(rad) * 7 + 5;
 			var dy:Float = Math.sin(rad) * 7 + 7;
 
-			var s:Shot = new Shot(x + dx, y + dy, angle , ShotType.BFG, _state);
+			var s:Shot = new Shot(x + dx, y + dy, angle , ShotType.BFG, _state, _playerNumber);
 			s.setDamage(_weaponSystems._bfgDamageBase, _weaponSystems._bfgDamageFactor);
 			_state.addShot(s);
 		}
@@ -370,7 +372,7 @@ class Player extends FlxObject
         var dy:Float = Math.sin(rad) * 7 + 7;
 		//trace ("Shot created");
 
-		var s:Shot = new Shot(x + dx, y + dy, angle + dangle, ShotType.Mg, _state);
+		var s:Shot = new Shot(x + dx, y + dy, angle + dangle, ShotType.Mg, _state, _playerNumber);
 		s.setDamage(_weaponSystems._mgDamgeBase, _weaponSystems._mgDamageFactor);
 		_state.addShot(s);
 

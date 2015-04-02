@@ -34,11 +34,14 @@ class Enemy extends FlxObject
     private var _shootTimerMax:Float;
 	private var _hasSeenPlayer:Bool;
 	private var _spawnedPickUp:Bool;
-
+	
+	private var _lastHit : Int;		// -1 enemy, 1 p1, 2 p2;
+	
     public function new()
     {
 		_hasSeenPlayer = false;
 		_spawnedPickUp = false;
+		_lastHit = -1;
         super();
     }
 
@@ -68,7 +71,7 @@ class Enemy extends FlxObject
             var dx:Float = Math.cos(rad) * 7 + 5;
             var dy:Float = Math.sin(rad) * 7 + 7;
             
-            var s:Shot = new Shot(x + dx, y + dy, angle + dAngle, ShotType.Mg, _state, false);
+            var s:Shot = new Shot(x + dx, y + dy, angle + dAngle, ShotType.Mg, _state, -1);
 			s.setDamage(1, 1);
             _state.addShot(s);
             
@@ -87,6 +90,10 @@ class Enemy extends FlxObject
 			
         }
     }
+	public function setLastHit ( playerNumber : Int ) : Void
+	{
+		_lastHit = playerNumber;
+	}
 
     private function checkDead()
     {
@@ -97,7 +104,7 @@ class Enemy extends FlxObject
                 kill();
 				SpawnPickUp();
 				
-				_state.addPoints(FlxRandom.intRanged(3, 6));
+				_state.addPoints(FlxRandom.intRanged(3, 6), _lastHit);
             }
         }
     }

@@ -23,6 +23,7 @@ class DestroyableObject extends FlxObject
     public var _type:String;
     private var _health:Float;
     private var _state:PlayState;
+	private var _lastHit:Int; 	// -1 enemy, 1 p1, 2 p2
     
     static private function GetHitpoints(type:String):Float
     {
@@ -90,6 +91,7 @@ class DestroyableObject extends FlxObject
     {
         _type = type;
         _state = state;
+		_lastHit = -1;
         
         var imagepath:String = "assets/images/" + _type + ".png";
         var size:FlxVector = GetSize(_type);
@@ -123,9 +125,14 @@ class DestroyableObject extends FlxObject
         if (_health <= 0)
         {
             kill();
-            _state.addPoints(FlxRandom.intRanged(1, 3));
+            _state.addPoints(FlxRandom.intRanged(1, 3), _lastHit);
         }
     }
+	
+	public function setLastHit ( playerNumber : Int ) : Void
+	{
+		_lastHit = playerNumber;
+	}
 
     public override function kill():Void
     {
