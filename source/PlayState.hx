@@ -14,6 +14,7 @@ import flixel.util.FlxColorUtil;
 import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
+import flixel.util.FlxRect;
 import flixel.util.FlxTimer;
 import flixel.util.FlxVector;
 import haxe.CallStack;
@@ -98,10 +99,11 @@ class PlayState extends FlxState
 		if (twoPlayer)
 		{
 			camera1 = new FlxCamera(0, 0, 80, 144);
+
 			camera2 = new FlxCamera(320, 0, 80, 144);
 			cameraVignette =  new FlxCamera(0, 0, 160, 144);
-			_player1 = new Player(this, 1);
-			_player2 = new Player(this, 2);
+			_player1 = new Player(this, 1, camera1);
+			_player2 = new Player(this, 2, camera2);
 			
 			camera1.follow(_player1);
 			camera2.follow(_player2);
@@ -113,9 +115,9 @@ class PlayState extends FlxState
 		else
 		{
 			// TODO TEST!!
-			camera1 = new FlxCamera(0, 0, 160, 144);
+			_player1 = new Player(this, 1, camera1);
 			cameraVignette =  new FlxCamera(0, 0, 160, 144);
-			_player1 = new Player(this, 1);
+			_player1 = new Player(this, 1, camera1);
 			camera1.follow(_player1);
 			FlxG.cameras.add(camera1);
 			FlxG.cameras.add(cameraVignette);
@@ -128,7 +130,7 @@ class PlayState extends FlxState
 		super.create();
 	}
 	
-		function LoadLevel():Void 
+	function LoadLevel():Void 
 	{
 		_level = new Level(this);
 		var exitByException:Bool = false;
@@ -143,10 +145,21 @@ class PlayState extends FlxState
 			trace(CallStack.toString(CallStack.exceptionStack()));
 			exitByException = true;
 		}
-		
 		if (exitByException)
 		{
 			throw "I will crash now.";
+		}
+		
+		
+		if (twoPlayer)
+		{
+			camera1.bounds = _level.getLevelBounds();
+			camera2.bounds = _level.getLevelBounds();
+
+		}
+		else
+		{
+			camera1.bounds = _level.getLevelBounds();	
 		}
 	}
 	
@@ -198,18 +211,21 @@ class PlayState extends FlxState
 			
 			if (twoPlayer)
 			{
-				if (!_player1._dead)
-				{
-					_player1.update();
-					PickupMagnet(_player1);
-					FlxG.overlap(_player1._sprite, _pickUpList, DoPlayerPickUp1);
-			
-				}
+
+
 				if (!_player2._dead)
 				{
 					_player2.update();
 					PickupMagnet(_player2);
 					FlxG.overlap(_player2._sprite, _pickUpList, DoPlayerPickUp2);
+					CheckInsideMap(_player2);
+				}
+				if (!_player1._dead)
+				{
+					_player1.update();
+					PickupMagnet(_player1);
+					FlxG.overlap(_player1._sprite, _pickUpList, DoPlayerPickUp1);
+					CheckInsideMap(_player1);
 				}
 			}
 			else
@@ -217,6 +233,7 @@ class PlayState extends FlxState
 				_player1.update();
 				PickupMagnet(_player1);
 				FlxG.overlap(_player1._sprite, _pickUpList, DoPlayerPickUp1);
+				CheckInsideMap(_player1);
 			}
 			
 			
@@ -258,6 +275,11 @@ class PlayState extends FlxState
 			_player2.AddPickUp(p);
 			p.kill();
 		}
+	}
+	
+	public function CheckInsideMap(p:Player) : Void
+	{
+		p._outside = !_level.getLevelBounds().containsFlxPoint( new FlxPoint(p.x, p.y));
 	}
 	
 	private function CheckEndCondition():Void

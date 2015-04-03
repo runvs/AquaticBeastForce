@@ -33,11 +33,6 @@ class Controls
 	
 	public function update()
 	{
-		_gamePad = FlxG.gamepads.lastActive;
-		if (_gamePad == null) {
-			return;
-		}
-		
 		up = false;
 		down = false;
 		left = false;
@@ -49,6 +44,10 @@ class Controls
 		
 		if (controlType == ControlType.GamePad)
 		{
+			_gamePad = FlxG.gamepads.lastActive;
+			if (_gamePad == null) {
+				return;
+			}
 			 getInputGamePad();
 		}
 		else if ( controlType == ControlType.Keyboard)
@@ -59,7 +58,12 @@ class Controls
 	
 	private function updateAxis(xID:Int, yID:Int): FlxPoint
 	{
+
 		var p : FlxPoint = new FlxPoint();
+		if (_gamePad == null) {
+			return p;
+		}
+		
 		var xAxisValue = _gamePad.getXAxis(xID);
 		var yAxisValue = _gamePad.getYAxis(yID);
 		
@@ -72,7 +76,9 @@ class Controls
 	
 	function getInputGamePad():Void 
 	{
-
+		if (_gamePad == null) {
+			return;
+		}
 		var la :FlxPoint = updateAxis(GamepadIDs.LEFT_ANALOGUE_X, GamepadIDs.LEFT_ANALOGUE_Y);
 		// note the wrong axis numbers! For whatever reason this behaves wrong.
 		var ra :FlxPoint = updateAxis(GamepadIDs.RIGHT_ANALOGUE_Y, GamepadIDs.RIGHT_ANALOGUE_X);
@@ -110,16 +116,6 @@ class Controls
 		var dpadUp = _gamePad.pressed(XboxButtonID.DPAD_UP);
 		var dpadDown = _gamePad.pressed(XboxButtonID.DPAD_DOWN);
 		
-		
-		
-		//if (dpadUp)
-		//{
-			//up = true;
-		//}
-		//if (dpadDown)
-		//{
-			//down = true;
-		//}
 		if (_gamePad.pressed(XboxButtonID.RIGHT_TRIGGER))
 		{
 			shot = true;

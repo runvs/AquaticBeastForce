@@ -59,12 +59,20 @@ class Player extends FlxObject
 	private var _control : Controls;
 	private var _playerNumber : Int ;
 	
-	public function new(state:PlayState, controls : Int)
+	private var _cam : FlxCamera;
+	public var _outside :Bool; // true if the player is outside the map;
+	private var _outsideTimer : Float;
+	
+	public function new(state:PlayState, controls : Int, cam:FlxCamera)
 	{   
+		
 		_dead = false;
 		_weaponSystems = new WeaponSystems();
 		_weaponSystems._hasAutoTurret = true;
+		_cam = cam;
 
+		_outside = false; 
+		_outsideTimer = 0.5;
 		if(controls == 1)
 		{	
 			_control = GameProperties.p1Controls;
@@ -170,7 +178,15 @@ class Player extends FlxObject
 		_mgfireTime += FlxG.elapsed;
 		_specialWeaponFireTime += FlxG.elapsed;
 		
-		
+		if (_outside)
+		{
+			_outsideTimer -= FlxG.elapsed;
+			if (_outsideTimer <= 0)
+			{
+				takeDamage(1);
+				_outsideTimer = 0.5;
+			}
+		}
 		
         super.update();
     }
@@ -401,9 +417,9 @@ class Player extends FlxObject
 	public function takeDamage(damage:Float):Void
 	{
 		_soundHit.play(true);
-		FlxG.camera.shake(0.007, 0.25);
-		var col = FlxColorUtil.makeFromARGB(0.5, 255, 0, 0);
-		FlxG.camera.flash(col, 0.25);
+		_cam.shake(0.007, 0.25);
+		var col = FlxColorUtil.makeFromARGB(0.25, 255, 0, 0);
+		_cam.flash(col, 0.25);
 		_health -=  damage;
 		checkDead();
 		
