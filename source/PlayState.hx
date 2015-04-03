@@ -51,13 +51,18 @@ class PlayState extends FlxState
 	
 	private var twoPlayer:Bool;	// true if two players, false if one player
 	
+	
+	public function new( tp : Bool) 
+	{
+		super();
+		SetTwoPlayer(tp);
+	}
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
 	override public function create():Void
 	{
-		twoPlayer = true;
 		
 		_enemies = new FlxTypedGroup<Enemy>();
 		_shotlist = new FlxTypedGroup<Shot>();
@@ -95,13 +100,12 @@ class PlayState extends FlxState
 		
 		
 		FlxG.mouse.cursorContainer.visible = false;
-		
+
 		if (twoPlayer)
 		{
 			camera1 = new FlxCamera(0, 0, 80, 144);
 
 			camera2 = new FlxCamera(320, 0, 80, 144);
-			cameraVignette =  new FlxCamera(0, 0, 160, 144);
 			_player1 = new Player(this, 1, camera1);
 			_player2 = new Player(this, 2, camera2);
 			
@@ -114,19 +118,19 @@ class PlayState extends FlxState
 		}
 		else
 		{
-			// TODO TEST!!
-			_player1 = new Player(this, 1, camera1);
-			cameraVignette =  new FlxCamera(0, 0, 160, 144);
+			camera1 = new FlxCamera(0, 0, 160, 144);
 			_player1 = new Player(this, 1, camera1);
 			camera1.follow(_player1);
 			FlxG.cameras.add(camera1);
-			FlxG.cameras.add(cameraVignette);
+			
 		}
 		
-
+		cameraVignette =  new FlxCamera(0, 0, 160, 144);
+		FlxG.cameras.add(cameraVignette);
 		
-		LoadLevel();
 
+		LoadLevel();
+		
 		super.create();
 	}
 	
@@ -198,6 +202,7 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
+		trace ("update");
 		if (!_upgrade.alive)
 		{		
 			FlxG.mouse.cursorContainer.visible = false;
@@ -211,8 +216,6 @@ class PlayState extends FlxState
 			
 			if (twoPlayer)
 			{
-
-
 				if (!_player2._dead)
 				{
 					_player2.update();
@@ -258,6 +261,7 @@ class PlayState extends FlxState
 			_upgrade.update();
 		}
 		super.update();
+		trace ("end update");
 	}
 
 	public function DoPlayerPickUp1(player:FlxSprite, p:PickUp) : Void 
@@ -416,6 +420,7 @@ class PlayState extends FlxState
     
     override public function draw():Void 
     {
+		trace ("draw");
 		// remove vignette camera since only vignette should be drawn to this cam
 		FlxG.cameras.remove(cameraVignette, false);
 		
@@ -457,38 +462,44 @@ class PlayState extends FlxState
 		
 		DrawVignette();
 		
-		
+		trace ("end draw");
 		
 		
     }
 	
 	private function drawHud():Void
 	{
-		FlxG.cameras.remove(camera2, false);
+		trace ("drawHud");
 		
-		_player1.drawHud();
-		DrawLocator(_player1);
-		
-		if (_player1._dead)
+		if ( twoPlayer)
 		{
-			_blackScreen.draw();
+			FlxG.cameras.remove(camera2, false);
+			
+			_player1.drawHud();
+			DrawLocator(_player1);
+			
+			if (_player1._dead)
+			{
+				_blackScreen.draw();
+			}
+		
+			FlxG.cameras.remove(camera1, false);
+			FlxG.cameras.add(camera2);
+			_player2.drawHud();
+			DrawLocator(_player2);
+			if (_player2._dead)
+			{
+				_blackScreen.draw();
+			}
+			FlxG.cameras.add(camera1);
 		}
-	
 		
-		
-		FlxG.cameras.remove(camera1, false);
-		FlxG.cameras.add(camera2);
-		_player2.drawHud();
-		DrawLocator(_player2);
-		if (_player2._dead)
+		else 		
 		{
-			_blackScreen.draw();
+			_player1.drawHud();
+			DrawLocator(_player1);
 		}
-		
-	
-		
-		FlxG.cameras.add(camera1);
-		
+		trace ("end drawHud");
 	}
 	
 	function HandleCollisions():Void 
@@ -604,17 +615,34 @@ class PlayState extends FlxState
 	
 	function DrawVignette():Void 
 	{
-		FlxG.cameras.remove(camera1, false);
-		FlxG.cameras.remove(camera2, false);
-		FlxG.cameras.add(cameraVignette);
-		cameraVignette.bgColor = FlxColorUtil.makeFromARGB(0.0, 0, 0, 0);
-		_vignette.draw();
-		
-		FlxG.cameras.remove(cameraVignette, false);
-		
-		FlxG.cameras.add(camera1);
-		FlxG.cameras.add(camera2);
-		FlxG.cameras.add(cameraVignette);
+		if (twoPlayer)
+		{
+			FlxG.cameras.remove(camera1, false);
+			FlxG.cameras.remove(camera2, false);
+			FlxG.cameras.add(cameraVignette);
+			cameraVignette.bgColor = FlxColorUtil.makeFromARGB(0.0, 0, 0, 0);
+			_vignette.draw();
+			
+			// correct camera draw order
+			FlxG.cameras.remove(cameraVignette, false);
+			
+			FlxG.cameras.add(camera1);
+			FlxG.cameras.add(camera2);
+			FlxG.cameras.add(cameraVignette);
+		}
+		else 
+		{
+			FlxG.cameras.remove(camera1, false);
+			FlxG.cameras.add(cameraVignette);
+			cameraVignette.bgColor = FlxColorUtil.makeFromARGB(0.0, 0, 0, 0);
+			_vignette.draw();
+			
+			// correct camera draw order
+			FlxG.cameras.remove(cameraVignette, false);
+			
+			FlxG.cameras.add(camera1);
+			FlxG.cameras.add(cameraVignette);
+		}
 	}
 	
 
@@ -749,4 +777,10 @@ class PlayState extends FlxState
 		}
 		return ret;
 	}
+	
+	public function SetTwoPlayer (tp : Bool)
+	{
+		twoPlayer = tp;
+	}
+	
 }
