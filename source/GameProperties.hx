@@ -62,7 +62,7 @@ class GameProperties
     public static var PickUpMagnetDistance:Float = 40;
     public static var PickUpMagnetMaxVelocity:Float = 90;
 
-	public static var p1Controls : Controls = new Controls(ControlType.GamePad);
-	public static var p2Controls : Controls = new Controls(ControlType.Keyboard);
+	//public static var p1Controls : Controls = new Controls(ControlType.GamePad);
+	//public static var p2Controls : Controls = new Controls(ControlType.Keyboard);
 
 }

@@ -18,6 +18,9 @@ import lime.math.Vector2;
 import openfl.filters.BlurFilter;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.input.gamepad.XboxButtonID;
+import ControlsGamepad;
+import ControlsKeyboard;
+import IControls;
 
 /**
  * ...
@@ -56,7 +59,7 @@ class Player extends FlxObject
 	private var _soundPickup : FlxSound;
 	private var _soundHit : FlxSound;
 	
-	private var _control : Controls;
+	private var _control : IControls;
 	private var _playerNumber : Int ;
 	
 	private var _cam : FlxCamera;
@@ -75,12 +78,12 @@ class Player extends FlxObject
 		_outsideTimer = 0.5;
 		if(controls == 1)
 		{	
-			_control = GameProperties.p1Controls;
+			_control =  new ControlsGamepad();
 			_playerNumber = 1;
 		}
 		else
 		{
-			_control = GameProperties.p2Controls;
+			_control =  new ControlsKeyboard();
 			_playerNumber = 2;
 		}
 			
@@ -245,11 +248,11 @@ class Player extends FlxObject
         
 		if (_control.left)
 		{
-			angle = (angle - GameProperties.PlayerRotationSpeed * _control.rotationfactor) % 360;
+			angle = (angle - GameProperties.PlayerRotationSpeed *  _control.getRotationFactor()) % 360;
 		}
 		else if (_control.right)
 		{
-			angle = (angle + GameProperties.PlayerRotationSpeed * _control.rotationfactor) % 360;
+			angle = (angle + GameProperties.PlayerRotationSpeed * _control.getRotationFactor()) % 360;
 		}
         
 		if (_control.up)
