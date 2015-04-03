@@ -32,7 +32,6 @@ class Player extends FlxObject
 	public var _health:Float;
 	public var _healthMax:Float;
 	
-	private var _remainingLives:Int;
 	
 	private var _respawnPosition:FlxPoint;
 	
@@ -64,6 +63,7 @@ class Player extends FlxObject
 	{   
 		_dead = false;
 		_weaponSystems = new WeaponSystems();
+		_weaponSystems._hasAutoTurret = true;
 
 		if(controls == 1)
 		{	
@@ -76,9 +76,6 @@ class Player extends FlxObject
 			_playerNumber = 2;
 		}
 			
-		
-		// for testing
-		_weaponSystems._hasAutoTurret = false;
 		
 		FlxG.stage.quality = flash.display.StageQuality.BEST;
 		_state = state;
@@ -129,7 +126,6 @@ class Player extends FlxObject
 		_hudBackground.scrollFactor.set(0,0);
 		
 		_health = _healthMax = GameProperties.PlayerHealthDefault;
-		_remainingLives = GameProperties.PlayerLivesDefault;
 		
 		_mgfireTime = 0;
 		_specialWeaponFireTime = 0;
@@ -329,25 +325,37 @@ class Player extends FlxObject
 		}
 		else if (_weaponSystems._hasAutoTurret)
 		{
-			var e:Enemy = _state.getNearestEnemy();
+			var e:Enemy = _state.getNearestEnemy(this);
 			if (e == null)
 			{
 				return;
 			}
+
+		
+			
 			
 			//var dangle = FlxRandom.floatRanged( -GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
 			var dex:Float = e.x - x + 3;
 			var dey:Float = e.y - y + 3;
 			
-			var rad:Float = (angle) / 180 * Math.PI;
-			var dx:Float = Math.cos(rad) * 7 + 5;
-			var dy:Float = Math.sin(rad) * 7 + 7;
+			var d : Float = (dex * dex) + (dey * dey);
+			if (d < GameProperties.AutoCannonRange * GameProperties.AutoCannonRange)	// compare to range squared because i do not want to use sqrt (performance)
+			{
+				var rad:Float = (angle) / 180 * Math.PI;
+				var dx:Float = Math.cos(rad) * 7 + 5;
+				var dy:Float = Math.sin(rad) * 7 + 7;
+				
+				var tarAngle:Float = Math.atan2(dey, dex) * 180/Math.PI;
+				//trace (dex + " " + dey + " " + tarAngle);
+				var s:Shot = new Shot(x + dx, y + dy, tarAngle, ShotType.MgSmall, _state, _playerNumber);
+				s.setDamage(_weaponSystems._autoDamageBase, _weaponSystems._autoDamageFactor);
+				_state.addShot(s);
+			
+				
+			}
+			
 
-			var tarAngle:Float = Math.atan2(dey, dex) * 180/Math.PI;
-			//trace (dex + " " + dey + " " + tarAngle);
-			var s:Shot = new Shot(x + dx, y + dy, tarAngle, ShotType.MgSmall, _state, _playerNumber);
-			s.setDamage(_weaponSystems._autoDamageBase, _weaponSystems._autoDamageFactor);
-			_state.addShot(s);
+		
 		}
 		else if (_weaponSystems._hasBFG)
 		{
@@ -420,36 +428,9 @@ class Player extends FlxObject
 		if (alive)
 		{
 			alive = false;
-			//trace("die");
-			endThisLife();
+			_dead = true;
 			_state.PlayerDead();
 		}
-	}
-	
-	public function endThisLife():Void
-	{
-		//trace ("endlife");
-		_remainingLives = _remainingLives - 1;
-		if (_remainingLives >= 0)
-		{
-			//trace ("remaining lives " + _remainingLives );
-			respawn();
-		}
-		else 
-		{
-			_dead = true;
-		}
-	}
-	
-	private function respawn():Void
-	{
-		trace ("alive");
-		_health = _healthMax;
-		alive = true;
-		//trace (FlxG.camera.color);
-		FlxG.camera.fade(FlxColor.BLACK, 1, true);
-		x = _respawnPosition.x;
-		y = _respawnPosition.y;
 	}
 	
 	public function setRespawnPosition(pos:FlxPoint, moveToPosition  :Bool = false):Void
@@ -457,7 +438,12 @@ class Player extends FlxObject
 		_respawnPosition = pos;
 		if (moveToPosition)
 		{
-			respawn();
+			_health = _healthMax;
+			alive = true;
+			//trace (FlxG.camera.color);
+			FlxG.camera.fade(FlxColor.BLACK, 1, true);
+			x = _respawnPosition.x;
+			y = _respawnPosition.y;
 		}
 	}
 	

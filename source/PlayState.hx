@@ -202,17 +202,21 @@ class PlayState extends FlxState
 				{
 					_player1.update();
 					PickupMagnet(_player1);
+					FlxG.overlap(_player1._sprite, _pickUpList, DoPlayerPickUp1);
+			
 				}
 				if (!_player2._dead)
 				{
 					_player2.update();
 					PickupMagnet(_player2);
+					FlxG.overlap(_player2._sprite, _pickUpList, DoPlayerPickUp2);
 				}
 			}
 			else
 			{
 				_player1.update();
 				PickupMagnet(_player1);
+				FlxG.overlap(_player1._sprite, _pickUpList, DoPlayerPickUp1);
 			}
 			
 			
@@ -222,8 +226,7 @@ class PlayState extends FlxState
 			CheckEndCondition();
             
 			
-			FlxG.overlap(_player1._sprite, _pickUpList, DoPlayerPickUp1);
-			FlxG.overlap(_player2._sprite, _pickUpList, DoPlayerPickUp2);
+			
 			
 			HandleCollisions();
 			
@@ -264,7 +267,7 @@ class PlayState extends FlxState
 		{
 			if (_player1._dead && _player2._dead)
 			{
-				// Player lost
+				// Players lost, since both are dead
 				var s : GameOverState = new GameOverState(false);
 				s.SetPoints(_player1.TotalPoints, _player2.TotalPoints);
 				FlxG.switchState(s);
@@ -367,7 +370,7 @@ class PlayState extends FlxState
 		d.setLastHit(s._playerNumber);
 	}
 	
-	public function getNearestEnemy():Enemy 
+	public function getNearestEnemy(p:Player ):Enemy 
 	{
 		var ret:Enemy = null;
 		var distancelargest:Float = 999999;
@@ -376,20 +379,14 @@ class PlayState extends FlxState
 			var e:Enemy = _enemies.members[i];
 			if (!e.alive) continue;
 			
-			var dx:Float = e.x - _player1.x;
-			var dy:Float = e.y - _player1.y;
+			var dx:Float = e.x - p.x;
+			var dy:Float = e.y - p.y;
 			
-			// todo remove sqrt here
-			
-			var d:Float = Math.sqrt(dx * dx + dy * dy);
-			
-			if (d < GameProperties.AutoCannonRange)
+			var d:Float = dx * dx + dy * dy;
+			if ( d < distancelargest)
 			{
-				if (d < distancelargest)
-				{
-					distancelargest = d;
-					ret = e;
-				}
+				distancelargest = d;
+				ret = e;
 			}
 		}
 		return ret;
@@ -405,8 +402,22 @@ class PlayState extends FlxState
         _destroyableList.draw();
 
 		_enemies.draw();
-		_player1.draw();
-		_player2.draw();
+		
+		if (twoPlayer)
+		{
+			if (!_player1._dead)
+			{
+				_player1.draw();
+			}
+			if (!_player2._dead)
+			{
+				_player2.draw();
+			}
+		}
+		else 
+		{
+			_player1.draw();
+		}
 		_shotlist.draw();
 		_explosionList.draw();
 		
@@ -422,17 +433,7 @@ class PlayState extends FlxState
 		
         super.draw();
 		
-		FlxG.cameras.remove(camera1, false);
-		FlxG.cameras.remove(camera2, false);
-		FlxG.cameras.add(cameraVignette);
-		cameraVignette.bgColor = FlxColorUtil.makeFromARGB(0.0, 0, 0, 0);
-		_vignette.draw();
-		
-		FlxG.cameras.remove(cameraVignette, false);
-		
-		FlxG.cameras.add(camera1);
-		FlxG.cameras.add(camera2);
-		FlxG.cameras.add(cameraVignette);
+		DrawVignette();
 		
 		
 		
@@ -503,23 +504,17 @@ class PlayState extends FlxState
 				}
 				else
 				{
-					if (FlxG.overlap(_player1._sprite, s.sprite))
+					if (twoPlayer)
 					{
-						if (FlxG.pixelPerfectOverlap(_player1._sprite, s.sprite,1))
-						{
-							_player1.takeDamage(s.getDamage());
-							s.deleteObject();
-						}
+						// checks automatically if player is dead
+						PlayerShotCollision(_player1, s);
+						PlayerShotCollision(_player2, s);
 					}
-					if (FlxG.overlap(_player2._sprite, s.sprite))
+					else 
 					{
-						trace ("test");
-						if (FlxG.pixelPerfectOverlap(_player2._sprite, s.sprite,1))
-						{
-							_player2.takeDamage(s.getDamage());
-							s.deleteObject();
-						}
+						PlayerShotCollision(_player1, s);
 					}
+					
 				}
 				for (i in 0 ... _destroyableList.length)
 				{
@@ -535,6 +530,21 @@ class PlayState extends FlxState
 							shotDestroyableCollision(d, s);
 						}
 					}
+				}
+			}
+		}
+	}
+	
+	private function PlayerShotCollision(p:Player, s:Shot)
+	{
+		if (!p._dead && p.alive)
+		{
+			if (FlxG.overlap(p._sprite, s.sprite))
+			{
+				if (FlxG.pixelPerfectOverlap(p._sprite, s.sprite,1))
+				{
+					p.takeDamage(s.getDamage());
+					s.deleteObject();
 				}
 			}
 		}
@@ -568,6 +578,21 @@ class PlayState extends FlxState
 				}
 			}
 		}
+	}
+	
+	function DrawVignette():Void 
+	{
+		FlxG.cameras.remove(camera1, false);
+		FlxG.cameras.remove(camera2, false);
+		FlxG.cameras.add(cameraVignette);
+		cameraVignette.bgColor = FlxColorUtil.makeFromARGB(0.0, 0, 0, 0);
+		_vignette.draw();
+		
+		FlxG.cameras.remove(cameraVignette, false);
+		
+		FlxG.cameras.add(camera1);
+		FlxG.cameras.add(camera2);
+		FlxG.cameras.add(cameraVignette);
 	}
 	
 
@@ -635,21 +660,35 @@ class PlayState extends FlxState
 	
 	public function setPlayersRespawn (p :FlxPoint, moveToPosition:Bool):Void
 	{
-		_player1.setRespawnPosition(p, moveToPosition);
-		_player2.setRespawnPosition(p, moveToPosition);
+		if (twoPlayer)
+		{
+			_player1.setRespawnPosition(p, moveToPosition);
+			_player2.setRespawnPosition(p, moveToPosition);
+		}
+		else 
+		{
+			_player1.setRespawnPosition(p, moveToPosition);
+		}
 	}
 	
 	public function addPoints (p : Int, playerNumber : Int = -1 )
 	{
-		if (playerNumber == -1)
+		if (twoPlayer)
 		{
-			var s : Int = FlxRandom.sign();
-			_player1.ChangePoints(Std.int(p/2 +( 0.5 * s)));
-			_player2.ChangePoints(Std.int(p/2 -( 0.5 * 2)));
-		}
-		else if (playerNumber == 2)
-		{
-			_player2.ChangePoints(p);
+			if (playerNumber == -1)
+			{
+				var s : Int = FlxRandom.sign();
+				_player1.ChangePoints(Std.int(p/2 +( 0.5 * s)));
+				_player2.ChangePoints(Std.int(p/2 -( 0.5 * 2)));
+			}
+			else if (playerNumber == 2)
+			{
+				_player2.ChangePoints(p);
+			}
+			else
+			{
+				_player1.ChangePoints(p);
+			}
 		}
 		else
 		{
@@ -657,19 +696,35 @@ class PlayState extends FlxState
 		}
 	}
 	
-	public function getNearestPlayer ( p:FlxPoint) : FlxVector
+	public function getNearestPlayer ( p:FlxPoint) : Player
 	{
-		var t1 :FlxVector = new FlxVector(_player1.x - p.x, _player1.y - p.y);
-		var t2 :FlxVector = new FlxVector(_player2.x - p.x, _player2.y - p.y);
-		
-		if (t1.lengthSquared < t2.lengthSquared)
+		var ret : Player = null;
+		if (twoPlayer)
 		{
-			return new FlxVector(_player1.x, _player1.y);
+			var t1 :FlxVector = new FlxVector(_player1.x - p.x, _player1.y - p.y);
+			var t2 :FlxVector = new FlxVector(_player2.x - p.x, _player2.y - p.y);
+			
+			if (t1.lengthSquared < t2.lengthSquared)
+			{
+				if (!_player1._dead)
+				{
+					//trace ("return p1");
+					ret = _player1;
+				}
+			}
+			else
+			{
+				if (!_player2._dead)
+				{
+					//trace ("return p2");
+					ret = _player2;
+				}
+			}
 		}
 		else
 		{
-			return new FlxVector(_player2.x, _player2.y);
+			ret = _player1;
 		}
+		return ret;
 	}
-	
 }

@@ -65,7 +65,16 @@ class EnemySoldier extends Enemy
     {
 		if (alive)
 		{
-			var playerPos:FlxVector = _state.getNearestPlayer(new FlxPoint(x, y));
+			var target:Player = null;
+		
+		target = _state.getNearestPlayer(new FlxPoint(x, y));
+		if (target == null)
+		{
+			_hasSeenPlayer = false;
+			return;	// don't do anything if there is no player
+		}
+		
+		var playerPos : FlxVector = new FlxVector(target.x, target.y);
 			var soldierPos:FlxVector  = new FlxVector(x,y);
 			
 			var direction:FlxVector = new FlxVector(playerPos.x - soldierPos.x,playerPos.y - soldierPos.y);
