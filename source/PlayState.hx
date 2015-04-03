@@ -63,7 +63,7 @@ class PlayState extends FlxState
 	 */
 	override public function create():Void
 	{
-		
+		trace ("start create");
 		_enemies = new FlxTypedGroup<Enemy>();
 		_shotlist = new FlxTypedGroup<Shot>();
 		_explosionList = new FlxTypedGroup<Explosion>();
@@ -80,8 +80,6 @@ class PlayState extends FlxState
 		_blackScreen.scrollFactor.set();
 		_blackScreen.origin.set();
 		
-		var p : PickUp = new PickUp(new FlxPoint(100, 100));
-		_pickUpList.add(p);
 		
 		_upgrade = new Upgrade(this);	
 		_upgrade.alive = false;
@@ -103,9 +101,10 @@ class PlayState extends FlxState
 
 		if (twoPlayer)
 		{
+			trace ("twoplayer");
 			camera1 = new FlxCamera(0, 0, 80, 144);
-
 			camera2 = new FlxCamera(320, 0, 80, 144);
+			
 			_player1 = new Player(this, 1, camera1);
 			_player2 = new Player(this, 2, camera2);
 			
@@ -114,10 +113,10 @@ class PlayState extends FlxState
 			
 			FlxG.cameras.add(camera1);
 			FlxG.cameras.add(camera2);
-			FlxG.cameras.add(cameraVignette);
 		}
 		else
 		{
+			trace ("oneplayer");
 			camera1 = new FlxCamera(0, 0, 160, 144);
 			_player1 = new Player(this, 1, camera1);
 			camera1.follow(_player1);
@@ -132,10 +131,12 @@ class PlayState extends FlxState
 		LoadLevel();
 		
 		super.create();
+		//trace ("end create");
 	}
 	
 	function LoadLevel():Void 
 	{
+		//trace ("start loadlevel");
 		_level = new Level(this);
 		var exitByException:Bool = false;
 		try 
@@ -144,8 +145,8 @@ class PlayState extends FlxState
 		}
 		catch ( msg : String ) 
 		{
-			trace("Error occurred while loading the level: " + msg);
-			trace("Call stack:");
+			//trace("Error occurred while loading the level: " + msg);
+			//trace("Call stack:");
 			trace(CallStack.toString(CallStack.exceptionStack()));
 			exitByException = true;
 		}
@@ -165,6 +166,7 @@ class PlayState extends FlxState
 		{
 			camera1.bounds = _level.getLevelBounds();	
 		}
+		//trace ("end loadlevel");
 	}
 	
 	/**
@@ -202,7 +204,7 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
-		trace ("update");
+		//trace ("update");
 		if (!_upgrade.alive)
 		{		
 			FlxG.mouse.cursorContainer.visible = false;
@@ -261,7 +263,7 @@ class PlayState extends FlxState
 			_upgrade.update();
 		}
 		super.update();
-		trace ("end update");
+		//trace ("end update");
 	}
 
 	public function DoPlayerPickUp1(player:FlxSprite, p:PickUp) : Void 
@@ -420,7 +422,7 @@ class PlayState extends FlxState
     
     override public function draw():Void 
     {
-		trace ("draw");
+		//trace ("draw");
 		// remove vignette camera since only vignette should be drawn to this cam
 		FlxG.cameras.remove(cameraVignette, false);
 		
@@ -462,14 +464,14 @@ class PlayState extends FlxState
 		
 		DrawVignette();
 		
-		trace ("end draw");
+		//trace ("end draw");
 		
 		
     }
 	
 	private function drawHud():Void
 	{
-		trace ("drawHud");
+		//trace ("drawHud");
 		
 		if ( twoPlayer)
 		{
@@ -499,7 +501,7 @@ class PlayState extends FlxState
 			_player1.drawHud();
 			DrawLocator(_player1);
 		}
-		trace ("end drawHud");
+		//trace ("end drawHud");
 	}
 	
 	function HandleCollisions():Void 
@@ -674,7 +676,7 @@ class PlayState extends FlxState
 					var dist = Math.sqrt((en.x -e.x) * (en.x -e.x) + (en.y -e.y) * (en.y -e.y));
 					if (dist <= 25)
 					{
-						trace ("enemy taking Damage from explosion");
+						//trace ("enemy taking Damage from explosion");
 						var t: FlxTimer = new FlxTimer(0.23, function(t:FlxTimer) { en.takeDamage(GameProperties.ExplosionDamage); } );	// so they do not explode simulatiously
 					}
 				}
@@ -687,7 +689,7 @@ class PlayState extends FlxState
 					var dist = Math.sqrt((d.x -e.x) * (d.x -e.x) + (d.y -e.y) * (d.y -e.y));
 					if (dist <= 25)
 					{
-						trace ("enemy taking Damage from explosion");
+						//trace ("enemy taking Damage from explosion");
 						var t: FlxTimer = new FlxTimer(0.23, function(t:FlxTimer) { d.takeDamage(GameProperties.ExplosionDamage); } );	// so they do not explode simulatiously
 					}
 				}
