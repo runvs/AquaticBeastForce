@@ -54,7 +54,16 @@ class EnemyTank extends Enemy
     
     override public function update():Void 
     {
-		var playerPos:FlxVector = _state.getNearestPlayer(new FlxPoint(x, y));
+		var target:Player = null;
+		
+		target = _state.getNearestPlayer(new FlxPoint(x, y));
+		if (target == null)
+		{
+			_hasSeenPlayer = false;
+			return;	// don't do anything if there is no player
+		}
+		
+		var playerPos : FlxVector = new FlxVector(target.x, target.y);
 		var tankPos:FlxVector  = new FlxVector(x,y);
 		
 		var direction:FlxVector = new FlxVector(playerPos.x - tankPos.x,playerPos.y - tankPos.y);

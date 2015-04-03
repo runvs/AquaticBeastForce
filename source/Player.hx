@@ -18,6 +18,9 @@ import lime.math.Vector2;
 import openfl.filters.BlurFilter;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.input.gamepad.XboxButtonID;
+import ControlsGamepad;
+import ControlsKeyboard;
+import IControls;
 
 /**
  * ...
@@ -32,7 +35,6 @@ class Player extends FlxObject
 	public var _health:Float;
 	public var _healthMax:Float;
 	
-	private var _remainingLives:Int;
 	
 	private var _respawnPosition:FlxPoint;
 	
@@ -57,28 +59,34 @@ class Player extends FlxObject
 	private var _soundPickup : FlxSound;
 	private var _soundHit : FlxSound;
 	
-	private var _control : Controls;
+	private var _control : IControls;
 	private var _playerNumber : Int ;
 	
-	public function new(state:PlayState, controls : Int)
+	private var _cam : FlxCamera;
+	public var _outside :Bool; // true if the player is outside the map;
+	private var _outsideTimer : Float;
+	
+	public function new(state:PlayState, controls : Int, cam:FlxCamera)
 	{   
+		
 		_dead = false;
 		_weaponSystems = new WeaponSystems();
+		_weaponSystems._hasAutoTurret = true;
+		_cam = cam;
 
+		_outside = false; 
+		_outsideTimer = 0.5;
 		if(controls == 1)
 		{	
-			_control = GameProperties.p1Controls;
+			_control =  new ControlsGamepad();
 			_playerNumber = 1;
 		}
 		else
 		{
-			_control = GameProperties.p2Controls;
+			_control =  new ControlsKeyboard();
 			_playerNumber = 2;
 		}
 			
-		
-		// for testing
-		_weaponSystems._hasAutoTurret = false;
 		
 		FlxG.stage.quality = flash.display.StageQuality.BEST;
 		_state = state;
@@ -129,7 +137,6 @@ class Player extends FlxObject
 		_hudBackground.scrollFactor.set(0,0);
 		
 		_health = _healthMax = GameProperties.PlayerHealthDefault;
-		_remainingLives = GameProperties.PlayerLivesDefault;
 		
 		_mgfireTime = 0;
 		_specialWeaponFireTime = 0;
@@ -174,7 +181,15 @@ class Player extends FlxObject
 		_mgfireTime += FlxG.elapsed;
 		_specialWeaponFireTime += FlxG.elapsed;
 		
-		
+		if (_outside)
+		{
+			_outsideTimer -= FlxG.elapsed;
+			if (_outsideTimer <= 0)
+			{
+				takeDamage(1);
+				_outsideTimer = 0.5;
+			}
+		}
 		
         super.update();
     }
@@ -233,11 +248,11 @@ class Player extends FlxObject
         
 		if (_control.left)
 		{
-			angle = (angle - GameProperties.PlayerRotationSpeed * _control.rotationfactor) % 360;
+			angle = (angle - GameProperties.PlayerRotationSpeed *  _control.getRotationFactor()) % 360;
 		}
 		else if (_control.right)
 		{
-			angle = (angle + GameProperties.PlayerRotationSpeed * _control.rotationfactor) % 360;
+			angle = (angle + GameProperties.PlayerRotationSpeed * _control.getRotationFactor()) % 360;
 		}
         
 		if (_control.up)
@@ -329,25 +344,37 @@ class Player extends FlxObject
 		}
 		else if (_weaponSystems._hasAutoTurret)
 		{
-			var e:Enemy = _state.getNearestEnemy();
+			var e:Enemy = _state.getNearestEnemy(this);
 			if (e == null)
 			{
 				return;
 			}
+
+		
+			
 			
 			//var dangle = FlxRandom.floatRanged( -GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
 			var dex:Float = e.x - x + 3;
 			var dey:Float = e.y - y + 3;
 			
-			var rad:Float = (angle) / 180 * Math.PI;
-			var dx:Float = Math.cos(rad) * 7 + 5;
-			var dy:Float = Math.sin(rad) * 7 + 7;
+			var d : Float = (dex * dex) + (dey * dey);
+			if (d < GameProperties.AutoCannonRange * GameProperties.AutoCannonRange)	// compare to range squared because i do not want to use sqrt (performance)
+			{
+				var rad:Float = (angle) / 180 * Math.PI;
+				var dx:Float = Math.cos(rad) * 7 + 5;
+				var dy:Float = Math.sin(rad) * 7 + 7;
+				
+				var tarAngle:Float = Math.atan2(dey, dex) * 180/Math.PI;
+				//trace (dex + " " + dey + " " + tarAngle);
+				var s:Shot = new Shot(x + dx, y + dy, tarAngle, ShotType.MgSmall, _state, _playerNumber);
+				s.setDamage(_weaponSystems._autoDamageBase, _weaponSystems._autoDamageFactor);
+				_state.addShot(s);
+			
+				
+			}
+			
 
-			var tarAngle:Float = Math.atan2(dey, dex) * 180/Math.PI;
-			//trace (dex + " " + dey + " " + tarAngle);
-			var s:Shot = new Shot(x + dx, y + dy, tarAngle, ShotType.MgSmall, _state, _playerNumber);
-			s.setDamage(_weaponSystems._autoDamageBase, _weaponSystems._autoDamageFactor);
-			_state.addShot(s);
+		
 		}
 		else if (_weaponSystems._hasBFG)
 		{
@@ -393,9 +420,9 @@ class Player extends FlxObject
 	public function takeDamage(damage:Float):Void
 	{
 		_soundHit.play(true);
-		FlxG.camera.shake(0.007, 0.25);
-		var col = FlxColorUtil.makeFromARGB(0.5, 255, 0, 0);
-		FlxG.camera.flash(col, 0.25);
+		_cam.shake(0.007, 0.25);
+		var col = FlxColorUtil.makeFromARGB(0.25, 255, 0, 0);
+		_cam.flash(col, 0.25);
 		_health -=  damage;
 		checkDead();
 		
@@ -420,36 +447,9 @@ class Player extends FlxObject
 		if (alive)
 		{
 			alive = false;
-			//trace("die");
-			endThisLife();
+			_dead = true;
 			_state.PlayerDead();
 		}
-	}
-	
-	public function endThisLife():Void
-	{
-		//trace ("endlife");
-		_remainingLives = _remainingLives - 1;
-		if (_remainingLives >= 0)
-		{
-			//trace ("remaining lives " + _remainingLives );
-			respawn();
-		}
-		else 
-		{
-			_dead = true;
-		}
-	}
-	
-	private function respawn():Void
-	{
-		trace ("alive");
-		_health = _healthMax;
-		alive = true;
-		//trace (FlxG.camera.color);
-		FlxG.camera.fade(FlxColor.BLACK, 1, true);
-		x = _respawnPosition.x;
-		y = _respawnPosition.y;
 	}
 	
 	public function setRespawnPosition(pos:FlxPoint, moveToPosition  :Bool = false):Void
@@ -457,7 +457,12 @@ class Player extends FlxObject
 		_respawnPosition = pos;
 		if (moveToPosition)
 		{
-			respawn();
+			_health = _healthMax;
+			alive = true;
+			//trace (FlxG.camera.color);
+			FlxG.camera.fade(FlxColor.BLACK, 1, true);
+			x = _respawnPosition.x;
+			y = _respawnPosition.y;
 		}
 	}
 	

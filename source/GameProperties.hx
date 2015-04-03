@@ -27,18 +27,18 @@ class GameProperties
 	public static var EnemyTankTurnSpeed:Float = 0.75;
 	public static var EnemyTankDefaultHealth:Float = 14;
 	public static var EnemyTankShootInterval:Float = 1.5;
-	public static var EnemyTankDamage:Float = 4;
+	public static var EnemyTankDamage:Float = 3;
 
 	public static var EnemySamTurnSpeed:Float = 1.15;
 	public static var EnemySamDefaultHealth:Float = 14;
 	public static var EnemySamShootInterval:Float = 0.85;
-	public static var EnemySamDamage:Float = 7;
+	public static var EnemySamDamage:Float = 5;
 
 	public static var EnemyHeliMovementSpeed:Float = 30;
 	public static var EnemyHeliTurnSpeed:Float = 2;
 	public static var EnemyHeliDefaultHealth:Float = 10;
 	public static var EnemyHeliShootInterval:Float = 0.35;
-	public static var EnemyHeliDamage:Float = 3;
+	public static var EnemyHeliDamage:Float = 2;
 
 	public static var ShotBallisticMovementSpeed:Float = 100;
 	public static var ShotBallisticLifeTime:Float = 0.35;
@@ -62,7 +62,7 @@ class GameProperties
     public static var PickUpMagnetDistance:Float = 40;
     public static var PickUpMagnetMaxVelocity:Float = 90;
 
-	public static var p1Controls : Controls = new Controls(ControlType.GamePad);
-	public static var p2Controls : Controls = new Controls(ControlType.Keyboard);
+	//public static var p1Controls : Controls = new Controls(ControlType.GamePad);
+	//public static var p2Controls : Controls = new Controls(ControlType.Keyboard);
 
 }

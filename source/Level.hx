@@ -5,6 +5,7 @@ import flixel.addons.editors.ogmo.FlxOgmoLoader;
 import flixel.FlxObject;
 import flixel.tile.FlxTilemap;
 import flixel.util.FlxPoint;
+import flixel.util.FlxRect;
 import flixel.util.FlxVector;
 
 /**
@@ -30,6 +31,11 @@ class Level extends FlxBasic
 	public var _mapObjects1:FlxTilemap;
 	public var _missionInfo:String;
 	public var _targets:Array<String>;
+	
+	public function getLevelBounds () : FlxRect
+	{
+		return new FlxRect(0, 0, _mapBackground.width, _mapBackground.height);
+	}
 	
 	
 	public function loadLevel(levelNumber:Int)
