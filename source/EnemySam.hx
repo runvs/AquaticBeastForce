@@ -105,7 +105,7 @@ class EnemySam extends Enemy
     {
         if (_shootTimer >= _shootTimerMax)
         {
-			trace ("shoot (SAM)");
+			//trace ("shoot (SAM)");
             //var dAngle = FlxRandom.floatRanged(-GameProperties.PlayerWeaponMgSpreadInDegree, GameProperties.PlayerWeaponMgSpreadInDegree);
             var rad:Float = (angle) / 180 * Math.PI;
             var dx:Float = Math.cos(rad) * 7 + 5;

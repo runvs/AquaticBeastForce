@@ -43,8 +43,9 @@ class PlayState extends FlxState
 	
 	private var _tutorialText : FlxText;
 	
-	private var camera1:FlxCamera = new FlxCamera(0, 0, 80, 144);
-	private var camera2:FlxCamera = new FlxCamera(320, 0, 80, 144);
+	private var camera1:FlxCamera;
+	private var camera2:FlxCamera;
+	private var cameraVignette:FlxCamera;
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -67,9 +68,8 @@ class PlayState extends FlxState
 		
 		
         camera1 = new FlxCamera(0, 0, 80, 144);
-		
 		camera2 = new FlxCamera(320, 0, 80, 144);
-
+		cameraVignette =  new FlxCamera(0, 0, 160, 144);
 		
         _player1 = new Player(this, 1);
 		_player2 = new Player(this,2);
@@ -95,17 +95,14 @@ class PlayState extends FlxState
 			throw "I will crash now.";
 		}
 		
-		//add(_level);
-		//trace("Level Loaded");
-		
 		
 		camera1.follow(_player1);
 		camera2.follow(_player2);
 		
 		FlxG.cameras.add(camera1);
 		FlxG.cameras.add(camera2);
-		
-		//FlxG.camera.follow(_player1, FlxCamera.STYLE_TOPDOWN_TIGHT);
+		FlxG.cameras.add(cameraVignette);
+
 
 		_upgrade = new Upgrade(this);
 		
@@ -345,7 +342,7 @@ class PlayState extends FlxState
     
     override public function draw():Void 
     {
-			
+		FlxG.cameras.remove(cameraVignette, false);
 		_level.draw();
         _destroyableList.draw();
 
@@ -366,7 +363,18 @@ class PlayState extends FlxState
 		}		
 		
         super.draw();
+		
+		FlxG.cameras.remove(camera1, false);
+		FlxG.cameras.remove(camera2, false);
+		FlxG.cameras.add(cameraVignette);
+		cameraVignette.bgColor = FlxColorUtil.makeFromARGB(0.0, 0, 0, 0);
 		_vignette.draw();
+		
+		FlxG.cameras.remove(cameraVignette, false);
+		
+		FlxG.cameras.add(camera1);
+		FlxG.cameras.add(camera2);
+		FlxG.cameras.add(cameraVignette);
     }
 	
 	private function drawHud():Void
