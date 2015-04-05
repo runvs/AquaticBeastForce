@@ -449,6 +449,7 @@ class Player extends FlxObject
 			alive = false;
 			_dead = true;
 			_state.PlayerDead();
+            _state.faceInBlackScreen(this);
 		}
 	}
 	

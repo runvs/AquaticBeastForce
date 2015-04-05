@@ -47,7 +47,8 @@ class PlayState extends FlxState
 	private var camera1:FlxCamera;
 	private var camera2:FlxCamera;
 	private var cameraVignette:FlxCamera;
-	private var _blackScreen:FlxSprite;
+	private var _blackScreen1:FlxSprite;
+    private var _blackScreen2:FlxSprite;
 	
 	private var twoPlayer:Bool;	// true if two players, false if one player
 	
@@ -75,12 +76,20 @@ class PlayState extends FlxState
 		_vignette.origin.set();
 		_vignette.alpha = 0.4;
 		
-		_blackScreen = new FlxSprite();
-		_blackScreen.makeGraphic(160, 144, FlxColorUtil.makeFromARGB(1.0, 0, 0, 0));
-		_blackScreen.scrollFactor.set();
-		_blackScreen.origin.set();
-		
-		
+		_blackScreen1 = new FlxSprite();
+		_blackScreen1.makeGraphic(160, 144, FlxColorUtil.makeFromARGB(1.0, 0, 0, 0));
+		_blackScreen1.scrollFactor.set();
+		_blackScreen1.origin.set();
+        _blackScreen1.alpha = 0.0;
+        if (twoPlayer)
+        {
+            _blackScreen2 = new FlxSprite();
+            _blackScreen2.makeGraphic(160, 144, FlxColorUtil.makeFromARGB(1.0, 0, 0, 0));
+            _blackScreen2.scrollFactor.set();
+            _blackScreen2.origin.set();
+            _blackScreen2.alpha = 0.0;
+		}
+        
 		_upgrade = new Upgrade(this);	
 		_upgrade.alive = false;
 		
@@ -482,7 +491,7 @@ class PlayState extends FlxState
 			
 			if (_player1._dead)
 			{
-				_blackScreen.draw();
+				_blackScreen1.draw();
 			}
 		
 			FlxG.cameras.remove(camera1, false);
@@ -491,7 +500,7 @@ class PlayState extends FlxState
 			DrawLocator(_player2);
 			if (_player2._dead)
 			{
-				_blackScreen.draw();
+				_blackScreen2.draw();
 			}
 			FlxG.cameras.add(camera1);
 		}
@@ -784,5 +793,19 @@ class PlayState extends FlxState
 	{
 		twoPlayer = tp;
 	}
-	
+	public function faceInBlackScreen(p:Player)
+    {
+        var s : FlxSprite = null;
+        if (p == _player2)
+        {
+            s = _blackScreen2;
+        }
+        else 
+        {
+            s = _blackScreen1;
+        }
+        
+        FlxTween.tween(s, { alpha:1.0 }, 1.0);
+        
+    }
 }
