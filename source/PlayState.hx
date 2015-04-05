@@ -488,6 +488,7 @@ class PlayState extends FlxState
 			
 			_player1.drawHud();
 			DrawLocator(_player1);
+            DrawCrosshead (_player1);
 			
 			if (_player1._dead)
 			{
@@ -498,6 +499,7 @@ class PlayState extends FlxState
 			FlxG.cameras.add(camera2);
 			_player2.drawHud();
 			DrawLocator(_player2);
+            DrawCrosshead (_player2);
 			if (_player2._dead)
 			{
 				_blackScreen2.draw();
@@ -509,6 +511,7 @@ class PlayState extends FlxState
 		{
 			_player1.drawHud();
 			DrawLocator(_player1);
+            DrawCrosshead (_player1);
 		}
 		//trace ("end drawHud");
 	}
@@ -587,6 +590,7 @@ class PlayState extends FlxState
 			{
 				if (FlxG.pixelPerfectOverlap(p._sprite, s.sprite,1))
 				{
+                    addExplosion(new Explosion(s.sprite.x - 4, s.sprite.y - 6, true));
 					p.takeDamage(s.getDamage());
 					s.deleteObject();
 				}
@@ -594,6 +598,11 @@ class PlayState extends FlxState
 		}
 	}
 	
+    private function DrawCrosshead (p:Player):Void
+    {
+        p.drawCrosshead();
+    }
+    
 	function DrawLocator(p:Player):Void 
 	{
 		if (_level._missionInfo == "attack")

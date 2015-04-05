@@ -65,6 +65,8 @@ class Player extends FlxObject
 	private var _cam : FlxCamera;
 	public var _outside :Bool; // true if the player is outside the map;
 	private var _outsideTimer : Float;
+    
+    private var _cross : FlxSprite;
 	
 	public function new(state:PlayState, controls : Int, cam:FlxCamera)
 	{   
@@ -116,6 +118,15 @@ class Player extends FlxObject
 		_locator.updateHitbox();
 		_locator.animation.play("base");
 		
+        
+        _cross = new FlxSprite();
+        _cross.loadGraphic(AssetPaths.cross__png, true, 7, 7);
+        _cross.animation.add("base", [0, 1, 2, 3, 4, 0 ,1, 2, 3, 4, 0 , 5], 5);
+        _cross.alpha = 0.55;
+        //_cross.setGraphicSize(8, 8);
+        //_cross.updateHitbox();
+        _cross.angularVelocity = 45;
+        _cross.animation.play("base");
 		
 		_hud = new FlxSprite();
 		_hud.loadGraphic(AssetPaths.hud__png);
@@ -169,6 +180,8 @@ class Player extends FlxObject
         _sprite.angle = angle;
         _sprite.update();
         
+        _cross.update();
+        
         _shadowSprite.setPosition(x + 3, y + 3);
         _shadowSprite.angle = angle;
         _shadowSprite.update();
@@ -221,6 +234,17 @@ class Player extends FlxObject
 		_textPoints.draw();
 	}
 	
+    public function drawCrosshead() : Void 
+    {
+        var dx = Math.cos(angle/180.0*Math.PI) * 20;
+        var dy = Math.sin(angle/180.0*Math.PI) * 20;
+        // the +8 ofset corrects the players offset position
+        _cross.x = x + dx + 5;
+        _cross.y = y + dy + 5;
+        
+        _cross.draw();
+    }
+    
 	// pass the target's center position
 	public function drawLocator(targetX:Float, targetY:Float):Void
 	{
@@ -423,11 +447,15 @@ class Player extends FlxObject
 		_cam.shake(0.007, 0.25);
 		var col = FlxColorUtil.makeFromARGB(0.25, 255, 0, 0);
 		_cam.flash(col, 0.25);
+        FlashSprite();
 		_health -=  damage;
 		checkDead();
-		
 	}
-	
+	public function FlashSprite () :Void
+	{
+		_sprite.color = FlxColorUtil.makeFromARGB(1.0, 0, 0, 0);
+		FlxTween.color(_sprite, 0.1,  FlxColorUtil.makeFromARGB(1.0, 0, 0, 0),  FlxColorUtil.makeFromARGB(1.0, 255, 255, 255));
+	}
 	
 	private function checkDead()
 	{
