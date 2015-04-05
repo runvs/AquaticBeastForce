@@ -147,6 +147,8 @@ class PlayState extends FlxState
 
 		LoadLevel();
 		
+        Analytics.start();
+        
 		super.create();
 		//trace ("end create");
 	}
@@ -192,6 +194,8 @@ class PlayState extends FlxState
 	 */
 	override public function destroy():Void
 	{
+        trace ("destroy");
+        
 		super.destroy();
 	}
 	
@@ -221,9 +225,12 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
+        super.update();
+        Analytics.update();
 		//trace ("update");
 		if (!_upgrade.alive)
 		{		
+            // not in upgrade mode
 			FlxG.mouse.cursorContainer.visible = false;
 			_level.update();
 			_destroyableList.update();
@@ -232,6 +239,7 @@ class PlayState extends FlxState
 			_explosionList.update();
 			_pickUpList.update();
 			_overlay.update();
+            
 			
 			if (twoPlayer)
 			{
@@ -271,7 +279,9 @@ class PlayState extends FlxState
 			
 			if (FlxG.keys.justPressed.U)
 			{
-				ShowUpgrades();
+				//ShowUpgrades();
+                trace ("save");
+                Analytics.SaveAnalytics("test.analytics");
 			}
 		}
 		else
@@ -279,7 +289,7 @@ class PlayState extends FlxState
 			FlxG.mouse.cursorContainer.visible = true;
 			_upgrade.update();
 		}
-		super.update();
+		
 		//trace ("end update");
 	}
 
@@ -571,6 +581,7 @@ class PlayState extends FlxState
 					}
 					
 				}
+                // destroyables can be shot from player or enemies
 				for (i in 0 ... _destroyableList.length)
 				{
 					var d:DestroyableObject = _destroyableList.members[i];
@@ -580,14 +591,14 @@ class PlayState extends FlxState
 					}
 					if (FlxG.overlap(d.sprite, s.sprite))
 					{
-						if (FlxG.pixelPerfectOverlap(d.sprite, s.sprite,1))
+						if (FlxG.pixelPerfectOverlap( s.sprite, d.sprite, 1))
 						{
 							shotDestroyableCollision(d, s);
 						}
 					}
 				}
 			}
-		}
+		}   
 	}
 	
 	private function PlayerShotCollision(p:Player, s:Shot)
@@ -751,26 +762,46 @@ class PlayState extends FlxState
 	
 	public function addPoints (p : Int, playerNumber : Int = -1 )
 	{
+        
 		if (twoPlayer)
 		{
 			if (playerNumber == -1)
 			{
 				var s : Int = FlxRandom.sign();
-				_player1.ChangePoints(Std.int(p/2 +( 0.5 * s)));
-				_player2.ChangePoints(Std.int(p/2 -( 0.5 * 2)));
+                var p1 : Int ;
+                var p2 : Int ;
+                
+                if (s == 1 )
+                {
+                    p1 = Math.floor((p / 2.0));
+                    p2 = Math.ceil((p / 2.0));
+                }
+                else 
+                {
+                    p2 = Math.floor((p / 2.0));
+                    p1 = Math.ceil((p / 2.0));
+                }
+                
+				_player1.ChangePoints(p1);
+				_player2.ChangePoints(p2);
+                Analytics.LogPoints(_player1, 1, p1);
+                Analytics.LogPoints(_player2, 2, p2);
 			}
 			else if (playerNumber == 2)
 			{
 				_player2.ChangePoints(p);
+                Analytics.LogPoints(_player2, 2, p);
 			}
 			else
 			{
 				_player1.ChangePoints(p);
+                Analytics.LogPoints(_player1, 1, p);
 			}
 		}
 		else
 		{
 			_player1.ChangePoints(p);
+            Analytics.LogPoints(_player1, 1, p);
 		}
 	}
 	

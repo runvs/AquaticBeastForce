@@ -72,7 +72,6 @@ class EnemyTank extends Enemy
 		{
 			// drive towards player
 			
-			
 			var targetAngle:Float = direction.degrees;
 			var currentAngle:Float = angle;
 			

@@ -68,6 +68,9 @@ class MenuState extends FlxState
         _helpButton.onOut.callback = onOutHelpButton;
         _helpButton.visible = false;
 
+        add(_playButton);
+		add(_helpButton);
+        
         _helpScreen = new FlxSprite();
         _helpScreen.loadGraphic(AssetPaths.help__png, false, 160, 144);
         _helpScreen.scrollFactor.set();
@@ -80,8 +83,7 @@ class MenuState extends FlxState
 		_vignette.origin.set();
 		_vignette.alpha = 0.4;
 		
-		add(_playButton);
-		add(_helpButton);
+		
 
 		add(_helpScreen);
 		add(_vignette);

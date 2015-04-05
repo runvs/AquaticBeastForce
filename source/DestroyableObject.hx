@@ -124,9 +124,15 @@ class DestroyableObject extends FlxObject
     {
         if (_health <= 0)
         {
+            Analytics.LogDestroyableDestroyed(this);
             kill();
             _state.addPoints(FlxRandom.intRanged(1, 3), _lastHit);
         }
+    }
+    
+    public function getLastHit () : Int 
+    {
+        return _lastHit;
     }
 	
 	public function setLastHit ( playerNumber : Int ) : Void

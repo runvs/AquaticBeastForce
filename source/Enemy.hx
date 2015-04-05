@@ -101,6 +101,7 @@ class Enemy extends FlxObject
         {
             if (_health <= 0)
             {
+                Analytics.LogEnemyDestroyed(this);
                 kill();
 				SpawnPickUp();
 				
@@ -109,6 +110,11 @@ class Enemy extends FlxObject
         }
     }
 
+    public function getLastHit () : Int 
+    {
+        return _lastHit;
+    }
+    
 	private function SpawnPickUp() : Void 
 	{
 		if (!_spawnedPickUp)
