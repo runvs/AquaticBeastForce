@@ -41,13 +41,15 @@ class PlayState extends FlxState
 	
 	private var _overlay : FlxSprite;
 	private var _vignette : FlxSprite;
-	
+	private var _separatrix :FlxSprite;
+    
 	private var _tutorialText : FlxText;
 	
 	private var camera1:FlxCamera;
 	private var camera2:FlxCamera;
 	private var cameraVignette:FlxCamera;
-	private var _blackScreen1:FlxSprite;
+	
+    private var _blackScreen1:FlxSprite;
     private var _blackScreen2:FlxSprite;
 	
 	private var twoPlayer:Bool;	// true if two players, false if one player
@@ -75,6 +77,12 @@ class PlayState extends FlxState
 		_vignette.scrollFactor.set();
 		_vignette.origin.set();
 		_vignette.alpha = 0.4;
+        
+        _separatrix  = new FlxSprite();
+        _separatrix.makeGraphic(2, 144, FlxColorUtil.makeFromARGB(1.0, 67, 43, 109));
+        _separatrix.scrollFactor.set();
+        _separatrix.origin.set();
+        _separatrix.setPosition(79, 0);
 		
 		_blackScreen1 = new FlxSprite();
 		_blackScreen1.makeGraphic(160, 144, FlxColorUtil.makeFromARGB(1.0, 0, 0, 0));
@@ -642,7 +650,7 @@ class PlayState extends FlxState
 			FlxG.cameras.add(cameraVignette);
 			cameraVignette.bgColor = FlxColorUtil.makeFromARGB(0.0, 0, 0, 0);
 			_vignette.draw();
-			
+			_separatrix.draw();
 			// correct camera draw order
 			FlxG.cameras.remove(cameraVignette, false);
 			
