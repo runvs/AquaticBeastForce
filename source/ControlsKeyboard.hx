@@ -32,6 +32,7 @@ class ControlsKeyboard implements IControls
 		strafeRight = false;
 		strafeLeft = false;
 		shot = false;
+		showUpdates = false;
 	
 		
 		up = FlxG.keys.anyPressed(["W", "UP"]);
@@ -40,7 +41,8 @@ class ControlsKeyboard implements IControls
 		right = FlxG.keys.anyPressed(["D", "RIGHT"]);
 		strafeRight = FlxG.keys.pressed.E;
 		strafeLeft = FlxG.keys.pressed.Q;
-		shot = FlxG.keys.anyPressed(["Space","X"]);
+		shot = FlxG.keys.anyPressed(["Space", "X"]);
+		showUpdates = FlxG.keys.justPressed.P;
 	}
 	
 	public function getRotationFactor() : Float

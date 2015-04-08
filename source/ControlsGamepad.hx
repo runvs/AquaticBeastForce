@@ -38,6 +38,7 @@ class ControlsGamepad implements IControls
 		strafeRight = false;
 		strafeLeft = false;
 		shot = false;
+		showUpdates = false;
 	
 		_gamePad = FlxG.gamepads.lastActive;
 		if (_gamePad == null) {
@@ -84,6 +85,7 @@ class ControlsGamepad implements IControls
 		var dpadUp = _gamePad.pressed(XboxButtonID.DPAD_UP);
 		var dpadDown = _gamePad.pressed(XboxButtonID.DPAD_DOWN);
 		
+		
 		if (_gamePad.pressed(XboxButtonID.RIGHT_TRIGGER))
 		{
 			shot = true;
@@ -93,6 +95,7 @@ class ControlsGamepad implements IControls
 		{
 			showUpdates = true;
 		}
+		
 		
 		
 	}

@@ -53,7 +53,9 @@ class Player extends FlxObject
 	private var _currentPoints:Int = 0;
     public var TotalPoints:Int = 0;
 	
-	private var _textPoints : FlxText;
+	private var _textPoints1 : FlxText;
+	private var _textPoints2 : FlxText;
+	
 	
 	private var _soundShoot : FlxSound;
 	private var _soundPickup : FlxSound;
@@ -121,11 +123,11 @@ class Player extends FlxObject
         
         _cross = new FlxSprite();
         _cross.loadGraphic(AssetPaths.cross__png, true, 7, 7);
-        _cross.animation.add("base", [0, 1, 2, 3, 4, 0 ,1, 2, 3, 4, 0 , 5], 5);
+        _cross.animation.add("base", [1, 2, 3, 4,1, 2, 3, 4,  5], 5);
         _cross.alpha = 0.55;
         //_cross.setGraphicSize(8, 8);
         //_cross.updateHitbox();
-        _cross.angularVelocity = 45;
+        _cross.angularVelocity = 55;
         _cross.animation.play("base");
 		
 		_hud = new FlxSprite();
@@ -154,10 +156,16 @@ class Player extends FlxObject
 		
 		//_currentPoints = 100;
 		
-		_textPoints = new FlxText(5, 5, 161, "");
-		_textPoints.color = FlxColorUtil.makeFromARGB(1.0, 3, 32, 4);
-		_textPoints.scrollFactor.set();
-        _textPoints.origin.set(8, 4);
+		_textPoints1 = new FlxText(4, 4, 161, "");
+		_textPoints1.color = FlxColorUtil.makeFromARGB(1.0, 3, 32, 4);
+		_textPoints1.scrollFactor.set();
+        _textPoints1.origin.set(8, 4);
+		
+		_textPoints2 = new FlxText(5, 5, 161, "");
+		_textPoints2.color = FlxColorUtil.makeFromARGB(1.0, 215, 238, 218);
+		_textPoints2.scrollFactor.set();
+        _textPoints2.origin.set(8, 4);
+		//FlxTween.tween(_textPoints2.offset, { x : 6.5, y:6.5 }, 0.6, { type:FlxTween.PINGPONG });	// not working :(
 		
 		_soundShoot = new FlxSound();
         _soundShoot = FlxG.sound.load(AssetPaths.shoot__ogg, 0.5 , false, false , false);
@@ -218,8 +226,10 @@ class Player extends FlxObject
 	public function drawHud():Void
 	{
 		_hudBackground.draw();
-		_textPoints.text = Std.string(_currentPoints);
-		_textPoints.update();
+		_textPoints1.text = Std.string(_currentPoints);
+		_textPoints1.update();
+		_textPoints2.text = Std.string(_currentPoints);
+		_textPoints2.update();
 		var factor:Float = _health / _healthMax;
         if (factor < 0)
         {
@@ -231,7 +241,9 @@ class Player extends FlxObject
         
 		
 		_hud.draw();
-		_textPoints.draw();
+		_textPoints1.draw();
+		_textPoints2.draw();
+		
 	}
 	
     public function drawCrosshead() : Void 
@@ -319,6 +331,12 @@ class Player extends FlxObject
 			}
 		
 		}
+		
+		if (_control.showUpdates)
+		{
+			CheckRepair();
+		}
+		
 		if (_weaponSystems._hasAutoTurret)
 		{
 			if (_specialWeaponFireTime > _weaponSystems._specialWeaponFireTimeMax)
@@ -434,6 +452,15 @@ class Player extends FlxObject
 		
 		
 	}
+
+	public function CheckRepair () : Void
+	{
+		if ( _currentPoints >= 15)
+		{
+			_currentPoints -= 15;
+			repair();
+		}
+	}
 	
 	public function repair():Void
 	{
@@ -542,8 +569,10 @@ class Player extends FlxObject
 			TotalPoints += diff;
 			_currentPoints += diff;
 			
-			_textPoints.scale.set(1.5, 1.5);
-			FlxTween.tween(_textPoints.scale, { x:1.0, y:1.0 }, 0.25);
+			_textPoints1.scale.set(1.5, 1.5);
+			FlxTween.tween(_textPoints1.scale, { x:1.0, y:1.0 }, 0.25);
+			_textPoints2.scale.set(1.5, 1.5);
+			FlxTween.tween(_textPoints2.scale, { x:1.0, y:1.0 }, 0.25);
 		}
 		else
 		{

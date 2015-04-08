@@ -91,7 +91,6 @@ class Analytics
             fout.writeString(Std.string(_allEvents.pop()) + "\n");
             
         }
-        
         fout.close();
     }
     
