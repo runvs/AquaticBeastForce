@@ -17,7 +17,8 @@ import flixel.input.gamepad.XboxButtonID;
 class BriefingRoomState extends FlxState
 {
     private var _briefingSprite:FlxSprite;
-    private var _briefingText:FlxText;
+    private var _briefingText1:FlxText;
+	private var _briefingText2:FlxText;
     private var _briefingTextBackground:FlxSprite;
     private var _bubblePosition:FlxVector;
     private var _timeSinceStart = 0.0;
@@ -47,11 +48,19 @@ class BriefingRoomState extends FlxState
         _briefingTextBackground.alpha = 0.6;
         add(_briefingTextBackground);
         
-        _briefingText = new FlxText();
-        _briefingText.alignment = 'center';
-        _briefingText.wordWrap = true;
-        _briefingText.fieldWidth = 100;
-        add(_briefingText);
+        _briefingText1 = new FlxText();
+        _briefingText1.alignment = 'center';
+        _briefingText1.wordWrap = true;
+        _briefingText1.fieldWidth = 100;
+		_briefingText1.color = FlxColorUtil.makeFromARGB(1.0, 3, 32, 4);
+        add(_briefingText1);
+		
+		_briefingText2 = new FlxText();
+        _briefingText2.alignment = 'center';
+        _briefingText2.wordWrap = true;
+        _briefingText2.fieldWidth = 100;
+		_briefingText2.color = FlxColorUtil.makeFromARGB(1.0, 215, 238, 218);
+        add(_briefingText2);
 		
 		_vignette = new FlxSprite();
 		_vignette.loadGraphic(AssetPaths.Vignette__png, false, 160, 144);
@@ -107,20 +116,23 @@ class BriefingRoomState extends FlxState
         
         if (_missionStringIndex < _missionStrings.length)
         {
-            _briefingText.text = _missionStrings[_missionStringIndex];
+            _briefingText1.text = _missionStrings[_missionStringIndex];
+			_briefingText2.text = _missionStrings[_missionStringIndex];
             
             _bubblePosition.set(
                 30 + Math.sin(_timeSinceStart * 2 + 4.2),
                 20 + 2 * Math.sin(_timeSinceStart * 1.5)
             );
-            _briefingText.setPosition(_bubblePosition.x, _bubblePosition.y);
+            _briefingText1.setPosition(_bubblePosition.x-1, _bubblePosition.y-1);
+			_briefingText2.setPosition(_bubblePosition.x, _bubblePosition.y);
             
-            _briefingTextBackground.setGraphicSize(_briefingText.frameWidth, _briefingText.frameHeight);
-            _briefingTextBackground.setPosition(_briefingText.x, _briefingText.y);
+            _briefingTextBackground.setGraphicSize(_briefingText1.frameWidth, _briefingText1.frameHeight);
+            _briefingTextBackground.setPosition(_briefingText1.x, _briefingText1.y);
         }
         else
         {
-            _briefingText.text = '';
+            _briefingText1.text = '';
+			_briefingText2.text = '';
             _briefingTextBackground.visible = false;
         }
         

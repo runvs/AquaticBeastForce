@@ -23,9 +23,8 @@ import haxe.CallStack;
 /**
  * A FlxState which can be used for the actual gameplay.
  */
-class PlayState extends FlxState
+class PlayState extends FlxState implements IDisplayAchievment
 {
-
 	private var _player1:Player;
 	private var _player2:Player;
 	
@@ -66,7 +65,8 @@ class PlayState extends FlxState
 	 */
 	override public function create():Void
 	{
-		trace ("start create");
+		//trace ("start create");
+		Achievments.setCallbacker(this);
 		_enemies = new FlxTypedGroup<Enemy>();
 		_shotlist = new FlxTypedGroup<Shot>();
 		_explosionList = new FlxTypedGroup<Explosion>();
@@ -227,6 +227,7 @@ class PlayState extends FlxState
 	{
         super.update();
         Analytics.update();
+		Achievments.update();
 		//trace ("update");
 		if (!_upgrade.alive)
 		{		
@@ -856,4 +857,11 @@ class PlayState extends FlxState
         FlxTween.tween(s, { alpha:1.0 }, 1.0);
         
     }
+	
+	/* INTERFACE IDisplayAchievment */
+	
+	public function DisplayAchievmentMessage(s:String):Void 
+	{
+		
+	}
 }

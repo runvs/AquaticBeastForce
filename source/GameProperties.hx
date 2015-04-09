@@ -6,7 +6,7 @@ package ;
  */
 class GameProperties
 {
-    public static var PlayerMovementSpeed:Float = 60;
+    public static var PlayerMovementSpeed:Float = 70;
     public static var PlayerRotationSpeed:Float = 2.5;
 
 	public static var PlayerWeaponMgSpreadInDegree = 6;

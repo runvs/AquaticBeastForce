@@ -89,6 +89,8 @@ class MenuState extends FlxState
 		add(_vignette);
 
 		FlxG.sound.playMusic(AssetPaths.ABF_OST__ogg, 1.0, true);
+		
+		Achievments.init();
 	}
 	
 	public function startGame():Void
