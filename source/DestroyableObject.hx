@@ -13,18 +13,17 @@ import haxe.ds.StringMap;
 
 /**
  * ...
- * @author 
+ * @author
  */
 class DestroyableObject extends FlxObject
 {
     public var sprite:FlxSprite;
     public var name:String;
-    
+
     public var _type:String;
-    private var _health:Float;
-    private var _state:PlayState;
+
 	private var _lastHit:Int; 	// -1 enemy, 1 p1, 2 p2
-    
+
     static private function GetHitpoints(type:String):Float
     {
         switch(type)
@@ -58,7 +57,7 @@ class DestroyableObject extends FlxObject
                 return new FlxVector(16, 16);
         }
     }
-    
+
     static private function GetSize(type:String):FlxVector
     {
         switch(type)
@@ -73,7 +72,22 @@ class DestroyableObject extends FlxObject
                 return new FlxVector(16, 16);
         }
     }
-    
+
+    override public function kill():Void
+    {
+        super.kill();
+
+        if (alive && exists)
+        {
+            /*
+             * Flip the image using a timer
+             * after the explosion has started.
+             * Fancy juicy shit :D
+             */
+            var t: FlxTimer = new FlxTimer(0.2, switchImage);
+        }
+    }
+
     private function addAnimations():Void
     {
         switch(_type)
@@ -87,26 +101,26 @@ class DestroyableObject extends FlxObject
         }
     }
 
-    public function new(X:Float=0, Y:Float=0, type:String, state:PlayState) 
+    public function new(X:Float=0, Y:Float=0, type:String, state:PlayState)
     {
         _type = type;
         _state = state;
 		_lastHit = -1;
-        
+
         var imagepath:String = "assets/images/" + _type + ".png";
         var size:FlxVector = GetSize(_type);
         var scale:FlxVector = GetScale(_type);
-        
+
         sprite = new FlxSprite();
         sprite.loadGraphic(imagepath, true, Std.int(size.x), Std.int(size.y));
         sprite.setGraphicSize(Std.int(scale.x), Std.int(scale.y));
         sprite.updateHitbox();
-        
+
         addAnimations();
         sprite.animation.play("normal");
-        
+
         _health = GetHitpoints(_type);
-        
+
         super(X, Y);
     }
 
@@ -120,59 +134,35 @@ class DestroyableObject extends FlxObject
         }
     }
 
-    private function checkDead()
-    {
-        if (_health <= 0)
-        {
-            Analytics.LogDestroyableDestroyed(this);
-            kill();
-            _state.addPoints(FlxRandom.intRanged(1, 3), _lastHit);
-        }
-    }
-    
-    public function getLastHit () : Int 
+    public function getLastHit () : Int
     {
         return _lastHit;
     }
-	
+
 	public function setLastHit ( playerNumber : Int ) : Void
 	{
 		_lastHit = playerNumber;
 	}
 
-    public override function kill():Void
-    {
-        if (alive && exists)
-        {
-            alive = false;
-            _state.addExplosion(new Explosion(x + Std.int((GetScale(_type).x) - 16) / 2, y + (Std.int(GetScale(_type).y) - 16) / 2, false, true));	// probably just a small explosion?
-            var t: FlxTimer = new FlxTimer(0.2, switchImage);	// this timer is needed so the image is flipped after the explosion has started. Fancy juicy shit :D
-            if (name != "")
-            {
-                trace ("object " + name + " destroyed");
-            }
-        }
-    }
-
     public function switchImage(t:FlxTimer):Void
     {
         sprite.animation.play("destroyed");
     }
-	
+
 	public function FlashSprite () :Void
 	{
 		sprite.color = FlxColorUtil.makeFromARGB(1.0, 0, 0, 0);
 		FlxTween.color(sprite, 0.1,  FlxColorUtil.makeFromARGB(1.0, 0, 0, 0),  FlxColorUtil.makeFromARGB(1.0, 255, 255, 255));
 	}
-	
 
-    override public function draw():Void 
+
+    override public function draw():Void
     {
         super.draw();
         sprite.draw();
     }
 
-    override public function update():Void 
+    override public function update():Void
     {
         sprite.x = x;
         sprite.y = y;

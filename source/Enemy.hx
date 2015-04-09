@@ -25,41 +25,44 @@ class Enemy extends FlxObject
 
     private var _shadowSprite:FlxSprite;
     private var _shadowDistance:Float;
-    private var _state:PlayState;
-
-    private var _health:Float;
-    private var _healthMax:Float;
 
     private var _shootTimer:Float;
     private var _shootTimerMax:Float;
-	private var _hasSeenPlayer:Bool;
-	private var _spawnedPickUp:Bool;
-	
-	private var _lastHit : Int;		// -1 enemy, 1 p1, 2 p2;
-	
+    private var _hasSeenPlayer:Bool;
+    private var _spawnedPickUp:Bool;
+
+    private var _lastHit : Int;        // -1 enemy, 1 p1, 2 p2;
+
     public function new()
     {
-		_hasSeenPlayer = false;
-		_spawnedPickUp = false;
-		_lastHit = -1;
+        _hasSeenPlayer = false;
+        _spawnedPickUp = false;
+        _lastHit = -1;
         super();
     }
 
-    override public function update():Void 
+    override public function update():Void
     {
         sprite.setPosition(x, y);
         _shadowSprite.setPosition(x + _shadowDistance, y + _shadowDistance);
-        
+
         sprite.angle = angle;
         _shadowSprite.angle = angle;
-        
+
         sprite.update();
         _shadowSprite.update();
-        
+
         velocity.x *= 0.96;
         velocity.y *= 0.96;
-        
+
         super.update();
+    }
+
+    override public function draw():Void
+    {
+        _shadowSprite.draw();
+        sprite.draw();
+        super.draw();
     }
 
     public function shoot():Void
@@ -70,11 +73,11 @@ class Enemy extends FlxObject
             var rad:Float = (angle) / 180 * Math.PI;
             var dx:Float = Math.cos(rad) * 7 + 5;
             var dy:Float = Math.sin(rad) * 7 + 7;
-            
+
             var s:Shot = new Shot(x + dx, y + dy, angle + dAngle, ShotType.Mg, _state, -1);
-			s.setDamage(1, 1);
+            s.setDamage(1, 1);
             _state.addShot(s);
-            
+
             _shootTimer = 0;
         }
     }
@@ -84,16 +87,16 @@ class Enemy extends FlxObject
         if (alive && exists)
         {
             _health -=  damage;
-			FlashSprite();
+            FlashSprite();
             checkDead();
-			_hasSeenPlayer = true;
-			
+            _hasSeenPlayer = true;
+
         }
     }
-	public function setLastHit ( playerNumber : Int ) : Void
-	{
-		_lastHit = playerNumber;
-	}
+    public function setLastHit ( playerNumber : Int ) : Void
+    {
+        _lastHit = playerNumber;
+    }
 
     private function checkDead()
     {
@@ -103,54 +106,41 @@ class Enemy extends FlxObject
             {
                 Analytics.LogEnemyDestroyed(this);
                 kill();
-				SpawnPickUp();
-				
-				_state.addPoints(FlxRandom.intRanged(3, 6), _lastHit);
+                SpawnPickUp();
+
+                _state.addPoints(FlxRandom.intRanged(3, 6), _lastHit);
             }
         }
     }
 
-    public function getLastHit () : Int 
+    public function getLastHit () : Int
     {
         return _lastHit;
     }
-    
-	private function SpawnPickUp() : Void 
-	{
-		if (!_spawnedPickUp)
-		{
-			if (FlxRandom.float() < GameProperties.PickUpDropChance)
-			{
-				var p : PickUp = new PickUp(new FlxPoint(x, y));
-				_state.addPickUp(p);
-			}
-			_spawnedPickUp = true;
-		}
-	}
-	
-    override public function draw():Void 
-    {
-        _shadowSprite.draw();
-        sprite.draw();
-        super.draw();
-    }
-	
-	public function FlashSprite () :Void
-	{
-		sprite.color = FlxColorUtil.makeFromARGB(1.0, 0, 0, 0);
-		FlxTween.color(sprite, 0.1,  FlxColorUtil.makeFromARGB(1.0, 0, 0, 0),  FlxColorUtil.makeFromARGB(1.0, 255, 255, 255));
-	}
-	
 
-    public override function kill():Void
+    private function SpawnPickUp() : Void
     {
-        super.kill();
-        // we need to call kill first, otherwise the enemy could get damaged by its own explosion and cause an endless loop
-        _state.addExplosion(new Explosion(x , y, false , true ));
+        if (!_spawnedPickUp)
+        {
+            if (FlxRandom.float() < GameProperties.PickUpDropChance)
+            {
+                var p : PickUp = new PickUp(new FlxPoint(x, y));
+                _state.addPickUp(p);
+            }
+            _spawnedPickUp = true;
+        }
     }
-	
-	public function UnseePlayer():Void
-	{
-		_hasSeenPlayer = false;
-	}
+
+    public function FlashSprite () :Void
+    {
+        sprite.color = FlxColorUtil.makeFromARGB(1.0, 0, 0, 0);
+        FlxTween.color(sprite, 0.1,  FlxColorUtil.makeFromARGB(1.0, 0, 0, 0),  FlxColorUtil.makeFromARGB(1.0, 255, 255, 255));
+    }
+
+
+
+    public function UnseePlayer():Void
+    {
+        _hasSeenPlayer = false;
+    }
 }
