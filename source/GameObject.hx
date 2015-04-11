@@ -35,19 +35,23 @@ class GameObject extends FlxObject
 
     public function new(X:Float=0, Y:Float=0)
     {
+        if (_scale == null)
+        {
+            _scale = new FlxVector(16, 16);
+        }
+        
         super(X, Y);
     }
 
     public override function kill():Void
     {
-        /*
-         * We need to call kill first, otherwise the GameObject
-         * could get damaged by its own explosion
-         * and cause an endless loop
-         */
-
         if (alive && exists)
         {
+            /*
+             * We need to call super.kill first, otherwise the GameObject
+             * could get damaged by its own explosion
+             * and cause an endless loop
+             */
             super.kill();
             _state.addExplosion( new Explosion(x + Std.int(_scale.x - 16) / 2, y + Std.int(_scale.y - 16) / 2, false, true) );
         }
