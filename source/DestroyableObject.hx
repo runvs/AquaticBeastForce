@@ -1,28 +1,17 @@
-package ;
+package;
 
-import flixel.FlxG;
-import flixel.FlxObject;
-import flixel.FlxSprite;
-import flixel.tweens.FlxTween;
-import flixel.util.FlxColorUtil;
-import flixel.util.FlxPoint;
-import flixel.util.FlxRandom;
-import flixel.util.FlxTimer;
 import flixel.util.FlxVector;
-import haxe.ds.StringMap;
+import flixel.util.FlxTimer;
+import flixel.FlxSprite;
+import flixel.util.FlxRandom;
 
 /**
  * ...
  * @author
  */
-class DestroyableObject extends FlxObject
+class DestroyableObject extends GameObject
 {
-    public var sprite:FlxSprite;
-    public var name:String;
-
     public var _type:String;
-
-	private var _lastHit:Int; 	// -1 enemy, 1 p1, 2 p2
 
     static private function GetHitpoints(type:String):Float
     {
@@ -105,7 +94,7 @@ class DestroyableObject extends FlxObject
     {
         _type = type;
         _state = state;
-		_lastHit = -1;
+        _lastHit = -1;
 
         var imagepath:String = "assets/images/" + _type + ".png";
         var size:FlxVector = GetSize(_type);
@@ -129,31 +118,25 @@ class DestroyableObject extends FlxObject
         if (alive && exists)
         {
             _health -= damage;
-			FlashSprite();
+            flashSprite();
             checkDead();
         }
     }
-
-    public function getLastHit () : Int
+    
+    private function checkDead()
     {
-        return _lastHit;
+        if (_health <= 0)
+        {
+            Analytics.LogDestroyableDestroyed(this);
+            kill();
+            _state.addPoints(FlxRandom.intRanged(1, 3), _lastHit);
+        }
     }
-
-	public function setLastHit ( playerNumber : Int ) : Void
-	{
-		_lastHit = playerNumber;
-	}
 
     public function switchImage(t:FlxTimer):Void
     {
         sprite.animation.play("destroyed");
     }
-
-	public function FlashSprite () :Void
-	{
-		sprite.color = FlxColorUtil.makeFromARGB(1.0, 0, 0, 0);
-		FlxTween.color(sprite, 0.1,  FlxColorUtil.makeFromARGB(1.0, 0, 0, 0),  FlxColorUtil.makeFromARGB(1.0, 255, 255, 255));
-	}
 
 
     override public function draw():Void

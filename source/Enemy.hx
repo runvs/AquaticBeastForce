@@ -1,37 +1,19 @@
-package ;
-import flixel.FlxObject;
-import flixel.FlxSprite;
-import flixel.FlxG;
-import flixel.tweens.FlxTween;
-import flixel.util.FlxColorUtil;
-import flixel.util.FlxPoint;
+package;
+
 import flixel.util.FlxRandom;
-import flixel.util.FlxSpriteUtil;
-import flixel.util.FlxTimer;
-import flixel.util.FlxVector;
-using flixel.util.FlxSpriteUtil;
 
 /**
  * ...
  * @author Thunraz
  */
-class Enemy extends FlxObject
+class Enemy extends GameObject
 {
     public var type:EnemyType;
-    public var name:String;
     public var isGround:Bool;
-    public var sprite:FlxSprite;
-
-
-    private var _shadowSprite:FlxSprite;
-    private var _shadowDistance:Float;
-
+    
     private var _shootTimer:Float;
     private var _shootTimerMax:Float;
     private var _hasSeenPlayer:Bool;
-    private var _spawnedPickUp:Bool;
-
-    private var _lastHit : Int;        // -1 enemy, 1 p1, 2 p2;
 
     public function new()
     {
@@ -41,7 +23,7 @@ class Enemy extends FlxObject
         super();
     }
 
-    override public function update():Void
+    public override function update():Void
     {
         sprite.setPosition(x, y);
         _shadowSprite.setPosition(x + _shadowDistance, y + _shadowDistance);
@@ -87,15 +69,11 @@ class Enemy extends FlxObject
         if (alive && exists)
         {
             _health -=  damage;
-            FlashSprite();
+            flashSprite();
             checkDead();
             _hasSeenPlayer = true;
 
         }
-    }
-    public function setLastHit ( playerNumber : Int ) : Void
-    {
-        _lastHit = playerNumber;
     }
 
     private function checkDead()
@@ -106,35 +84,11 @@ class Enemy extends FlxObject
             {
                 Analytics.LogEnemyDestroyed(this);
                 kill();
-                SpawnPickUp();
+                spawnPickUp();
 
                 _state.addPoints(FlxRandom.intRanged(3, 6), _lastHit);
             }
         }
-    }
-
-    public function getLastHit () : Int
-    {
-        return _lastHit;
-    }
-
-    private function SpawnPickUp() : Void
-    {
-        if (!_spawnedPickUp)
-        {
-            if (FlxRandom.float() < GameProperties.PickUpDropChance)
-            {
-                var p : PickUp = new PickUp(new FlxPoint(x, y));
-                _state.addPickUp(p);
-            }
-            _spawnedPickUp = true;
-        }
-    }
-
-    public function FlashSprite () :Void
-    {
-        sprite.color = FlxColorUtil.makeFromARGB(1.0, 0, 0, 0);
-        FlxTween.color(sprite, 0.1,  FlxColorUtil.makeFromARGB(1.0, 0, 0, 0),  FlxColorUtil.makeFromARGB(1.0, 255, 255, 255));
     }
 
 
