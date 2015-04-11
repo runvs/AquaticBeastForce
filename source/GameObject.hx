@@ -88,4 +88,16 @@ class GameObject extends FlxObject
         sprite.color = black;
         FlxTween.color(sprite, 0.1, black, white);
     }
+
+    public function takeDamage(damage:Float):Void
+    {
+        if (alive && exists)
+        {
+            _health -= damage;
+            flashSprite();
+            checkDead();
+        }
+    }
+    
+    private function checkDead():Void { }
 }

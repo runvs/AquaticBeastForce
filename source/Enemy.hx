@@ -63,20 +63,18 @@ class Enemy extends GameObject
             _shootTimer = 0;
         }
     }
-
-    public function takeDamage(damage:Float):Void
+    
+    public override function takeDamage(damage:Float):Void 
     {
         if (alive && exists)
         {
-            _health -=  damage;
-            flashSprite();
-            checkDead();
             _hasSeenPlayer = true;
-
         }
+        
+        super.takeDamage(damage);
     }
 
-    private function checkDead()
+    private override function checkDead():Void
     {
         if (alive && exists)
         {

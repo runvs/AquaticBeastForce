@@ -72,7 +72,7 @@ class DestroyableObject extends GameObject
              * Flip the image using a timer
              * after the explosion has started.
              * Fancy juicy shit :D
-             */
+             */           
             var t: FlxTimer = new FlxTimer(0.2, switchImage);
         }
     }
@@ -112,18 +112,8 @@ class DestroyableObject extends GameObject
 
         super(X, Y);
     }
-
-    public function takeDamage(damage:Float):Void
-    {
-        if (alive && exists)
-        {
-            _health -= damage;
-            flashSprite();
-            checkDead();
-        }
-    }
     
-    private function checkDead()
+    private override function checkDead():Void
     {
         if (_health <= 0)
         {
