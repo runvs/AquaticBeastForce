@@ -98,11 +98,11 @@ class DestroyableObject extends GameObject
 
         var imagepath:String = "assets/images/" + _type + ".png";
         var size:FlxVector = GetSize(_type);
-        var scale:FlxVector = GetScale(_type);
+        _scale = GetScale(_type);
 
         sprite = new FlxSprite();
         sprite.loadGraphic(imagepath, true, Std.int(size.x), Std.int(size.y));
-        sprite.setGraphicSize(Std.int(scale.x), Std.int(scale.y));
+        sprite.setGraphicSize(Std.int(_scale.x), Std.int(_scale.y));
         sprite.updateHitbox();
 
         addAnimations();
