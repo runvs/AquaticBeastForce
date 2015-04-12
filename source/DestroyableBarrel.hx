@@ -14,7 +14,7 @@ class DestroyableBarrel extends DestroyableObject
         _scale = scale;
 
         sprite = new FlxSprite();
-        sprite.loadGraphic(AssetPaths.barrel__png, true, Std.int(size.x), Std.int(size.y));
+        sprite.loadGraphic(AssetPaths.destroyableBarrel__png, true, Std.int(size.x), Std.int(size.y));
         sprite.setGraphicSize(Std.int(_scale.x), Std.int(_scale.y));
         sprite.updateHitbox();
         

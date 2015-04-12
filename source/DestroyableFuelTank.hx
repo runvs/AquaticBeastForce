@@ -14,7 +14,7 @@ class DestroyableFuelTank extends DestroyableObject
         _scale = scale;
 
         sprite = new FlxSprite();
-        sprite.loadGraphic(AssetPaths.fueltank__png, true, Std.int(size.x), Std.int(size.y));
+        sprite.loadGraphic(AssetPaths.destroyableFuelTank__png, true, Std.int(size.x), Std.int(size.y));
         sprite.setGraphicSize(Std.int(_scale.x), Std.int(_scale.y));
         sprite.updateHitbox();
         
