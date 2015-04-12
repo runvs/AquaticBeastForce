@@ -53,19 +53,17 @@ class DestroyableObject extends GameObject
     }
 
 
-    override public function draw():Void
+    public override function draw():Void
     {
         super.draw();
         sprite.draw();
     }
 
-    override public function update():Void
+    public override function update():Void
     {
         sprite.x = x;
         sprite.y = y;
         sprite.update();
         super.update();
     }
-
-
 }
