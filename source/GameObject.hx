@@ -16,11 +16,6 @@ class GameObject extends FlxObject
     public var sprite:FlxSprite;
     public var name:String;
     
-    private var _scale:FlxVector;
-    private var _health:Float;
-    private var _healthMax:Float;
-    private var _spawnedPickUp:Bool;
-    private var _state:PlayState;
     /*
      * Who hit this object the last time?
      * -1 enemy
@@ -28,6 +23,11 @@ class GameObject extends FlxObject
      *  2 player 2
      */
     private var _lastHit:Int;
+    private var _scale:FlxVector;
+    private var _health:Float;
+    private var _healthMax:Float;
+    private var _spawnedPickUp:Bool;
+    private var _state:PlayState;
 
     private var _shadowSprite:FlxSprite;
     private var _shadowDistance:Float;
@@ -55,6 +55,11 @@ class GameObject extends FlxObject
             super.kill();
             _state.addExplosion( new Explosion(x + Std.int(_scale.x - 16) / 2, y + Std.int(_scale.y - 16) / 2, false, true) );
         }
+    }
+    
+    public function getScale():FlxVector
+    {
+        return _scale;
     }
     
     public function getLastHit():Int

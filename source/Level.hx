@@ -103,7 +103,7 @@ class Level extends FlxBasic
 		{
 			//trace ("creating destroyable object");
 			var type:String = entityData.get("Type");
-			var d : DestroyableObject = new  DestroyableObject(x, y, type, _state);
+			var d : DestroyableObject = DestroyableFactory.getDestroyableByString(x, y, type, _state);
 			d.name = entityData.get("Name");
 			_state.addDestroyable(d);
 		}

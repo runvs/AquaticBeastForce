@@ -644,7 +644,7 @@ class PlayState extends FlxState implements IDisplayAchievment
 					var e:DestroyableObject = _destroyableList.members[j];
 					if (e.alive && e.name == n) 
 					{
-						var offset:Float = Std.int(DestroyableObject.GetScale(e._type).x) * 0.5;
+						var offset:Float = Std.int(e.getScale().x) * 0.5;
 						p.drawLocator(e.x + offset, e.y + offset);
 						return;
 					}
