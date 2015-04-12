@@ -33,7 +33,7 @@ class Achievments
 		_save = new FlxSave();
 		_save.bind("achievments");
 		
-		// try to load save
+		// try to load achievments-save
 		if (_save.data._enemiesKilled001 == null)
 		{
 			// no saved achievments, write default values.
@@ -70,7 +70,7 @@ class Achievments
 	{
 		if (_enemiesKilled001 == false)
 		{
-			if ( Analytics.getNumberOfDeadEnemies() > 1)
+			if ( Analytics.getNumberOfDeadEnemies() >= 1)
 			{
 				_display.DisplayAchievmentMessage("1 Enemy killed");
 				_enemiesKilled001 = true;
@@ -79,7 +79,7 @@ class Achievments
 		
 		if (_enemiesKilled010 == false)
 		{
-			if ( Analytics.getNumberOfDeadEnemies() > 10)
+			if ( Analytics.getNumberOfDeadEnemies() >= 10)
 			{
 				_display.DisplayAchievmentMessage("10 Enemies killed");
 				_enemiesKilled010 = true;
@@ -88,7 +88,7 @@ class Achievments
 		
 		if (_enemiesKilled050 == false)
 		{
-			if ( Analytics.getNumberOfDeadEnemies() > 50)
+			if ( Analytics.getNumberOfDeadEnemies() >= 50)
 			{
 				_display.DisplayAchievmentMessage("50 Enemies killed");
 				_enemiesKilled050 = true;
@@ -97,7 +97,7 @@ class Achievments
 		
 		if (_enemiesKilled100 == false)
 		{
-			if ( Analytics.getNumberOfDeadEnemies() > 100)
+			if ( Analytics.getNumberOfDeadEnemies() >= 100)
 			{
 				_display.DisplayAchievmentMessage("100 Enemies killed");
 				_enemiesKilled100 = true;

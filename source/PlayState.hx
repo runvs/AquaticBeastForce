@@ -23,7 +23,7 @@ import haxe.CallStack;
 /**
  * A FlxState which can be used for the actual gameplay.
  */
-class PlayState extends FlxState implements IDisplayAchievment
+class PlayState extends FlxState
 {
 	private var _player1:Player;
 	private var _player2:Player;
@@ -53,6 +53,7 @@ class PlayState extends FlxState implements IDisplayAchievment
 	
 	private var twoPlayer:Bool;	// true if two players, false if one player
 	
+	private var _achievmentsDisplay : DisplayAchievmentImpl;
 	
 	public function new( tp : Bool) 
 	{
@@ -66,7 +67,8 @@ class PlayState extends FlxState implements IDisplayAchievment
 	override public function create():Void
 	{
 		//trace ("start create");
-		Achievments.setCallbacker(this);
+		_achievmentsDisplay = new DisplayAchievmentImpl();
+		Achievments.setCallbacker(_achievmentsDisplay);
 		_enemies = new FlxTypedGroup<Enemy>();
 		_shotlist = new FlxTypedGroup<Shot>();
 		_explosionList = new FlxTypedGroup<Explosion>();
@@ -195,7 +197,7 @@ class PlayState extends FlxState implements IDisplayAchievment
 	override public function destroy():Void
 	{
         trace ("destroy");
-        
+        Achievments.save();
 		super.destroy();
 	}
 	
@@ -229,6 +231,7 @@ class PlayState extends FlxState implements IDisplayAchievment
         Analytics.update();
 		Achievments.update();
 		//trace ("update");
+		trace (Analytics.getNumberOfDeadEnemies() );
 		if (!_upgrade.alive)
 		{		
             // not in upgrade mode
@@ -490,6 +493,7 @@ class PlayState extends FlxState implements IDisplayAchievment
 		
         super.draw();
 		
+		
 		DrawVignette();
 		
 		//trace ("end draw");
@@ -531,6 +535,7 @@ class PlayState extends FlxState implements IDisplayAchievment
 			_player1.drawHud();
 			DrawLocator(_player1);
             DrawCrosshead (_player1);
+			
 		}
 		//trace ("end drawHud");
 	}
@@ -661,8 +666,10 @@ class PlayState extends FlxState implements IDisplayAchievment
 			FlxG.cameras.remove(camera2, false);
 			FlxG.cameras.add(cameraVignette);
 			cameraVignette.bgColor = FlxColorUtil.makeFromARGB(0.0, 0, 0, 0);
-			_vignette.draw();
 			_separatrix.draw();
+			_achievmentsDisplay.draw();
+			_vignette.draw();
+			
 			// correct camera draw order
 			FlxG.cameras.remove(cameraVignette, false);
 			
@@ -675,7 +682,11 @@ class PlayState extends FlxState implements IDisplayAchievment
 			FlxG.cameras.remove(camera1, false);
 			FlxG.cameras.add(cameraVignette);
 			cameraVignette.bgColor = FlxColorUtil.makeFromARGB(0.0, 0, 0, 0);
+			
+			_achievmentsDisplay.draw();
+			
 			_vignette.draw();
+			
 			
 			// correct camera draw order
 			FlxG.cameras.remove(cameraVignette, false);
@@ -857,11 +868,4 @@ class PlayState extends FlxState implements IDisplayAchievment
         FlxTween.tween(s, { alpha:1.0 }, 1.0);
         
     }
-	
-	/* INTERFACE IDisplayAchievment */
-	
-	public function DisplayAchievmentMessage(s:String):Void 
-	{
-		
-	}
 }
