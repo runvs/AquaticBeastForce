@@ -75,6 +75,9 @@ class Player extends FlxObject
 	
 	private var _engineeringPoints : Int;
 	
+	public var _isOnWorkshop : Bool;
+	public var _wantsToEnterWorkshop : Bool;
+	
 	public function new(state:PlayState, controls : Int, cam:FlxCamera)
 	{   
 		
@@ -82,7 +85,10 @@ class Player extends FlxObject
 		_weaponSystems = new WeaponSystems();
 		_weaponSystems._hasAutoTurret = true;
 		_cam = cam;
+		
 		_engineeringPoints = 1;
+		_isOnWorkshop = false;
+		_wantsToEnterWorkshop = false;
 
 		_outside = false; 
 		_outsideTimer = 0.5;
@@ -305,6 +311,7 @@ class Player extends FlxObject
     private function getInput():Void
     {
 		_control.update();
+		
         
 		if (_control.left)
 		{
@@ -356,9 +363,11 @@ class Player extends FlxObject
 		
 		}
 		
+		_wantsToEnterWorkshop = false;
 		if (_control.showUpdates)
 		{
-			CheckRepair();
+			_wantsToEnterWorkshop = true;
+			trace (_wantsToEnterWorkshop + " " + _isOnWorkshop);
 		}
 		
 		if (_weaponSystems._hasAutoTurret)

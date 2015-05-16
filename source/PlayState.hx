@@ -36,6 +36,7 @@ class PlayState extends FlxState
 	private var _destroyableList:FlxTypedGroup<DestroyableObject>;
 	private var _pickUpList:FlxTypedGroup<PickUp>;
 	private var _engineerList : FlxTypedGroup<Engineer>;
+	private var _workshopList : FlxTypedGroup<Workshop>;
 	
 	private var _upgrade : Upgrade;
 	
@@ -76,7 +77,7 @@ class PlayState extends FlxState
 		_destroyableList = new FlxTypedGroup<DestroyableObject>();
 		_pickUpList = new FlxTypedGroup<PickUp>();
 		_engineerList = new FlxTypedGroup<Engineer>();
-		
+		_workshopList = new FlxTypedGroup<Workshop>();
 
 		
 		_vignette = new FlxSprite();
@@ -154,11 +155,11 @@ class PlayState extends FlxState
 
 		LoadLevel();
 		
-				// Test
-		var e : Engineer = new Engineer(this);
-		e.x = _level.getLevelBounds().width - 50;
-		e.y = _level.getLevelBounds().height - 50;
-		_engineerList.add(e);
+		// TEST
+		var w : Workshop = new Workshop(this);
+		w.x = _level.getLevelBounds().width - 75;
+		w.y = _level.getLevelBounds().height- 50;
+		_workshopList.add(w);
 		
         Analytics.start();
         
@@ -257,6 +258,7 @@ class PlayState extends FlxState
 			_explosionList.update();
 			_pickUpList.update();
 			_engineerList.update();
+			_workshopList.update();
 			_overlay.update();
             
 			
@@ -475,7 +477,9 @@ class PlayState extends FlxState
 		// draw to both
 		_level.draw();
         _destroyableList.draw();
-
+		
+		_workshopList.draw();
+		
 		_enemies.draw();
 		_engineerList.draw();
 		
@@ -557,7 +561,7 @@ class PlayState extends FlxState
 	}
 	
 	
-	function engineerPlayerCollision(p: Player, e:Engineer)
+	private function engineerPlayerCollision(p: Player, e:Engineer) : Void
 	{
 		if (FlxG.overlap(p._sprite, e.sprite))
 		{
@@ -579,6 +583,16 @@ class PlayState extends FlxState
 		}
 	}
 	
+	private function workshopPlayerOverlap(p:Player, w:Workshop) : Void 
+	{
+		if (FlxG.overlap(p._sprite, w.sprite))
+		{
+			trace ("overlap");
+			p._isOnWorkshop = true;
+		}
+	}
+	
+	
 	function HandleCollisions():Void 
 	{
 		
@@ -598,6 +612,8 @@ class PlayState extends FlxState
 				}
 			}
 		}
+		WorkshopTest();
+		
 		
 		for (j in 0..._shotlist.length)
 		{
@@ -752,6 +768,49 @@ class PlayState extends FlxState
 		}
 	}
 	
+	function WorkshopTest():Void 
+	{
+		_player1._isOnWorkshop = false;
+		if ( twoPlayer)
+		{
+			_player2._isOnWorkshop = false;
+		}
+		for (k in 0..._workshopList.length)
+		{
+			var w : Workshop = _workshopList.members[k];
+			if (twoPlayer)
+			{
+				workshopPlayerOverlap(_player1, w);
+				workshopPlayerOverlap(_player2, w);
+			}
+			else
+			{
+				workshopPlayerOverlap(_player1, w);
+			}
+		}
+		trace (_player1._isOnWorkshop);
+		
+		if (twoPlayer)
+		{
+			//if (_player1._wantsToEnterWorkshop && _player1._isOnWorkshop && _player2._wantsToEnterWorkshop && _player2._isOnWorkshop)
+			if (_player1._isOnWorkshop && _player2._wantsToEnterWorkshop && _player2._isOnWorkshop)
+			{
+				EnterWorkshop();
+			}
+		}
+		else
+		{
+			if (_player1._wantsToEnterWorkshop && _player1._isOnWorkshop)
+			{
+				EnterWorkshop();
+			}
+		}
+	}
+	
+	private function EnterWorkshop() : Void 
+	{
+		_upgrade.alive = true;
+	}
 
 	
 	public function ShowUpgrades():Void 
