@@ -560,14 +560,23 @@ class PlayState extends FlxState
 	function engineerPlayerCollision(p: Player, e:Engineer)
 	{
 		if (FlxG.overlap(p._sprite, e.sprite))
+		{
+			if (FlxG.pixelPerfectOverlap(p._sprite, e.sprite,1))
 			{
-				if (FlxG.pixelPerfectOverlap(p._sprite, e.sprite,1))
-				{
-					e.kill();
-					trace ("Pickup Engineer");
-					//p.PickUpEngineer();
-				}
+				e.kill();
+				trace ("Pickup Engineer");
+				PickUpEngineer();
 			}
+		}
+	}
+	
+	private function PickUpEngineer() : Void 
+	{
+		_player1.ChangeEngineeringPoints(1);
+		if (twoPlayer)
+		{
+			_player2.ChangeEngineeringPoints(1);
+		}
 	}
 	
 	function HandleCollisions():Void 
@@ -633,7 +642,6 @@ class PlayState extends FlxState
 					{
 						PlayerShotCollision(_player1, s);
 					}
-					
 				}
                 // destroyables can be shot from player or enemies
 				for (i in 0 ... _destroyableList.length)
@@ -914,6 +922,16 @@ class PlayState extends FlxState
         }
         
         FlxTween.tween(s, { alpha:1.0 }, 1.0);
-        
     }
+	
+	public function SpawnEngineer(d:DestroyableObject) : Void 
+	{
+		//trace ("spawn engi");
+		var e : Engineer = new Engineer(this);
+		e.x = d.x;
+		e.y = d.y;
+		
+		_engineerList.add(e);
+	}
+	
 }

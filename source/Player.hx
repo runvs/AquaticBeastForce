@@ -56,6 +56,9 @@ class Player extends FlxObject
 	private var _textPoints1 : FlxText;
 	private var _textPoints2 : FlxText;
 	
+	private var _textEngi1 : FlxText;
+	private var _textEngi2 : FlxText;
+	
 	
 	private var _soundShoot : FlxSound;
 	private var _soundPickup : FlxSound;
@@ -70,6 +73,8 @@ class Player extends FlxObject
     
     private var _cross : FlxSprite;
 	
+	private var _engineeringPoints : Int;
+	
 	public function new(state:PlayState, controls : Int, cam:FlxCamera)
 	{   
 		
@@ -77,6 +82,7 @@ class Player extends FlxObject
 		_weaponSystems = new WeaponSystems();
 		_weaponSystems._hasAutoTurret = true;
 		_cam = cam;
+		_engineeringPoints = 1;
 
 		_outside = false; 
 		_outsideTimer = 0.5;
@@ -167,6 +173,17 @@ class Player extends FlxObject
         _textPoints2.origin.set(8, 4);
 		//FlxTween.tween(_textPoints2.offset, { x : 6.5, y:6.5 }, 0.6, { type:FlxTween.PINGPONG });	// not working :(
 		
+		_textEngi1  = new FlxText (4, 14, 161, "");
+		_textEngi1.color = FlxColorUtil.makeFromARGB(1.0, 3, 32, 4);
+		_textEngi1.scrollFactor.set();
+        _textEngi1.origin.set(8, 4);
+		
+		_textEngi2 = new FlxText(5, 15, 161, "");
+		_textEngi2.color = FlxColorUtil.makeFromARGB(1.0, 215, 238, 218);
+		_textEngi2.scrollFactor.set();
+        _textEngi2.origin.set(8, 4);
+		
+		
 		_soundShoot = new FlxSound();
         _soundShoot = FlxG.sound.load(AssetPaths.shoot__ogg, 0.5 , false, false , false);
 		
@@ -244,6 +261,13 @@ class Player extends FlxObject
 		_textPoints1.draw();
 		_textPoints2.draw();
 		
+		_textEngi1.text = Std.string(_engineeringPoints);
+		_textEngi1.update();
+		_textEngi2.text = Std.string(_engineeringPoints);
+		_textEngi2.update();
+		
+		_textEngi1.draw();
+		_textEngi2.draw();
 	}
 	
     public function drawCrosshead() : Void 
@@ -577,6 +601,15 @@ class Player extends FlxObject
 		else
 		{
 			_currentPoints += diff;
+		}
+	}
+	
+	public function ChangeEngineeringPoints(delta:Int)
+	{
+		_engineeringPoints += delta;
+		if (_engineeringPoints < 0)
+		{
+			_engineeringPoints = 0;
 		}
 	}
 	

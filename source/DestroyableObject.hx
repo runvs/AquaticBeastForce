@@ -12,6 +12,7 @@ import flixel.util.FlxRandom;
 class DestroyableObject extends GameObject
 {
     public var _type:DestroyableType;
+	public var _spawnEngineer : Bool;
 
     public function new(X:Float=0, Y:Float=0, type:DestroyableType, state:PlayState)
     {
@@ -19,12 +20,19 @@ class DestroyableObject extends GameObject
         _state = state;
         _lastHit = -1;
 
+		// TODO aus Level Laden
+		_spawnEngineer = FlxRandom.chanceRoll();
+		
         super(X, Y);
     }
 
     public override function kill():Void
     {
         super.kill();
+		if (_spawnEngineer)
+		{
+			_state.SpawnEngineer(this);
+		}
 
         if (alive && exists)
         {
@@ -49,7 +57,9 @@ class DestroyableObject extends GameObject
 
     public function switchImage(t:FlxTimer):Void
     {
+		
         sprite.animation.play("destroyed");
+
     }
 
 
