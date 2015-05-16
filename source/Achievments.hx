@@ -72,8 +72,10 @@ class Achievments
 		{
 			if ( Analytics.getNumberOfDeadEnemies() >= 1)
 			{
+				
 				_display.DisplayAchievmentMessage("1 Enemy killed");
 				_enemiesKilled001 = true;
+				save();
 			}
 		}
 		
@@ -81,8 +83,10 @@ class Achievments
 		{
 			if ( Analytics.getNumberOfDeadEnemies() >= 10)
 			{
+				
 				_display.DisplayAchievmentMessage("10 Enemies killed");
 				_enemiesKilled010 = true;
+				save();
 			}
 		}
 		
@@ -92,6 +96,7 @@ class Achievments
 			{
 				_display.DisplayAchievmentMessage("50 Enemies killed");
 				_enemiesKilled050 = true;
+				save();
 			}
 		}
 		
@@ -101,6 +106,7 @@ class Achievments
 			{
 				_display.DisplayAchievmentMessage("100 Enemies killed");
 				_enemiesKilled100 = true;
+				save();
 			}
 		}
 	}

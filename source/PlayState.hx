@@ -35,6 +35,7 @@ class PlayState extends FlxState
 	private var _explosionList:FlxTypedGroup<Explosion>;
 	private var _destroyableList:FlxTypedGroup<DestroyableObject>;
 	private var _pickUpList:FlxTypedGroup<PickUp>;
+	private var _engineerList : FlxTypedGroup<Engineer>;
 	
 	private var _upgrade : Upgrade;
 	
@@ -74,6 +75,10 @@ class PlayState extends FlxState
 		_explosionList = new FlxTypedGroup<Explosion>();
 		_destroyableList = new FlxTypedGroup<DestroyableObject>();
 		_pickUpList = new FlxTypedGroup<PickUp>();
+		_engineerList = new FlxTypedGroup<Engineer>();
+		
+
+		
 		_vignette = new FlxSprite();
 		_vignette.loadGraphic(AssetPaths.Vignette__png, false, 160, 144);
 		_vignette.scrollFactor.set();
@@ -149,6 +154,12 @@ class PlayState extends FlxState
 
 		LoadLevel();
 		
+				// Test
+		var e : Engineer = new Engineer(this);
+		e.x = _level.getLevelBounds().width - 50;
+		e.y = _level.getLevelBounds().height - 50;
+		_engineerList.add(e);
+		
         Analytics.start();
         
 		super.create();
@@ -220,6 +231,11 @@ class PlayState extends FlxState
 			_shotlist.forEach(function(s:Shot) { if (s.exists ) newShotList.add(s); else s.destroy(); } );
 			_shotlist = newShotList;
 		}
+		{
+			var newEngineerList:FlxTypedGroup<Engineer> = new FlxTypedGroup<Engineer>();
+			_engineerList.forEach(function(e:Engineer) { if (e.exists ) newEngineerList.add(e); else e.destroy(); } );
+			_engineerList = newEngineerList;
+		}
 	}
 	
 	/**
@@ -230,8 +246,6 @@ class PlayState extends FlxState
         super.update();
         Analytics.update();
 		Achievments.update();
-		//trace ("update");
-		trace (Analytics.getNumberOfDeadEnemies() );
 		if (!_upgrade.alive)
 		{		
             // not in upgrade mode
@@ -242,6 +256,7 @@ class PlayState extends FlxState
 			_shotlist.update();
 			_explosionList.update();
 			_pickUpList.update();
+			_engineerList.update();
 			_overlay.update();
             
 			
@@ -462,6 +477,7 @@ class PlayState extends FlxState
         _destroyableList.draw();
 
 		_enemies.draw();
+		_engineerList.draw();
 		
 		if (twoPlayer)
 		{
@@ -540,8 +556,40 @@ class PlayState extends FlxState
 		//trace ("end drawHud");
 	}
 	
+	
+	function engineerPlayerCollision(p: Player, e:Engineer)
+	{
+		if (FlxG.overlap(p._sprite, e.sprite))
+			{
+				if (FlxG.pixelPerfectOverlap(p._sprite, e.sprite,1))
+				{
+					e.kill();
+					trace ("Pickup Engineer");
+					//p.PickUpEngineer();
+				}
+			}
+	}
+	
 	function HandleCollisions():Void 
 	{
+		
+		for (k in 0..._engineerList.length)
+		{
+			var e:Engineer = _engineerList.members[k];
+			if (e.alive && e.exists)
+			{
+				if (twoPlayer)
+				{
+					engineerPlayerCollision(_player1, e);
+					engineerPlayerCollision(_player2, e);
+				}
+				else
+				{
+					engineerPlayerCollision(_player1, e);
+				}
+			}
+		}
+		
 		for (j in 0..._shotlist.length)
 		{
 			var s:Shot = _shotlist.members[j];
