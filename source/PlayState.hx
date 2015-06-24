@@ -27,9 +27,9 @@ class PlayState extends FlxState
 {
 	private var _player1:Player;
 	private var _player2:Player;
-	
+
 	private var _level:Level;
-	
+
 	private var _enemies:FlxTypedGroup<Enemy>;
 	private var _shotlist:FlxTypedGroup<Shot>;
 	private var _explosionList:FlxTypedGroup<Explosion>;
@@ -37,34 +37,34 @@ class PlayState extends FlxState
 	private var _pickUpList:FlxTypedGroup<PickUp>;
 	private var _engineerList : FlxTypedGroup<Engineer>;
 	private var _workshopList : FlxTypedGroup<Workshop>;
-	
+
 	private var _upgrade : Upgrade;
-	
+
 	private var _overlay : FlxSprite;
 	private var _vignette : FlxSprite;
 	private var _separatrix :FlxSprite;
-    
+
 	private var _tutorialText : FlxText;
-	
+
 	private var camera1:FlxCamera;
 	private var camera2:FlxCamera;
 	private var cameraVignette:FlxCamera;
-	
+
     private var _blackScreen1:FlxSprite;
     private var _blackScreen2:FlxSprite;
-	
+
 	public var twoPlayer:Bool;	// true if two players, false if one player
-	
+
 	private var _achievmentsDisplay : DisplayAchievmentImpl;
-	
-	public function new( tp : Bool) 
+
+	public function new( tp : Bool)
 	{
 		super();
 		SetTwoPlayer(tp);
 	}
 
 	/**
-	 * Function that is called up when to state is created to set it up. 
+	 * Function that is called up when to state is created to set it up.
 	 */
 	override public function create():Void
 	{
@@ -85,13 +85,13 @@ class PlayState extends FlxState
 		_vignette.scrollFactor.set();
 		_vignette.origin.set();
 		_vignette.alpha = 0.4;
-        
+
         _separatrix  = new FlxSprite();
         _separatrix.makeGraphic(2, 144, FlxColorUtil.makeFromARGB(1.0, 67, 43, 109));
         _separatrix.scrollFactor.set();
         _separatrix.origin.set();
         _separatrix.setPosition(79, 0);
-		
+
 		_blackScreen1 = new FlxSprite();
 		_blackScreen1.makeGraphic(160, 144, FlxColorUtil.makeFromARGB(1.0, 0, 0, 0));
 		_blackScreen1.scrollFactor.set();
@@ -105,23 +105,24 @@ class PlayState extends FlxState
             _blackScreen2.origin.set();
             _blackScreen2.alpha = 0.0;
 		}
-        
-	
-		
+
+		_upgrade = new Upgrade(this);
+		_upgrade.alive = false;
+
 		
 		_overlay = new FlxSprite();
 		_overlay.makeGraphic(FlxG.width, FlxG.height, FlxColorUtil.makeFromARGB(1.0, 0, 0, 0));
 		_overlay.scrollFactor.set();
 		_overlay.origin.set();
-		
+
 		FlxTween.tween(_overlay, { alpha:0.0 }, 0.75);
-		
+
 		_tutorialText = new FlxText(10, 70, 124, "Please identify yourself as human by pressing [U] for upgrades.", 8);
 		_tutorialText.alpha = 1.0;
 		_tutorialText.scrollFactor.set();
 		FlxTween.tween(_tutorialText, { alpha:0.0 }, 2, {startDelay:2});
-		
-		
+
+
 		FlxG.mouse.cursorContainer.visible = false;
 
 		if (twoPlayer)
@@ -129,13 +130,13 @@ class PlayState extends FlxState
 			trace ("twoplayer");
 			camera1 = new FlxCamera(0, 0, 80, 144);
 			camera2 = new FlxCamera(320, 0, 80, 144);
-			
+
 			_player1 = new Player(this, 1, camera1);
 			_player2 = new Player(this, 2, camera2);
-			
+
 			camera1.follow(_player1);
 			camera2.follow(_player2);
-			
+
 			FlxG.cameras.add(camera1);
 			FlxG.cameras.add(camera2);
 		}
@@ -146,9 +147,9 @@ class PlayState extends FlxState
 			_player1 = new Player(this, 1, camera1);
 			camera1.follow(_player1);
 			FlxG.cameras.add(camera1);
-			
+
 		}
-		
+
 		cameraVignette =  new FlxCamera(0, 0, 160, 144);
 		FlxG.cameras.add(cameraVignette);
 
@@ -157,8 +158,9 @@ class PlayState extends FlxState
 		_upgrade.alive = false;
 	
 
+
 		LoadLevel();
-		
+
 		// TEST
 		var w : Workshop = new Workshop(this);
 		w.x = _level.getLevelBounds().width - 75;
@@ -166,21 +168,21 @@ class PlayState extends FlxState
 		_workshopList.add(w);
 		
         Analytics.start();
-        
+
 		super.create();
 		//trace ("end create");
 	}
-	
-	function LoadLevel():Void 
+
+	function LoadLevel():Void
 	{
 		//trace ("start loadlevel");
 		_level = new Level(this);
 		var exitByException:Bool = false;
-		try 
+		try
 		{
-			_level.loadLevel(2);
+			_level.loadLevel(1);
 		}
-		catch ( msg : String ) 
+		catch ( msg : String )
 		{
 			//trace("Error occurred while loading the level: " + msg);
 			//trace("Call stack:");
@@ -191,8 +193,8 @@ class PlayState extends FlxState
 		{
 			throw "I will crash now.";
 		}
-		
-		
+
+
 		if (twoPlayer)
 		{
 			camera1.bounds = _level.getLevelBounds();
@@ -201,13 +203,13 @@ class PlayState extends FlxState
 		}
 		else
 		{
-			camera1.bounds = _level.getLevelBounds();	
+			camera1.bounds = _level.getLevelBounds();
 		}
 		//trace ("end loadlevel");
 	}
-	
+
 	/**
-	 * Function that is called when this state is destroyed - you might want to 
+	 * Function that is called when this state is destroyed - you might want to
 	 * consider setting all objects this state uses to null to help garbage collection.
 	 */
 	override public function destroy():Void
@@ -216,9 +218,9 @@ class PlayState extends FlxState
         Achievments.save();
 		super.destroy();
 	}
-	
 
-	
+
+
 	private function cleanUp():Void
 	{
 		{
@@ -242,7 +244,7 @@ class PlayState extends FlxState
 			_engineerList = newEngineerList;
 		}
 	}
-	
+
 	/**
 	 * Function that is called once every frame.
 	 */
@@ -252,7 +254,7 @@ class PlayState extends FlxState
         Analytics.update();
 		Achievments.update();
 		if (!_upgrade.alive)
-		{		
+		{
             // not in upgrade mode
 			FlxG.mouse.cursorContainer.visible = false;
 			_level.update();
@@ -264,8 +266,8 @@ class PlayState extends FlxState
 			_engineerList.update();
 			_workshopList.update();
 			_overlay.update();
-            
-			
+
+
 			if (twoPlayer)
 			{
 				if (!_player2._dead)
@@ -290,18 +292,18 @@ class PlayState extends FlxState
 				FlxG.overlap(_player1._sprite, _pickUpList, DoPlayerPickUp1);
 				CheckInsideMap(_player1);
 			}
-			
-			
+
+
 			FlxG.collide(_enemies, _enemies);
 			cleanUp();
-			
+
 			CheckEndCondition();
-            
-			
-			
-			
+
+
+
+
 			HandleCollisions();
-			
+
 			if (FlxG.keys.justPressed.U)
 			{
 				//ShowUpgrades();
@@ -314,11 +316,11 @@ class PlayState extends FlxState
 			FlxG.mouse.cursorContainer.visible = true;
 			_upgrade.update();
 		}
-		
+
 		//trace ("end update");
 	}
 
-	public function DoPlayerPickUp1(player:FlxSprite, p:PickUp) : Void 
+	public function DoPlayerPickUp1(player:FlxSprite, p:PickUp) : Void
 	{
 		if (p.alive)
 		{
@@ -326,7 +328,7 @@ class PlayState extends FlxState
 			p.kill();
 		}
 	}
-	public function DoPlayerPickUp2(player:FlxSprite, p:PickUp) : Void 
+	public function DoPlayerPickUp2(player:FlxSprite, p:PickUp) : Void
 	{
 		if (p.alive)
 		{
@@ -334,15 +336,15 @@ class PlayState extends FlxState
 			p.kill();
 		}
 	}
-	
+
 	public function CheckInsideMap(p:Player) : Void
 	{
 		p._outside = !_level.getLevelBounds().containsFlxPoint( new FlxPoint(p.x, p.y));
 	}
-	
+
 	private function CheckEndCondition():Void
 	{
-	
+
 		if (twoPlayer)
 		{
 			if (_player1._dead && _player2._dead)
@@ -363,7 +365,7 @@ class PlayState extends FlxState
 				FlxG.switchState(s);
 			}
 		}
-		
+
 		if (_level._missionInfo == "attack")
 		{
 			if (CheckAllTargetsDead())
@@ -376,18 +378,18 @@ class PlayState extends FlxState
 		}
 		else if (_level._missionInfo == "defend")
 		{
-			
+
 		}
 		else if (_level._missionInfo == "escort")
 		{
-			
+
 		}
 		else if (_level._missionInfo == "rescue")
 		{
-			
+
 		}
 	}
-	
+
     private function PickupMagnet(pl : Player):Void
     {
         for (i in 0 ... _pickUpList.length)
@@ -413,11 +415,11 @@ class PlayState extends FlxState
 		for (i in 0 ... _level._targets.length)
 		{
 			var n:String = _level._targets[i];
-			
+
 			for (j in 0 ... _enemies.length)
 			{
 				var e:Enemy = _enemies.members[j];
-                if ( e.name == n) 
+                if ( e.name == n)
                 {
                     return false;
                 }
@@ -425,7 +427,7 @@ class PlayState extends FlxState
 			for (j in 0 ... _destroyableList.length)
 			{
 				var e:DestroyableObject = _destroyableList.members[j];
-				if ( e.name == n && e.alive && e.exists) 
+				if ( e.name == n && e.alive && e.exists)
 				{
 					return false;
 				}
@@ -433,7 +435,7 @@ class PlayState extends FlxState
 		}
 		return true;
 	}
-	
+
 	public function shotEnemyCollision (e:Enemy, s:Shot):Void
 	{
         addExplosion(new Explosion(s.sprite.x - 4, s.sprite.y - 6, true));
@@ -441,7 +443,7 @@ class PlayState extends FlxState
 		e.takeDamage(s.getDamage());
 		e.setLastHit(s._playerNumber);
 	}
-	
+
 	public function shotDestroyableCollision (d:DestroyableObject, s:Shot):Void
 	{
 		addExplosion(new Explosion(s.sprite.x - 4, s.sprite.y - 4, true));
@@ -449,8 +451,8 @@ class PlayState extends FlxState
 		d.takeDamage(s.getDamage());
 		d.setLastHit(s._playerNumber);
 	}
-	
-	public function getNearestEnemy(p:Player ):Enemy 
+
+	public function getNearestEnemy(p:Player ):Enemy
 	{
 		var ret:Enemy = null;
 		var distancelargest:Float = 999999;
@@ -458,10 +460,10 @@ class PlayState extends FlxState
 		{
 			var e:Enemy = _enemies.members[i];
 			if (!e.alive) continue;
-			
+
 			var dx:Float = e.x - p.x;
 			var dy:Float = e.y - p.y;
-			
+
 			var d:Float = dx * dx + dy * dy;
 			if ( d < distancelargest)
 			{
@@ -471,13 +473,13 @@ class PlayState extends FlxState
 		}
 		return ret;
 	}
-    
-    override public function draw():Void 
+
+    override public function draw():Void
     {
 		//trace ("draw");
 		// remove vignette camera since only vignette should be drawn to this cam
 		FlxG.cameras.remove(cameraVignette, false);
-		
+
 		// draw to both
 		_level.draw();
         _destroyableList.draw();
@@ -486,7 +488,7 @@ class PlayState extends FlxState
 		
 		_enemies.draw();
 		_engineerList.draw();
-		
+
 		if (twoPlayer)
 		{
 			if (!_player1._dead)
@@ -498,33 +500,36 @@ class PlayState extends FlxState
 				_player2.draw();
 			}
 		}
-		else 
+		else
 		{
 			_player1.draw();
 		}
 		_shotlist.draw();
 		_explosionList.draw();
-		
+
 		_pickUpList.draw();
 		_overlay.draw();
-		
+
 		_tutorialText.draw();
 		drawHud();
+		if (_upgrade.alive)
+		{
+			_upgrade.draw();
+		}
 
-		
         super.draw();
-		
-		
+
+
 		DrawVignette();
-		
+
     }
-	
+
 	private function drawHud():Void
 	{
 		if ( twoPlayer)
 		{
 			FlxG.cameras.remove(camera2, false);
-			
+
 			_player1.drawHud();
 			DrawLocator(_player1);
             DrawCrosshead (_player1);
@@ -536,7 +541,7 @@ class PlayState extends FlxState
 			{
 				_blackScreen1.draw();
 			}
-		
+
 			FlxG.cameras.remove(camera1, false);
 			FlxG.cameras.add(camera2);
 			_player2.drawHud();
@@ -548,7 +553,8 @@ class PlayState extends FlxState
 			}
 			FlxG.cameras.add(camera1);
 		}
-		else 		
+
+		else
 		{
 			_player1.drawHud();
 			DrawLocator(_player1);
@@ -556,6 +562,7 @@ class PlayState extends FlxState
 		
 		}
 	}
+
 	
 	    private function DrawCrosshead (p:Player):Void
     {
@@ -673,7 +680,7 @@ class PlayState extends FlxState
 	}
 	
 	
-	function HandleCollisions():Void 
+	function HandleCollisions():Void
 	{
 		
 		for (k in 0..._engineerList.length)
@@ -734,7 +741,7 @@ class PlayState extends FlxState
 						PlayerShotCollision(_player1, s);
 						PlayerShotCollision(_player2, s);
 					}
-					else 
+					else
 					{
 						PlayerShotCollision(_player1, s);
 					}
@@ -756,9 +763,9 @@ class PlayState extends FlxState
 					}
 				}
 			}
-		}   
+		}
 	}
-	
+
 	private function PlayerShotCollision(p:Player, s:Shot)
 	{
 		if (!p._dead && p.alive)
@@ -774,7 +781,7 @@ class PlayState extends FlxState
 			}
 		}
 	}
-	
+
 
 	function WorkshopTest():Void 
 	{
@@ -820,12 +827,12 @@ class PlayState extends FlxState
 		ShowUpgrades();
 	}
 
-	
-	public function ShowUpgrades():Void 
+
+	public function ShowUpgrades():Void
 	{
 		_upgrade.alive = true;
 	}
-	
+
 	public function addEnemy(enemy:Enemy):Void
 	{
 		_enemies.add(enemy);
@@ -841,8 +848,8 @@ class PlayState extends FlxState
 		_explosionList.add(e);
 		if (!e._isSmallExplosion)
 		{
-			_enemies.forEach(function(en:Enemy) 
-			{ 
+			_enemies.forEach(function(en:Enemy)
+			{
 				if (en.alive && en.exists)
 				{
 					var dist = Math.sqrt((en.x -e.x) * (en.x -e.x) + (en.y -e.y) * (en.y -e.y));
@@ -853,9 +860,9 @@ class PlayState extends FlxState
 					}
 				}
 			} );
-			
-			_destroyableList.forEach(function(d:DestroyableObject) 
-			{ 
+
+			_destroyableList.forEach(function(d:DestroyableObject)
+			{
 				if (d.alive && d.exists)
 				{
 					var dist = Math.sqrt((d.x -e.x) * (d.x -e.x) + (d.y -e.y) * (d.y -e.y));
@@ -872,16 +879,16 @@ class PlayState extends FlxState
 	{
 		_destroyableList.add(d);
 	}
-	public function addPickUp(p:PickUp) : Void 
+	public function addPickUp(p:PickUp) : Void
 	{
 		_pickUpList.add(p);
 	}
-	
+
 	public function PlayerDead():Void
 	{
 		_enemies.forEach(function(e:Enemy):Void { e.UnseePlayer(); } );
 	}
-	
+
 	public function setPlayersRespawn (p :FlxPoint, moveToPosition:Bool):Void
 	{
 		if (twoPlayer)
@@ -889,15 +896,15 @@ class PlayState extends FlxState
 			_player1.setRespawnPosition(p, moveToPosition);
 			_player2.setRespawnPosition(p, moveToPosition);
 		}
-		else 
+		else
 		{
 			_player1.setRespawnPosition(p, moveToPosition);
 		}
 	}
-	
+
 	public function addPoints (p : Int, playerNumber : Int = -1 )
 	{
-        
+
 		if (twoPlayer)
 		{
 			if (playerNumber == -1)
@@ -905,18 +912,18 @@ class PlayState extends FlxState
 				var s : Int = FlxRandom.sign();
                 var p1 : Int ;
                 var p2 : Int ;
-                
+
                 if (s == 1 )
                 {
                     p1 = Math.floor((p / 2.0));
                     p2 = Math.ceil((p / 2.0));
                 }
-                else 
+                else
                 {
                     p2 = Math.floor((p / 2.0));
                     p1 = Math.ceil((p / 2.0));
                 }
-                
+
 				_player1.ChangePoints(p1);
 				_player2.ChangePoints(p2);
                 Analytics.LogPoints(_player1, 1, p1);
@@ -939,7 +946,7 @@ class PlayState extends FlxState
             Analytics.LogPoints(_player1, 1, p);
 		}
 	}
-	
+
 	public function getNearestPlayer ( p:FlxPoint) : Player
 	{
 		var ret : Player = null;
@@ -947,7 +954,7 @@ class PlayState extends FlxState
 		{
 			var t1 :FlxVector = new FlxVector(_player1.x - p.x, _player1.y - p.y);
 			var t2 :FlxVector = new FlxVector(_player2.x - p.x, _player2.y - p.y);
-			
+
 			if (t1.lengthSquared < t2.lengthSquared)
 			{
 				if (!_player1._dead)
@@ -971,7 +978,7 @@ class PlayState extends FlxState
 		}
 		return ret;
 	}
-	
+
 	public function SetTwoPlayer (tp : Bool)
 	{
 		twoPlayer = tp;
@@ -983,11 +990,11 @@ class PlayState extends FlxState
         {
             s = _blackScreen2;
         }
-        else 
+        else
         {
             s = _blackScreen1;
         }
-        
+
         FlxTween.tween(s, { alpha:1.0 }, 1.0);
     }
 	
