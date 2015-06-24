@@ -34,10 +34,7 @@ class Upgrade extends FlxObject
 	private var _hasBoughtAAR : Bool = false;
 	private var _hasBoughtAGR : Bool = false;
 	private var _hasBoughtAutoTurret : Bool = false;
-	private var _hasBoughtBFG : Bool = false;
-	
-	
-	
+	private var _hasBoughtBFG : Bool = false;	
 	
 	public function new(state:PlayState) 
 	{
@@ -62,6 +59,7 @@ class Upgrade extends FlxObject
 	
 	private function DoRepair () : Void 
 	{
+		trace (_state.twoPlayer);
 		//if (_state._player.HasEnoughPoints(_costRepair))
 		//{
 			//_state._player.ChangePoints( - _costRepair);

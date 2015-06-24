@@ -53,7 +53,7 @@ class PlayState extends FlxState
     private var _blackScreen1:FlxSprite;
     private var _blackScreen2:FlxSprite;
 	
-	private var twoPlayer:Bool;	// true if two players, false if one player
+	public var twoPlayer:Bool;	// true if two players, false if one player
 	
 	private var _achievmentsDisplay : DisplayAchievmentImpl;
 	
@@ -106,8 +106,8 @@ class PlayState extends FlxState
             _blackScreen2.alpha = 0.0;
 		}
         
-		_upgrade = new Upgrade(this);	
-		_upgrade.alive = false;
+	
+		
 		
 		_overlay = new FlxSprite();
 		_overlay.makeGraphic(FlxG.width, FlxG.height, FlxColorUtil.makeFromARGB(1.0, 0, 0, 0));
@@ -151,7 +151,11 @@ class PlayState extends FlxState
 		
 		cameraVignette =  new FlxCamera(0, 0, 160, 144);
 		FlxG.cameras.add(cameraVignette);
+
 		
+		_upgrade = new Upgrade(this);	
+		_upgrade.alive = false;
+	
 
 		LoadLevel();
 		
@@ -506,25 +510,17 @@ class PlayState extends FlxState
 		
 		_tutorialText.draw();
 		drawHud();
-		if (_upgrade.alive)
-		{	
-			_upgrade.draw();
-		}		
+
 		
         super.draw();
 		
 		
 		DrawVignette();
 		
-		//trace ("end draw");
-		
-		
     }
 	
 	private function drawHud():Void
 	{
-		//trace ("drawHud");
-		
 		if ( twoPlayer)
 		{
 			FlxG.cameras.remove(camera2, false);
@@ -532,7 +528,10 @@ class PlayState extends FlxState
 			_player1.drawHud();
 			DrawLocator(_player1);
             DrawCrosshead (_player1);
-			
+			if (_upgrade.alive)
+			{	
+				//_upgrade1.draw();
+			}
 			if (_player1._dead)
 			{
 				_blackScreen1.draw();
@@ -549,17 +548,98 @@ class PlayState extends FlxState
 			}
 			FlxG.cameras.add(camera1);
 		}
-		
 		else 		
 		{
 			_player1.drawHud();
 			DrawLocator(_player1);
             DrawCrosshead (_player1);
-			
+		
 		}
-		//trace ("end drawHud");
 	}
 	
+	    private function DrawCrosshead (p:Player):Void
+    {
+        p.drawCrosshead();
+    }
+    
+	function DrawLocator(p:Player):Void 
+	{
+		if (_level._missionInfo == "attack")
+		{
+			for (i in 0 ... _level._targets.length)
+			{
+				var n:String = _level._targets[i];
+				for (j in 0 ... _enemies.length)
+				{
+					var e:Enemy = _enemies.members[j];
+					if ( e.name == n) 
+					{
+						p.drawLocator(e.x, e.y);
+						return;
+					}
+				}
+				for (j in 0 ... _destroyableList.length)
+				{
+					var e:DestroyableObject = _destroyableList.members[j];
+					if (e.alive && e.name == n) 
+					{
+						var offset:Float = Std.int(e.getScale().x) * 0.5;
+						p.drawLocator(e.x + offset, e.y + offset);
+						return;
+					}
+				}
+			}
+		}
+	}
+	
+	function DrawVignette():Void 
+	{
+		if (twoPlayer)
+		{
+			FlxG.cameras.remove(camera1, false);
+			FlxG.cameras.remove(camera2, false);
+			FlxG.cameras.add(cameraVignette);
+			cameraVignette.bgColor = FlxColorUtil.makeFromARGB(0.0, 0, 0, 0);
+			_separatrix.draw();
+			_achievmentsDisplay.draw();
+			_vignette.draw();
+			
+			if (_upgrade.alive)
+			{	
+				_upgrade.draw();
+			}
+			
+			
+			// correct camera draw order
+			FlxG.cameras.remove(cameraVignette, false);
+			
+			FlxG.cameras.add(camera1);
+			FlxG.cameras.add(camera2);
+			FlxG.cameras.add(cameraVignette);
+		}
+		else 
+		{
+			FlxG.cameras.remove(camera1, false);
+			FlxG.cameras.add(cameraVignette);
+			cameraVignette.bgColor = FlxColorUtil.makeFromARGB(0.0, 0, 0, 0);
+			
+			_achievmentsDisplay.draw();
+			
+			_vignette.draw();
+			
+			if (_upgrade.alive)
+			{	
+				_upgrade.draw();
+			}
+			
+			
+			// correct camera draw order
+			FlxG.cameras.remove(cameraVignette, false);
+			
+			FlxG.cameras.add(camera1);
+			FlxG.cameras.add(cameraVignette);
+		}
+	}	
 	
 	private function engineerPlayerCollision(p: Player, e:Engineer) : Void
 	{
@@ -587,7 +667,7 @@ class PlayState extends FlxState
 	{
 		if (FlxG.overlap(p._sprite, w.sprite))
 		{
-			trace ("overlap");
+			//trace ("overlap");
 			p._isOnWorkshop = true;
 		}
 	}
@@ -695,79 +775,7 @@ class PlayState extends FlxState
 		}
 	}
 	
-    private function DrawCrosshead (p:Player):Void
-    {
-        p.drawCrosshead();
-    }
-    
-	function DrawLocator(p:Player):Void 
-	{
-		if (_level._missionInfo == "attack")
-		{
-			for (i in 0 ... _level._targets.length)
-			{
-				var n:String = _level._targets[i];
-				for (j in 0 ... _enemies.length)
-				{
-					var e:Enemy = _enemies.members[j];
-					if ( e.name == n) 
-					{
-						p.drawLocator(e.x, e.y);
-						return;
-					}
-				}
-				for (j in 0 ... _destroyableList.length)
-				{
-					var e:DestroyableObject = _destroyableList.members[j];
-					if (e.alive && e.name == n) 
-					{
-						var offset:Float = Std.int(e.getScale().x) * 0.5;
-						p.drawLocator(e.x + offset, e.y + offset);
-						return;
-					}
-				}
-			}
-		}
-	}
-	
-	function DrawVignette():Void 
-	{
-		if (twoPlayer)
-		{
-			FlxG.cameras.remove(camera1, false);
-			FlxG.cameras.remove(camera2, false);
-			FlxG.cameras.add(cameraVignette);
-			cameraVignette.bgColor = FlxColorUtil.makeFromARGB(0.0, 0, 0, 0);
-			_separatrix.draw();
-			_achievmentsDisplay.draw();
-			_vignette.draw();
-			
-			// correct camera draw order
-			FlxG.cameras.remove(cameraVignette, false);
-			
-			FlxG.cameras.add(camera1);
-			FlxG.cameras.add(camera2);
-			FlxG.cameras.add(cameraVignette);
-		}
-		else 
-		{
-			FlxG.cameras.remove(camera1, false);
-			FlxG.cameras.add(cameraVignette);
-			cameraVignette.bgColor = FlxColorUtil.makeFromARGB(0.0, 0, 0, 0);
-			
-			_achievmentsDisplay.draw();
-			
-			_vignette.draw();
-			
-			
-			// correct camera draw order
-			FlxG.cameras.remove(cameraVignette, false);
-			
-			FlxG.cameras.add(camera1);
-			FlxG.cameras.add(cameraVignette);
-		}
-	}
-	
+
 	function WorkshopTest():Void 
 	{
 		_player1._isOnWorkshop = false;
@@ -788,7 +796,7 @@ class PlayState extends FlxState
 				workshopPlayerOverlap(_player1, w);
 			}
 		}
-		trace (_player1._isOnWorkshop);
+		//trace (_player1._isOnWorkshop);
 		
 		if (twoPlayer)
 		{
@@ -809,7 +817,7 @@ class PlayState extends FlxState
 	
 	private function EnterWorkshop() : Void 
 	{
-		_upgrade.alive = true;
+		ShowUpgrades();
 	}
 
 	

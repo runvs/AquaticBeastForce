@@ -65,7 +65,7 @@ class Player extends FlxObject
 	private var _soundHit : FlxSound;
 	
 	private var _control : IControls;
-	private var _playerNumber : Int ;
+	public var _playerNumber : Int ;
 	
 	private var _cam : FlxCamera;
 	public var _outside :Bool; // true if the player is outside the map;
@@ -95,12 +95,12 @@ class Player extends FlxObject
 		if(controls == 1)
 		{	
 			_control =  new ControlsGamepad();
-			_playerNumber = 1;
+			_playerNumber = ID = 1;
 		}
 		else
 		{
 			_control =  new ControlsKeyboard();
-			_playerNumber = 2;
+			_playerNumber = ID = 2;
 		}
 			
 		
